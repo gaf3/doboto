@@ -1,4 +1,4 @@
-""" This hold the Endpoint class """
+""" This holds the Endpoint class """
 
 class Endpoint(object):
     """ Base class for interacting with an endpoint of the DO API """

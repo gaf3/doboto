@@ -1,4 +1,4 @@
-""" This hold the DO class """
+""" This holds the DO class """
 
 from .Droplet import Droplet
 from .SSHKey import SSHKey

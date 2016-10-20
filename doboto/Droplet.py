@@ -1,4 +1,4 @@
-""" This hold the Droplet class """
+""" This holds the Droplet class """
 
 from .Endpoint import Endpoint
 

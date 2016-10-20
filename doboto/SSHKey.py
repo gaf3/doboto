@@ -1,4 +1,4 @@
-""" This hold the SSH Key class """
+""" This holds the SSH Key class """
 
 from .Endpoint import Endpoint
 
