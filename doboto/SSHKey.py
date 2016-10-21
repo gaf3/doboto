@@ -26,10 +26,8 @@ class SSHKey(Endpoint):
     def retrieve(self, ssh_id):
         """Retrieve SSH Key"""
 
-
     def update(self, ssh_id):
         """Update SSH Key"""
-
 
     def destroy(self, ssh_id):
         """Destroy SSH Key"""

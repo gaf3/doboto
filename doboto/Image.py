@@ -41,7 +41,11 @@ class Image(Endpoint):
         """Updates an image's name"""
         uri = self.uri + "/%s" % image_id
 
-        return self.make_request(uri, request_method="PUT", attribs={"name": name})
+        return self.make_request(
+            uri,
+            request_method="PUT",
+            attribs={"name": name}
+        )
 
     def destroy(self, image_id):
         """Destroy image"""
