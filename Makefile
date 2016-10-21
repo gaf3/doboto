@@ -9,7 +9,7 @@ run_tests:
 
 run_lint:
 	@echo "Running PEP8:"
-	pep8 ${PACKAGE}
+	pep8 --max-line-length=100 ${PACKAGE}
 	@echo "Running pylint:"
 	pylint ${PACKAGE}
 
