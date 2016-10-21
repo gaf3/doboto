@@ -23,30 +23,10 @@ class Endpoint(object):
         headers = {'Authorization': "Bearer %s" % self.token,
                    'Content-Type': 'application/json'}
 
-        if request_method == 'POST':
-            resp = requests.post(request_url,
-                                 data=json.dumps(attribs),
-                                 headers=headers,
-                                 timeout=60)
-            json_response = self.process_response(resp)
-        elif request_method == 'DELETE':
-            resp = requests.delete(request_url,
-                                   data=json.dumps(attribs),
-                                   headers=headers,
-                                   timeout=60)
-            json_response = self.process_response(resp)
-        elif request_method == 'PUT':
-            resp = requests.put(request_url,
-                                headers=headers,
-                                params=attribs,
-                                timeout=60)
-            json_response = resp.json()
-        elif request_method == 'GET':
-            resp = requests.get(request_url,
-                                headers=headers,
-                                params=attribs,
-                                timeout=60)
-            print resp
-            json_response = resp.json()
+        requests_method = getattr(requests, request_method.lower())
+        # TODO: Throw meaningful exception if not found
 
-        return json_response
+        resp = requests_method(
+            request_url, data=json.dumps(attribs), headers=headers, timeout=60
+        )
+        return self.process_response(resp)
