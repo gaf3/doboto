@@ -49,3 +49,7 @@ class Droplet(Endpoint):
     def destroy(self, droplet_id):
         """Destroy droplet"""
         raise NotImplementedError("we should implement this!")
+
+    def create(self, params={}):
+        """Create a droplet based off of parameters"""
+        
