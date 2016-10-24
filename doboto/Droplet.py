@@ -50,6 +50,7 @@ class Droplet(Endpoint):
         """Destroy droplet"""
         raise NotImplementedError("we should implement this!")
 
-    def create(self, params={}):
+    def create(self, attribs={}):
         """Create a droplet based off of parameters"""
-        
+
+        return self.make_request(self.uri, 'POST', attribs=attribs)
