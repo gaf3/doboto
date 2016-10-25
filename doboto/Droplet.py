@@ -18,7 +18,7 @@ class Droplet(Endpoint):
         """
         Retrieve droplet information
         """
-        uri = self.uri + "/%s" % droplet_id
+        uri = "%s/%s" % (self.uri,droplet_id)
         return self.make_request(uri)
 
     def list(self, tag_name=None):
@@ -26,7 +26,7 @@ class Droplet(Endpoint):
         list all droplets, or tagged droplets
         """
         if self.tag_name is not None:
-            uri = self.uri + "?tag_name=%s" % self.tag_name
+            uri = "%s?tag_name=%s" % (self.uri, self.tag_name)
         else:
             uri = self.uri
 
@@ -36,35 +36,35 @@ class Droplet(Endpoint):
         """
         Retrieve droplet kernels information
         """
-        uri = self.uri + "/%s/kernels" % droplet_id
+        uri = "%s/%s/kernels" % (self.uri, droplet_id)
         return self.make_request(uri)
 
     def list_snapshots(self, droplet_id):
         """
         Retrieve droplet snapshots information
         """
-        uri = self.uri + "/%s/snapshots" % droplet_id
+        uri =  "%s/%s/snapshots" % (self.uri, droplet_id)
         return self.make_request(uri)
 
     def list_backups(self, droplet_id):
         """
         Retrieve droplet backups information
         """
-        uri = self.uri + "/%s/backups" % droplet_id
+        uri = "%s/%s/backups" % (self.uri, droplet_id)
         return self.make_request(uri)
 
     def list_actions(self, droplet_id):
         """
         Retrieve droplet actions information
         """
-        uri = self.uri + "/%s/actions" % droplet_id
+        uri = "%s/%s/actions" % (self.uri, droplet_id)
         return self.make_request(uri)
 
     def get_action(self, droplet_id, action_id):
         """
         Get the status of an droplet action
         """
-        uri = self.uri + "%s/actions/%s" % (self.droplet_id, self.action_id)
+        uri = "%s/%s/actions/%s" % (self.uri, self.droplet_id, self.action_id)
         return self.make_request(uri)
 
     def destroy(self, droplet_id, tag_name=None):
@@ -72,9 +72,9 @@ class Droplet(Endpoint):
         Destroy a droplet of tagged droplets
         """
         if self.tag_name is not None:
-            uri = self.uri + "?tag_name=%s" % self.tag_name
+            uri = "%s?tag_name=%s" % (self.uri, self.tag_name)
         else:
-            uri = self.uri + "/%s" % self.droplet_id
+            uri = "%s/%s" % (self.uri, self.droplet_id)
         return self.make_request(uri, 'DELETE')
 
     def create(self, attribs={}):
@@ -86,9 +86,9 @@ class Droplet(Endpoint):
         Enable or disabled backups for a droplet, or tagged droplets
         """
         if self.tag_name is not None:
-            uri = self.uri + "/actions?tag_name=%s" % self.tag_name
+            uri = "%s/actions?tag_name=%s" % (self.uri, self.tag_name)
         else:
-            uri = self.uri + "%s/actions" % self.droplet_id
+            uri = "%s/%s/actions" % (self.uri, self.droplet_id)
 
         action = str(self.action).lower()
 
@@ -108,7 +108,7 @@ class Droplet(Endpoint):
         """
         Reboot a droplet
         """
-        uri = self.uri + "%s/actions" % self.droplet_id
+        uri = "%s/%s/actions" % (self.uri, self.droplet_id)
         attribs = {"type": "reboot"}
         return self.make_request(uri, 'POST', attribs=attribs)
 
@@ -117,9 +117,9 @@ class Droplet(Endpoint):
         Power action for a droplet, or tagged droplets
         """
         if self.tag_name is not None:
-            uri = self.uri + "/actions?tag_name=%s" % self.tag_name
+            uri = "%s/actions?tag_name=%s" % (self.uri, self.tag_name)
         else:
-            uri = self.uri + "%s/actions" % self.droplet_id
+            uri = "%s/%s/actions" % (self.uri, self.droplet_id)
         action = str(self.action).lower()
 
         if action == "on":
@@ -141,9 +141,9 @@ class Droplet(Endpoint):
         Shutdown a droplet, or tagged droplets
         """
         if self.tag_name is not None:
-            uri = self.uri + "/actions?tag_name=%s" % self.tag_name
+            uri = "%s/actions?tag_name=%s" % (self.uri, self.tag_name)
         else:
-            uri = self.uri + "%s/actions" % self.droplet_id
+            uri = "%s/%s/actions" % (self.uri, self.droplet_id)
         attribs = {"type": "shutdown"}
         return self.make_request(uri, 'POST', attribs=attribs)
 
@@ -151,7 +151,7 @@ class Droplet(Endpoint):
         """
         Restore a droplet from an backup image
         """
-        uri = self.uri + "%s/actions" % self.droplet_id
+        uri = "%s/%s/actions" % (self.uri, self.droplet_id)
         image = self.image
         attribs = {"type": "restore", "image": image}
         return self.make_request(uri, 'POST', attribs=attribs)
@@ -160,7 +160,7 @@ class Droplet(Endpoint):
         """
         Issues a password_reset to a droplet
         """
-        uri = self.uri + "%s/actions" % self.droplet_id
+        uri = "%s/%s/actions" % (self.uri, self.droplet_id)
         attribs = {"type": "password_reset"}
         return self.make_request(uri, 'POST', attribs=attribs)
 
@@ -169,7 +169,7 @@ class Droplet(Endpoint):
         Issues a resize action to a droplet, requires size slug, and optional
         disk resize bool (default=False) to permenatntly resize droplet disk
         """
-        uri = self.uri + "%s/actions" % self.droplet_id
+        uri = "%s/%s/actions" % (self.uri, self.droplet_id)
         size = self.size
         disk = str(self.disk).lower()
         attribs = {"type": "resize", "size": "%s" % size, "disk": disk}
@@ -179,16 +179,18 @@ class Droplet(Endpoint):
         """
         Issues a rebuild action to a droplet, requires image name or image id 
         """
-        uri = self.uri + "%s/actions" % self.droplet_id
-        image = self.image
-        attribs = {"type": "rebuild", "image": "%s" % image}
+        uri = "%s/%s/actions" % (self.uri, self.droplet_id)
+        if isinstance(self.image, int):
+            attribs = {"type": "rebuild", "image": self.image}
+        else:
+            attribs = {"type": "rebuild", "image": "%s" % self.image}
         return self.make_request(uri, 'POST', attribs=attribs)
 
     def rename(self, droplet_id, name):
         """
         Issues a rename action to a droplet, requires droplet id and a new name
         """
-        uri = self.uri + "%s/actions" % self.droplet_id
+        uri = "%s/%s/actions" % (self.uri, self.droplet_id)
         name = self.name
         attribs = {"type": "rename", "name": "%s" % name}
         return self.make_request(uri, 'POST', attribs=attribs)
@@ -197,7 +199,7 @@ class Droplet(Endpoint):
         """
         Specify a kernel id to change to for a droplet
         """
-        uri = self.uri + "%s/actions" % self.droplet_id
+        uri = "%s/%s/actions" % (self.uri, self.droplet_id)
         attribs = {"type": "change_kernel", "kernel": kernel_id}
         return self.make_request(uri, 'POST', attribs=attribs)
 
@@ -206,9 +208,9 @@ class Droplet(Endpoint):
         Enable IPv6 for a droplet, or tagged droplets
         """
         if self.tag_name is not None:
-            uri = self.uri + "/actions?tag_name=%s" % self.tag_name
+            uri = "%s/actions?tag_name=%s" % (self.uri, self.tag_name)
         else:
-            uri = self.uri + "%s/actions" % self.droplet_id
+            uri = "%s/%s/actions" % (self.uri, self.droplet_id)
         attribs = {"type": "enable_ipv6"}
         return self.make_request(uri, 'POST', attribs=attribs)
 
@@ -217,9 +219,9 @@ class Droplet(Endpoint):
         Enable Private Networking for a droplet, or tagged droplets
         """
         if self.tag_name is not None:
-            uri = self.uri + "/actions?tag_name=%s" % self.tag_name
+            uri = "%s/actions?tag_name=%s" % (self.uri, self.tag_name)
         else:
-            uri = self.uri + "%s/actions" % self.droplet_id
+            uri = "%s/%s/actions" % (self.uri, self.droplet_id)
         attribs = {"type": "enable_private_networking"}
         return self.make_request(uri, 'POST', attribs=attribs)
 
@@ -229,9 +231,9 @@ class Droplet(Endpoint):
         Must supply snapshot name
         """
         if self.tag_name is not None:
-            uri = self.uri + "/actions?tag_name=%s" % self.tag_name
+            uri = "%s/actions?tag_name=%s" % (self.uri, self.tag_name)
         else:
-            uri = self.uri + "%s/actions" % self.droplet_id
+            uri = "%s/%s/actions" % (self.uri, self.droplet_id)
 
         attribs = {"type": "snapshot", "name": "%s" % self.name}
         return self.make_request(uri, 'POST', attribs=attribs)
