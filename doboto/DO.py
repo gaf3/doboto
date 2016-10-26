@@ -2,6 +2,7 @@
 
 from .Droplet import Droplet
 from .SSHKey import SSHKey
+from .Tag import Tag
 
 
 class DO(object):
@@ -11,3 +12,4 @@ class DO(object):
         """Take URL and token, and create a sub instance for each endpoint."""
         self.droplet = Droplet(url, token)
         self.ssh_key = SSHKey(url, token)
+        self.tag = Tag(url, token)
