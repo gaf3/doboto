@@ -12,7 +12,7 @@ class Region(Endpoint):
         super(Region, self).__init__(token)
         self.uri = "%s/regions" % url
 
-    def list(self, type=None, private=None):
+    def list(self):
         """list all Regions"""
 
         return self.make_request(self.uri)
