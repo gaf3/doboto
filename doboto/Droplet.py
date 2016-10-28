@@ -77,8 +77,11 @@ class Droplet(Endpoint):
             uri = "%s/%s" % (self.uri, droplet_id)
         return self.make_request(uri, 'DELETE')
 
-    def create(self, attribs={}):
-        """Create a droplet based off of parameters"""
+    def create(self, attribs=None):
+        """
+        Create a droplet based off of parameters
+        """
+
         return self.make_request(self.uri, 'POST', attribs=attribs)
 
     def backups(self, droplet_id, action, with_tag=None):
@@ -153,7 +156,7 @@ class Droplet(Endpoint):
         """
         uri = "%s/%s/actions" % (self.uri, droplet_id)
 
-        if isinstance(image) is int:
+        if isinstance(image, int):
             attribs = {"type": "restore", "image": image}
         else:
             attribs = {"type": "restore", "image": "%s" % (image)}
@@ -183,7 +186,7 @@ class Droplet(Endpoint):
         Issues a rebuild action to a droplet, requires image name or image id
         """
         uri = "%s/%s/actions" % (self.uri, droplet_id)
-        if isinstance(image) is int:
+        if isinstance(image, int):
             attribs = {"type": "rebuild", "image": image}
         else:
             attribs = {"type": "rebuild", "image": "%s" % image}
