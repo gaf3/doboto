@@ -18,13 +18,13 @@ class Image(Endpoint):
 
         return self.make_request(uri)
 
-    def list(self, type=None, private=None):
+    def list(self, kind=None, private=None):
         """list all images"""
 
         params = {}
 
-        if type is not None:
-            params["type"] = type
+        if kind is not None:
+            params["type"] = kind
 
         if private is not None:
             params["private"] = private
