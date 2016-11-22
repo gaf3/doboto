@@ -5,7 +5,7 @@ install_modules:
 	pip install -r ${REQUIREMENTS}
 
 run_tests:
-	nosetests --with-coverage --cover-package=${PACKAGE} tests
+	nosetests --with-coverage --cover-package=${PACKAGE} --cover-erase tests
 
 run_lint:
 	@echo "Running PEP8:"

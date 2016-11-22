@@ -12,7 +12,7 @@ class Size(Endpoint):
         super(Size, self).__init__(token)
         self.uri = "%s/sizes" % url
 
-    def list(self, type=None, private=None):
+    def list(self):
         """list all sizes"""
 
         return self.make_request(self.uri)

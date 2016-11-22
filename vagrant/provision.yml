@@ -1,0 +1,23 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+  tasks:
+    - name: Install PIP and Python dev
+      apt:
+        pkg={{ item }}
+        state=present
+        update_cache=yes
+      environment:
+        DEBIAN_FRONTEND: noninteractive
+      with_items:
+        - python-pip
+        - python-dev
+
+    - name: Install Six
+      pip:
+        name=six
+        version=1.10.0
+
+    - name: Install dependencies
+      command: chdir=/home/vagrant/doboto make install_modules

@@ -177,6 +177,13 @@ class TestDroplet(TestCase):
         mock_make_request.assert_called_with(
             self.test_uri, 'POST', attribs=datas)
 
+        # Check empty
+
+        drop.create()
+
+        mock_make_request.assert_called_with(
+            self.test_uri, 'POST', attribs={})
+
     @patch('doboto.Droplet.Droplet.make_request')
     def test_backups(self, mock_make_request):
         """
