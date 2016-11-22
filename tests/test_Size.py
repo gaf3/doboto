@@ -79,7 +79,9 @@ class TestSize(TestCase):
         }
 
         mock_make_request.return_value = mock_ret
-        size = self.klass(self.test_uri, self.test_token)
+        size = self.klass(self.test_url, self.test_token)
         result = size.list()
 
         self.assertEqual(result, mock_ret)
+
+        mock_make_request.assert_called_with(self.test_uri)
