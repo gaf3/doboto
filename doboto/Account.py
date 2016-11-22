@@ -8,7 +8,7 @@ class Account(Endpoint):
     """Class for interacting with account information."""
 
     def __init__(self, url, token):
-        """Take token and sets its URI for size interaction."""
+        """Take token and sets its URI for account interaction."""
         super(Account, self).__init__(token)
         self.uri = "%s/account" % url
 
