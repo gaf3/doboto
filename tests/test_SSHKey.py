@@ -72,7 +72,8 @@ class TestSSHKey(TestCase):
         )
 
         mock_make_request.assert_called_with(
-            self.test_uri, 'POST', attribs=datas)
+            self.test_uri, 'POST', attribs=datas
+        )
 
         self.assertEqual(result, mock_ret)
 
