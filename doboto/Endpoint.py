@@ -66,6 +66,4 @@ class Endpoint(object):
             request_url, params=params, data=json.dumps(attribs), headers=headers, timeout=60
         )
 
-        print resp
-
         return self.process_response(resp)

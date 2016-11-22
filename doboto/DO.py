@@ -3,6 +3,7 @@
 from .Droplet import Droplet
 from .SSHKey import SSHKey
 from .Image import Image
+from .Size import Size
 from .Region import Region
 from .Tag import Tag
 
@@ -15,5 +16,6 @@ class DO(object):
         self.droplet = Droplet(url, token)
         self.ssh_key = SSHKey(url, token)
         self.image = Image(url, token)
+        self.size = Size(url, token)
         self.region = Region(url, token)
         self.tag = Tag(url, token)
