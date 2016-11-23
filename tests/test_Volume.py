@@ -143,7 +143,7 @@ class TestVolume(TestCase):
         test_uri = "{}/{}/snapshots".format(self.test_uri, volume_id)
 
         snap_name = "snap-1"
-        datas = {"name": "%s" % (snap_name)}
+        datas = {"name": snap_name}
         volume.take_snapshot(volume_id, snap_name)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 

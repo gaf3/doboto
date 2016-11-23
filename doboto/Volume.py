@@ -12,7 +12,7 @@ class Volume(Endpoint):
         Take token and sets its URI for volume interaction.
         """
         super(Volume, self).__init__(token)
-        self.uri = "%s/volumes" % url
+        self.uri = "{}/volumes".format(url)
 
     def list(self, region=None):
         """
@@ -37,11 +37,9 @@ class Volume(Endpoint):
         """
 
         if volume_id is not None:
-            return self.make_request("%s/%s" % (self.uri, volume_id))
+            return self.make_request("{}/{}".format(self.uri, volume_id))
         elif volume_name is not None and region is not None:
-            return self.make_request(
-                "%s" % self.uri, params={"name": volume_name, "region": region}
-            )
+            return self.make_request(self.uri, params={"name": volume_name, "region": region})
         else:
             raise ValueError("Must supply an id or name and region")
 
@@ -49,7 +47,7 @@ class Volume(Endpoint):
         """
         Retrieve volume snapshots information
         """
-        uri = "%s/%s/snapshots" % (self.uri, volume_id)
+        uri = "{}/{}/snapshots".format(self.uri, volume_id)
         return self.make_request(uri)
 
     def take_snapshot(self, volume_id, snapshot_name):
@@ -58,9 +56,9 @@ class Volume(Endpoint):
         Must supply snapshot name
         """
 
-        uri = "%s/%s/snapshots" % (self.uri, volume_id)
+        uri = "{}/{}/snapshots".format(self.uri, volume_id)
 
-        attribs = {"name": "%s" % snapshot_name}
+        attribs = {"name": snapshot_name}
         return self.make_request(uri, 'POST', attribs=attribs)
 
     def destroy(self, volume_id=None, region=None, volume_name=None):
@@ -68,10 +66,10 @@ class Volume(Endpoint):
         Destroy a volume by id or name
         """
         if volume_id is not None:
-            return self.make_request("%s/%s" % (self.uri, volume_id), "DELETE")
+            return self.make_request("{}/{}".format(self.uri, volume_id), "DELETE")
         elif volume_name is not None and region is not None:
             return self.make_request(
-                "%s" % self.uri, "DELETE", params={"name": volume_name, "region": region}
+                self.uri, "DELETE", params={"name": volume_name, "region": region}
             )
         else:
             raise ValueError("Must supply an id or name and region")
@@ -89,12 +87,12 @@ class Volume(Endpoint):
 
         if volume_id is not None:
             return self.make_request(
-                "%s/%s/actions" % (self.uri, volume_id), "POST", attribs=attribs
+                "{}/{}/actions".format(self.uri, volume_id), "POST", attribs=attribs
             )
         elif volume_name is not None:
             attribs["volume_name"] = volume_name
             return self.make_request(
-                "%s/actions" % self.uri, "POST", attribs=attribs
+                "{}/actions".format(self.uri), "POST", attribs=attribs
             )
         else:
             raise ValueError("Must supply an id or name")
@@ -112,12 +110,12 @@ class Volume(Endpoint):
 
         if volume_id is not None:
             return self.make_request(
-                "%s/%s/actions" % (self.uri, volume_id), "POST", attribs=attribs
+                "{}/{}/actions".format(self.uri, volume_id), "POST", attribs=attribs
             )
         elif volume_name is not None:
             attribs["volume_name"] = volume_name
             return self.make_request(
-                "%s/actions" % self.uri, "POST", attribs=attribs
+                "{}/actions".format(self.uri), "POST", attribs=attribs
             )
         else:
             raise ValueError("Must supply an id or name")
@@ -132,19 +130,19 @@ class Volume(Endpoint):
             "size_gigabytes": size
         }
 
-        uri = "%s/%s/actions" % (self.uri, volume_id)
+        uri = "{}/{}/actions".format(self.uri, volume_id)
         return self.make_request(uri, 'POST', attribs=attribs)
 
     def list_actions(self, volume_id):
         """
         Retrieve volume actions information
         """
-        uri = "%s/%s/actions" % (self.uri, volume_id)
+        uri = "{}/{}/actions".format(self.uri, volume_id)
         return self.make_request(uri)
 
     def get_action(self, volume_id, action_id):
         """
         Get the status of an volume action
         """
-        uri = "%s/%s/actions/%s" % (self.uri, volume_id, action_id)
+        uri = "{}/{}/actions/{}".format(self.uri, volume_id, action_id)
         return self.make_request(uri)
