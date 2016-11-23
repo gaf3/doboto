@@ -2,6 +2,7 @@
 
 from .Account import Account
 from .Action import Action
+from .Volume import Volume
 from .Droplet import Droplet
 from .SSHKey import SSHKey
 from .Image import Image
@@ -17,6 +18,7 @@ class DO(object):
         """Take URL and token, and create a sub instance for each endpoint."""
         self.account = Account(url, token)
         self.action = Action(url, token)
+        self.volume = Volume(url, token)
         self.droplet = Droplet(url, token)
         self.ssh_key = SSHKey(url, token)
         self.image = Image(url, token)
