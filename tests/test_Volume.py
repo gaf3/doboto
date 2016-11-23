@@ -267,7 +267,7 @@ class TestVolume(TestCase):
     @patch('doboto.Volume.Volume.make_request')
     def test_resize(self, mock_make_request):
         """
-        test that resize works with volume_id and/or name
+        test that resize works
         """
         volume = self.klass(self.test_url, self.test_token)
 
@@ -299,7 +299,7 @@ class TestVolume(TestCase):
     @patch('doboto.Volume.Volume.make_request')
     def test_get_action(self, mock_make_request):
         """
-        get_actions works with volume id
+        get_actions works with volume id and action id
         """
 
         volume_id = 12345
