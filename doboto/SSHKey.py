@@ -17,7 +17,7 @@ class SSHKey(Endpoint):
         attribs = {'name': name,
                    'public_key': public_key}
 
-        return self.make_request(self.uri, 'POST', attribs)
+        return self.make_request(self.uri, 'POST', attribs=attribs)
 
     def list(self):
         """list SSH Keys"""

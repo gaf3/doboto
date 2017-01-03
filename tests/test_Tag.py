@@ -1,5 +1,5 @@
 """
-This module contains tests for the main DO class
+This module contains tests for the Tag class
 """
 
 from unittest import TestCase
