@@ -67,7 +67,7 @@ class Droplet(Endpoint):
         uri = "%s/%s/actions/%s" % (self.uri, droplet_id, action_id)
         return self.make_request(uri)
 
-    def destroy(self, droplet_id, with_tag=None):
+    def destroy(self, droplet_id=None, with_tag=None):
         """
         Destroy a droplet of tagged droplets
         """
