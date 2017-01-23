@@ -163,6 +163,9 @@ class TestDroplet(TestCase):
 
         mock_make_request.assert_called_with(test_uri, 'DELETE')
 
+        with self.assertRaises(ValueError):
+            drop.destroy()
+
     @patch('doboto.Droplet.Droplet.make_request')
     def test_create(self, mock_make_request):
         """
