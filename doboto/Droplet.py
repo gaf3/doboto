@@ -67,14 +67,16 @@ class Droplet(Endpoint):
         uri = "%s/%s/actions/%s" % (self.uri, droplet_id, action_id)
         return self.make_request(uri)
 
-    def destroy(self, droplet_id, with_tag=None):
+    def destroy(self, droplet_id=None, with_tag=None):
         """
         Destroy a droplet of tagged droplets
         """
         if with_tag is not None:
             uri = "%s?tag_name=%s" % (self.uri, with_tag)
-        else:
+        elif droplet_id is not None:
             uri = "%s/%s" % (self.uri, droplet_id)
+        else:
+            raise ValueError("droplet_id or with_tag must be specified")
         return self.make_request(uri, 'DELETE')
 
     def create(self, attribs=None):

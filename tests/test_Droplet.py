@@ -158,10 +158,13 @@ class TestDroplet(TestCase):
         mock_make_request.assert_called_with(test_uri, 'DELETE')
 
         tag = "rando-tag"
-        drop.destroy("all", with_tag=tag)
+        drop.destroy(with_tag=tag)
         test_uri = "{}?tag_name={}".format(self.test_uri, tag)
 
         mock_make_request.assert_called_with(test_uri, 'DELETE')
+
+        with self.assertRaises(ValueError):
+            drop.destroy()
 
     @patch('doboto.Droplet.Droplet.make_request')
     def test_create(self, mock_make_request):
