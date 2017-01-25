@@ -24,11 +24,23 @@ class SSHKey(Endpoint):
 
         return self.make_request(self.uri)
 
-    def retrieve(self, ssh_id):
+    def info(self, id_fingerprint):
         """Retrieve SSH Key"""
 
-    def update(self, ssh_id):
+        uri = "%s/%s" % (self.uri, id_fingerprint)
+        return self.make_request(uri)
+
+    def update(self, id_fingerprint, name):
         """Update SSH Key"""
 
-    def destroy(self, ssh_id):
+        uri = "%s/%s" % (self.uri, id_fingerprint)
+        attribs = {'name': name}
+
+        return self.make_request(uri, 'PUT', attribs=attribs)
+
+    def destroy(self, id_fingerprint):
         """Destroy SSH Key"""
+
+        uri = "%s/%s" % (self.uri, id_fingerprint)
+
+        return self.make_request(uri, 'DELETE')
