@@ -55,7 +55,7 @@ class Tag(Endpoint):
         This call provides a way to attach resources to a tag
         """
 
-        uri = "{}/{}".format(self.uri, tag_name)
+        uri = "{}/{}/resources".format(self.uri, tag_name)
         attribs = {'resources': resources}
 
         return self.make_request(uri, 'POST', attribs)
@@ -65,7 +65,7 @@ class Tag(Endpoint):
         This call provides a way to detach resources to a tag
         """
 
-        uri = "{}/{}".format(self.uri, tag_name)
+        uri = "{}/{}/resources".format(self.uri, tag_name)
         attribs = {'resources': resources}
 
         return self.make_request(uri, 'DELETE', attribs)
