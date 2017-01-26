@@ -68,13 +68,13 @@ class TestDroplet(TestCase):
 
         drop = self.klass(self.test_url, self.test_token)
 
-        tag = "rando_tag"
+        tag_name = "rando_tag"
 
         drop.list()
         mock_make_request.assert_called_with(self.test_uri)
 
-        drop.list(with_tag=tag)
-        drop_uri = "{}?tag_name={}".format(self.test_uri, tag)
+        drop.list(tag_name=tag_name)
+        drop_uri = "{}?tag_name={}".format(self.test_uri, tag_name)
         mock_make_request.assert_called_with(drop_uri)
 
     @patch('doboto.Droplet.Droplet.make_request')
@@ -157,9 +157,9 @@ class TestDroplet(TestCase):
 
         mock_make_request.assert_called_with(test_uri, 'DELETE')
 
-        tag = "rando-tag"
-        drop.destroy(with_tag=tag)
-        test_uri = "{}?tag_name={}".format(self.test_uri, tag)
+        tag_name = "rando-tag"
+        drop.destroy(tag_name=tag_name)
+        test_uri = "{}?tag_name={}".format(self.test_uri, tag_name)
 
         mock_make_request.assert_called_with(test_uri, 'DELETE')
 
@@ -211,7 +211,7 @@ class TestDroplet(TestCase):
         test_uri = "{}/actions?tag_name={}".format(self.test_uri, tag)
         datas = {"type": "disable_backups"}
 
-        drop.backups("all", action, with_tag=tag)
+        drop.backups("all", action, tag_name=tag)
 
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
@@ -264,7 +264,7 @@ class TestDroplet(TestCase):
         test_uri = "{}/actions?tag_name={}".format(self.test_uri, tag)
         action = "off"
         datas = {"type": "power_off"}
-        drop.power("all", action, with_tag=tag)
+        drop.power("all", action, tag_name=tag)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
     @patch('doboto.Droplet.Droplet.make_request')
@@ -285,7 +285,7 @@ class TestDroplet(TestCase):
         tag = "rando-tag"
         test_uri = "{}/actions?tag_name={}".format(self.test_uri, tag)
         datas = {"type": "shutdown"}
-        drop.shutdown("all", with_tag=tag)
+        drop.shutdown("all", tag_name=tag)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
     @patch('doboto.Droplet.Droplet.make_request')
@@ -414,10 +414,10 @@ class TestDroplet(TestCase):
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
         # test with tag
-        tag = "rando-tag"
-        test_uri = "{}/actions?tag_name={}".format(self.test_uri, tag)
+        tag_name = "rando-tag"
+        test_uri = "{}/actions?tag_name={}".format(self.test_uri, tag_name)
         datas = {"type": "enable_ipv6"}
-        drop.enable_ipv6("all", with_tag=tag)
+        drop.enable_ipv6("all", tag_name=tag_name)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
     @patch('doboto.Droplet.Droplet.make_request')
@@ -438,7 +438,7 @@ class TestDroplet(TestCase):
         tag = "rando-tag"
         test_uri = "{}/actions?tag_name={}".format(self.test_uri, tag)
         datas = {"type": "enable_private_networking"}
-        drop.enable_private_networking("all", with_tag=tag)
+        drop.enable_private_networking("all", tag_name=tag)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
     @patch('doboto.Droplet.Droplet.make_request')
@@ -461,5 +461,5 @@ class TestDroplet(TestCase):
         test_uri = "{}/actions?tag_name={}".format(self.test_uri, tag)
         snap_name = "snap-2"
         datas = {"type": "snapshot", "name": "%s" % (snap_name)}
-        drop.take_snapshot("all", snap_name, with_tag=tag)
+        drop.take_snapshot("all", snap_name, tag_name=tag)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)

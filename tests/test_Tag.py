@@ -122,7 +122,7 @@ class TestTag(TestCase):
         resources = "sally"
         tag = self.klass(self.test_url, self.test_token)
         tag.attach(test_name, resources)
-        test_uri = "{}/{}".format(self.test_uri, test_name)
+        test_uri = "{}/{}/resources".format(self.test_uri, test_name)
 
         mock_make_request.assert_called_with(test_uri, 'POST', {'resources': resources})
 
@@ -136,7 +136,7 @@ class TestTag(TestCase):
         resources = "sally"
         tag = self.klass(self.test_url, self.test_token)
         tag.detach(test_name, resources)
-        test_uri = "{}/{}".format(self.test_uri, test_name)
+        test_uri = "{}/{}/resources".format(self.test_uri, test_name)
 
         mock_make_request.assert_called_with(test_uri, 'DELETE', {'resources': resources})
 
