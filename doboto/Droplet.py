@@ -40,28 +40,28 @@ class Droplet(Endpoint):
 
         return self.make_request(uri)
 
-    def list_kernels(self, id):
+    def kernels(self, id):
         """
         Retrieve droplet kernels information
         """
         uri = "%s/%s/kernels" % (self.uri, id)
         return self.make_request(uri)
 
-    def list_snapshots(self, id):
+    def snapshots(self, id):
         """
         Retrieve droplet snapshots information
         """
         uri = "%s/%s/snapshots" % (self.uri, id)
         return self.make_request(uri)
 
-    def list_backups(self, id):
+    def backups(self, id):
         """
         Retrieve droplet backups information
         """
         uri = "%s/%s/backups" % (self.uri, id)
         return self.make_request(uri)
 
-    def list_actions(self, id):
+    def actions(self, id):
         """
         Retrieve droplet actions information
         """
@@ -247,7 +247,7 @@ class Droplet(Endpoint):
 
     def snapshot(self, id=None, tag_name=None, name=None):
         """
-        Snaphots by id or tag with name
+        Snaphot by id or tag with name
         """
 
         if name is None:

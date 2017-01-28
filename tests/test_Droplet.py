@@ -99,53 +99,53 @@ class TestDroplet(TestCase):
         mock_make_request.assert_called_with(drop_uri)
 
     @patch('doboto.Droplet.Droplet.make_request')
-    def test_list_kernels(self, mock_make_request):
+    def test_kernels(self, mock_make_request):
         """
         list_kernels works with droplet id
         """
 
         id = 12345
         drop = self.klass(self.test_url, self.test_token)
-        drop.list_kernels(id)
+        drop.kernels(id)
         test_uri = "{}/{}/kernels".format(self.test_uri, id)
 
         mock_make_request.assert_called_with(test_uri)
 
     @patch('doboto.Droplet.Droplet.make_request')
-    def test_list_snapshots(self, mock_make_request):
+    def test_snapshots(self, mock_make_request):
         """
         list_snapshots works with droplet id
         """
 
         id = 12345
         drop = self.klass(self.test_url, self.test_token)
-        drop.list_snapshots(id)
+        drop.snapshots(id)
         test_uri = "{}/{}/snapshots".format(self.test_uri, id)
 
         mock_make_request.assert_called_with(test_uri)
 
     @patch('doboto.Droplet.Droplet.make_request')
-    def test_list_backups(self, mock_make_request):
+    def test_backups(self, mock_make_request):
         """
         list_backups works with droplet id
         """
 
         id = 12345
         drop = self.klass(self.test_url, self.test_token)
-        drop.list_backups(id)
+        drop.backups(id)
         test_uri = "{}/{}/backups".format(self.test_uri, id)
 
         mock_make_request.assert_called_with(test_uri)
 
     @patch('doboto.Droplet.Droplet.make_request')
-    def test_list_actions(self, mock_make_request):
+    def test_actions(self, mock_make_request):
         """
         list_actions works with droplet id
         """
 
         id = 12345
         drop = self.klass(self.test_url, self.test_token)
-        drop.list_actions(id)
+        drop.actions(id)
         test_uri = "{}/{}/actions".format(self.test_uri, id)
 
         mock_make_request.assert_called_with(test_uri)
