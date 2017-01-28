@@ -53,11 +53,11 @@ class TestDroplet(TestCase):
         info works with droplet id
         """
 
-        droplet_id = 12345
+        id = 12345
         drop = self.klass(self.test_url, self.test_token)
-        drop.info(droplet_id)
+        drop.info(id)
 
-        test_uri = "{}/{}".format(self.test_uri, droplet_id)
+        test_uri = "{}/{}".format(self.test_uri, id)
         mock_make_request.assert_called_with(test_uri)
 
     @patch('doboto.Droplet.Droplet.make_request')
@@ -83,10 +83,10 @@ class TestDroplet(TestCase):
         list_kernels works with droplet id
         """
 
-        droplet_id = 12345
+        id = 12345
         drop = self.klass(self.test_url, self.test_token)
-        drop.list_kernels(droplet_id)
-        test_uri = "{}/{}/kernels".format(self.test_uri, droplet_id)
+        drop.list_kernels(id)
+        test_uri = "{}/{}/kernels".format(self.test_uri, id)
 
         mock_make_request.assert_called_with(test_uri)
 
@@ -96,10 +96,10 @@ class TestDroplet(TestCase):
         list_snapshots works with droplet id
         """
 
-        droplet_id = 12345
+        id = 12345
         drop = self.klass(self.test_url, self.test_token)
-        drop.list_snapshots(droplet_id)
-        test_uri = "{}/{}/snapshots".format(self.test_uri, droplet_id)
+        drop.list_snapshots(id)
+        test_uri = "{}/{}/snapshots".format(self.test_uri, id)
 
         mock_make_request.assert_called_with(test_uri)
 
@@ -109,10 +109,10 @@ class TestDroplet(TestCase):
         list_backups works with droplet id
         """
 
-        droplet_id = 12345
+        id = 12345
         drop = self.klass(self.test_url, self.test_token)
-        drop.list_backups(droplet_id)
-        test_uri = "{}/{}/backups".format(self.test_uri, droplet_id)
+        drop.list_backups(id)
+        test_uri = "{}/{}/backups".format(self.test_uri, id)
 
         mock_make_request.assert_called_with(test_uri)
 
@@ -122,10 +122,10 @@ class TestDroplet(TestCase):
         list_actions works with droplet id
         """
 
-        droplet_id = 12345
+        id = 12345
         drop = self.klass(self.test_url, self.test_token)
-        drop.list_actions(droplet_id)
-        test_uri = "{}/{}/actions".format(self.test_uri, droplet_id)
+        drop.list_actions(id)
+        test_uri = "{}/{}/actions".format(self.test_uri, id)
 
         mock_make_request.assert_called_with(test_uri)
 
@@ -135,12 +135,12 @@ class TestDroplet(TestCase):
         get_actions works with droplet id
         """
 
-        droplet_id = 12345
+        id = 12345
         action_id = 54321
         drop = self.klass(self.test_url, self.test_token)
-        drop.get_action(droplet_id, action_id)
+        drop.get_action(id, action_id)
         test_uri = "{}/{}/actions/{}".format(
-            self.test_uri, droplet_id, action_id)
+            self.test_uri, id, action_id)
 
         mock_make_request.assert_called_with(test_uri)
 
@@ -150,10 +150,10 @@ class TestDroplet(TestCase):
         destroy works with droplet id
         """
 
-        droplet_id = 12345
+        id = 12345
         drop = self.klass(self.test_url, self.test_token)
-        drop.destroy(droplet_id)
-        test_uri = "{}/{}".format(self.test_uri, droplet_id)
+        drop.destroy(id)
+        test_uri = "{}/{}".format(self.test_uri, id)
 
         mock_make_request.assert_called_with(test_uri, 'DELETE')
 
@@ -190,21 +190,21 @@ class TestDroplet(TestCase):
     @patch('doboto.Droplet.Droplet.make_request')
     def test_backups(self, mock_make_request):
         """
-        test that backups works with droplet_id and action
+        test that backups works with id and action
         """
         drop = self.klass(self.test_url, self.test_token)
 
-        droplet_id = 12345
+        id = 12345
         action = "on"
-        test_uri = "{}/{}/actions".format(self.test_uri, droplet_id)
+        test_uri = "{}/{}/actions".format(self.test_uri, id)
         datas = {"type": "enable_backups"}
 
-        drop.backups(droplet_id, action)
+        drop.backups(id, action)
 
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
         with self.assertRaises(ValueError):
-            drop.backups(droplet_id, "bad-action")
+            drop.backups(id, "bad-action")
 
         action = "off"
         tag = "rando-tag"
@@ -218,46 +218,46 @@ class TestDroplet(TestCase):
     @patch('doboto.Droplet.Droplet.make_request')
     def test_reboot(self, mock_make_request):
         """
-        test that reboot works with droplet_id and action
+        test that reboot works with id and action
         """
         drop = self.klass(self.test_url, self.test_token)
 
-        droplet_id = 12345
-        test_uri = "{}/{}/actions".format(self.test_uri, droplet_id)
+        id = 12345
+        test_uri = "{}/{}/actions".format(self.test_uri, id)
         datas = {"type": "reboot"}
 
-        drop.reboot(droplet_id)
+        drop.reboot(id)
 
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
     @patch('doboto.Droplet.Droplet.make_request')
     def test_power(self, mock_make_request):
         """
-        test that power commands with droplet_id and action
+        test that power commands with id and action
         """
         drop = self.klass(self.test_url, self.test_token)
 
-        droplet_id = 12345
-        test_uri = "{}/{}/actions".format(self.test_uri, droplet_id)
+        id = 12345
+        test_uri = "{}/{}/actions".format(self.test_uri, id)
 
         action = "on"
         datas = {"type": "power_on"}
-        drop.power(droplet_id, action)
+        drop.power(id, action)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
         action = "off"
         datas = {"type": "power_off"}
-        drop.power(droplet_id, action)
+        drop.power(id, action)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
         action = "cycle"
         datas = {"type": "power_cycle"}
-        drop.power(droplet_id, action)
+        drop.power(id, action)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
         # fail with back action
         with self.assertRaises(ValueError):
-            drop.power(droplet_id, "bad-action")
+            drop.power(id, "bad-action")
 
         # work with tags
         tag = "rando-tag"
@@ -270,15 +270,15 @@ class TestDroplet(TestCase):
     @patch('doboto.Droplet.Droplet.make_request')
     def test_shutdown(self, mock_make_request):
         """
-        test that power commands with droplet_id and action
+        test that power commands with id and action
         """
         drop = self.klass(self.test_url, self.test_token)
 
-        droplet_id = 12345
-        test_uri = "{}/{}/actions".format(self.test_uri, droplet_id)
+        id = 12345
+        test_uri = "{}/{}/actions".format(self.test_uri, id)
 
         datas = {"type": "shutdown"}
-        drop.shutdown(droplet_id)
+        drop.shutdown(id)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
         # work with tags
@@ -291,20 +291,20 @@ class TestDroplet(TestCase):
     @patch('doboto.Droplet.Droplet.make_request')
     def test_restore(self, mock_make_request):
         """
-        test that restore commands with droplet_id and image
+        test that restore commands with id and image
         """
         drop = self.klass(self.test_url, self.test_token)
-        droplet_id = 12345
-        test_uri = "{}/{}/actions".format(self.test_uri, droplet_id)
+        id = 12345
+        test_uri = "{}/{}/actions".format(self.test_uri, id)
 
         image = 654321
         datas = {"type": "restore", "image": image}
-        drop.restore(droplet_id, image)
+        drop.restore(id, image)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
         image = "my-image-slug"
         datas = {"type": "restore", "image": "%s" % (image)}
-        drop.restore(droplet_id, image)
+        drop.restore(id, image)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
     @patch('doboto.Droplet.Droplet.make_request')
@@ -313,11 +313,11 @@ class TestDroplet(TestCase):
         test password_reset works with droplet id
         """
         drop = self.klass(self.test_url, self.test_token)
-        droplet_id = 12345
-        test_uri = "{}/{}/actions".format(self.test_uri, droplet_id)
+        id = 12345
+        test_uri = "{}/{}/actions".format(self.test_uri, id)
 
         datas = {"type": "password_reset"}
-        drop.password_reset(droplet_id)
+        drop.password_reset(id)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
     @patch('doboto.Droplet.Droplet.make_request')
@@ -326,20 +326,20 @@ class TestDroplet(TestCase):
         test resize works with droplet id, size, and optionally disk resize flag
         """
         drop = self.klass(self.test_url, self.test_token)
-        droplet_id = 12345
-        test_uri = "{}/{}/actions".format(self.test_uri, droplet_id)
+        id = 12345
+        test_uri = "{}/{}/actions".format(self.test_uri, id)
 
         # test with size and not specify disk
         size = "32gb"
         datas = {"type": "resize", "size": "%s" % (size), "disk": "false"}
-        drop.resize(droplet_id, size)
+        drop.resize(id, size)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
         # test with size and specify disk
         size = "16gb"
         disk = True
         datas = {"type": "resize", "size": "%s" % (size), "disk": "true"}
-        drop.resize(droplet_id, size, disk)
+        drop.resize(id, size, disk)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
     @patch('doboto.Droplet.Droplet.make_request')
@@ -348,19 +348,19 @@ class TestDroplet(TestCase):
         test rebuild works with droplet id, image
         """
         drop = self.klass(self.test_url, self.test_token)
-        droplet_id = 12345
-        test_uri = "{}/{}/actions".format(self.test_uri, droplet_id)
+        id = 12345
+        test_uri = "{}/{}/actions".format(self.test_uri, id)
 
         # test with image id
         image = 654321
         datas = {"type": "rebuild", "image": image}
-        drop.rebuild(droplet_id, image)
+        drop.rebuild(id, image)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
         # test with image slug
         image = "my-image-slug"
         datas = {"type": "rebuild", "image": "%s" % (image)}
-        drop.rebuild(droplet_id, image)
+        drop.rebuild(id, image)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
     @patch('doboto.Droplet.Droplet.make_request')
@@ -369,13 +369,13 @@ class TestDroplet(TestCase):
         test rename works with droplet id, image
         """
         drop = self.klass(self.test_url, self.test_token)
-        droplet_id = 12345
-        test_uri = "{}/{}/actions".format(self.test_uri, droplet_id)
+        id = 12345
+        test_uri = "{}/{}/actions".format(self.test_uri, id)
 
         # test with image id
         name = "cool-droplet-bruh"
         datas = {"type": "rename", "name": "%s" % (name)}
-        drop.rename(droplet_id, name)
+        drop.rename(id, name)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
     @patch('doboto.Droplet.Droplet.make_request')
@@ -384,19 +384,19 @@ class TestDroplet(TestCase):
         test change_kernel works with droplet id, kernel id
         """
         drop = self.klass(self.test_url, self.test_token)
-        droplet_id = 12345
-        test_uri = "{}/{}/actions".format(self.test_uri, droplet_id)
+        id = 12345
+        test_uri = "{}/{}/actions".format(self.test_uri, id)
 
         # test with kernel id
         kernel = 654321
         datas = {"type": "change_kernel", "kernel": kernel}
-        drop.change_kernel(droplet_id, kernel)
+        drop.change_kernel(id, kernel)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
         # test with kernel as str()
         kernel = "654321"
         datas = {"type": "change_kernel", "kernel": kernel}
-        drop.change_kernel(droplet_id, kernel)
+        drop.change_kernel(id, kernel)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
     @patch('doboto.Droplet.Droplet.make_request')
@@ -405,12 +405,12 @@ class TestDroplet(TestCase):
         test enable_ipv6 works with droplet id, kernel id
         """
         drop = self.klass(self.test_url, self.test_token)
-        droplet_id = 12345
-        test_uri = "{}/{}/actions".format(self.test_uri, droplet_id)
+        id = 12345
+        test_uri = "{}/{}/actions".format(self.test_uri, id)
 
         # test without tag
         datas = {"type": "enable_ipv6"}
-        drop.enable_ipv6(droplet_id)
+        drop.enable_ipv6(id)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
         # test with tag
@@ -426,12 +426,12 @@ class TestDroplet(TestCase):
         test enable_private_networking works with droplet id, kernel id
         """
         drop = self.klass(self.test_url, self.test_token)
-        droplet_id = 12345
-        test_uri = "{}/{}/actions".format(self.test_uri, droplet_id)
+        id = 12345
+        test_uri = "{}/{}/actions".format(self.test_uri, id)
 
         # test without tag
         datas = {"type": "enable_private_networking"}
-        drop.enable_private_networking(droplet_id)
+        drop.enable_private_networking(id)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
         # test with tag
@@ -447,13 +447,13 @@ class TestDroplet(TestCase):
         test take_snapshot works with droplet id, kernel id
         """
         drop = self.klass(self.test_url, self.test_token)
-        droplet_id = 12345
-        test_uri = "{}/{}/actions".format(self.test_uri, droplet_id)
+        id = 12345
+        test_uri = "{}/{}/actions".format(self.test_uri, id)
 
         # test without tag
         snap_name = "snap-1"
         datas = {"type": "snapshot", "name": "%s" % (snap_name)}
-        drop.take_snapshot(droplet_id, snap_name)
+        drop.take_snapshot(id, snap_name)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
         # test with tag
