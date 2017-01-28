@@ -25,12 +25,12 @@ class Tag(Endpoint):
 
         return self.make_request(self.uri, 'POST', attribs)
 
-    def info(self, tag_name):
+    def info(self, name):
         """
         Retrieve a tag
         """
 
-        uri = "%s/%s" % (self.uri, tag_name)
+        uri = "%s/%s" % (self.uri, name)
         return self.make_request(uri)
 
     def list(self):
@@ -40,43 +40,43 @@ class Tag(Endpoint):
 
         return self.make_request(self.uri)
 
-    def update(self, tag_name, name):
+    def update(self, name, new_name):
         """
         This call provides a way to rename an existing tag
         """
 
-        uri = "{}/{}".format(self.uri, tag_name)
-        attribs = {'name': name}
+        uri = "{}/{}".format(self.uri, name)
+        attribs = {'name': new_name}
 
         return self.make_request(uri, 'PUT', attribs)
 
-    def attach(self, tag_name, resources):
+    def attach(self, name, resources):
         """
         This call provides a way to attach resources to a tag
         """
 
-        uri = "{}/{}/resources".format(self.uri, tag_name)
+        uri = "{}/{}/resources".format(self.uri, name)
         attribs = {'resources': resources}
 
         return self.make_request(uri, 'POST', attribs)
 
-    def detach(self, tag_name, resources):
+    def detach(self, name, resources):
         """
         This call provides a way to detach resources to a tag
         """
 
-        uri = "{}/{}/resources".format(self.uri, tag_name)
+        uri = "{}/{}/resources".format(self.uri, name)
         attribs = {'resources': resources}
 
         return self.make_request(uri, 'DELETE', attribs)
 
-    def destroy(self, tag_name):
+    def destroy(self, name):
         """
         Removes a named tag from all resources it is associated with, and
         deletes the tag itself
         """
 
-        uri = "{}/{}".format(self.uri, tag_name)
+        uri = "{}/{}".format(self.uri, name)
 
         return self.make_request(uri, 'DELETE')
 

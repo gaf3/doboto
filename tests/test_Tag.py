@@ -61,7 +61,7 @@ class TestTag(TestCase):
     @patch('doboto.Tag.Tag.make_request')
     def test_info(self, mock_make_request):
         """
-        info works with tag_name
+        info works with name
         """
 
         mock_ret = {
@@ -70,13 +70,13 @@ class TestTag(TestCase):
         }
 
         mock_make_request.return_value = mock_ret
-        tag_name = "hay"
+        name = "hay"
         tag = self.klass(self.test_url, self.test_token)
-        result = tag.info(tag_name)
+        result = tag.info(name)
 
         self.assertEqual(result, mock_ret)
 
-        test_uri = "{}/{}".format(self.test_uri, tag_name)
+        test_uri = "{}/{}".format(self.test_uri, name)
         mock_make_request.assert_called_with(test_uri)
 
     @patch('doboto.Tag.Tag.make_request')
@@ -160,15 +160,15 @@ class TestTag(TestCase):
         """
 
         extra_data = {'droplet': 'some data', 'your aunt': 'bessie', 'a moose once bit': 'my sister'}
-        tag_names = ['alpha', 'beta', 'gamma']
-        mock_ret = {'tags': [{'name': _, 'resources': extra_data} for _ in tag_names]}
+        names = ['alpha', 'beta', 'gamma']
+        mock_ret = {'tags': [{'name': _, 'resources': extra_data} for _ in names]}
 
 
         mock_make_request.return_value = mock_ret
         tag = self.klass(self.test_uri, self.test_token)
         result = tag.names()
 
-        self.assertListEqual(result, tag_names)
+        self.assertListEqual(result, names)
 
     @patch('doboto.Tag.Tag.make_request')
     def test_names_happy_without_tags(self, mock_make_request):
