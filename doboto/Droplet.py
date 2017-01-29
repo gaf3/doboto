@@ -13,6 +13,7 @@ class Droplet(Endpoint):
         """
         super(Droplet, self).__init__(token)
         self.uri = "%s/droplets" % url
+        self.reports = "%s/reports" % url
 
     def create(self, attribs=None):
         """Create a droplet based off of parameters"""
@@ -92,7 +93,7 @@ class Droplet(Endpoint):
         """
         list all droplets that are on the same physical hardware
         """
-        uri = "%s/droplet_neighbors" % (self.uri)
+        uri = "%s/droplet_neighbors" % (self.reports)
 
         return self.make_request(uri)
 
