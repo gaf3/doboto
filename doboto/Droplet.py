@@ -256,7 +256,7 @@ class Droplet(Endpoint):
 
         return self.action(id=id, tag_name=tag_name, type="snapshot", attribs={"name": name})
 
-    def get_action(self, id, action_id):
+    def action_info(self, id, action_id):
         """
         Get the status of an droplet action
         """

@@ -514,7 +514,7 @@ class TestDroplet(TestCase):
             drop.snapshot(id=0)
 
     @patch('doboto.Droplet.Droplet.make_request')
-    def test_get_action(self, mock_make_request):
+    def test_action_info(self, mock_make_request):
         """
         get_actions works with droplet id
         """
@@ -522,7 +522,7 @@ class TestDroplet(TestCase):
         id = 12345
         action_id = 54321
         drop = self.klass(self.test_url, self.test_token)
-        drop.get_action(id, action_id)
+        drop.action_info(id, action_id)
         test_uri = "{}/{}/actions/{}".format(
             self.test_uri, id, action_id)
 
