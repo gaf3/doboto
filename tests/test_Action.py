@@ -78,7 +78,37 @@ class TestAction(TestCase):
         }
 
         mock_make_request.return_value = mock_ret
-        action = self.klass(self.test_uri, self.test_token)
+        action = self.klass(self.test_url, self.test_token)
         result = action.list()
 
         self.assertEqual(result, mock_ret)
+        mock_make_request.assert_called_with(self.test_uri)
+
+    @patch('doboto.Action.Action.make_request')
+    def test_info(self, mock_make_request):
+        """
+        info works with action id
+        """
+
+        mock_ret = {
+            "action": {
+                "id": 36804636,
+                "status": "completed",
+                "type": "create",
+                "started_at": "2014-11-14T16:29:21Z",
+                "completed_at": "2014-11-14T16:30:06Z",
+                "resource_id": 3164444,
+                "resource_type": "droplet",
+                "region": "nyc3",
+                "region_slug": "nyc3"
+            }
+        }
+
+        id = 12345
+        mock_make_request.return_value = mock_ret
+        action = self.klass(self.test_url, self.test_token)
+        result = action.info(id)
+
+        test_uri = "{}/{}".format(self.test_uri, id)
+        self.assertEqual(result, mock_ret)
+        mock_make_request.assert_called_with(test_uri)
