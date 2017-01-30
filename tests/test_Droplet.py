@@ -516,7 +516,7 @@ class TestDroplet(TestCase):
     @patch('doboto.Droplet.Droplet.make_request')
     def test_action_info(self, mock_make_request):
         """
-        get_actions works with droplet id
+        action_info works with droplet id
         """
 
         id = 12345
