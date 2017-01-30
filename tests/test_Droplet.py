@@ -20,6 +20,7 @@ class TestDroplet(TestCase):
 
         self.test_url = "http://abc.example.com"
         self.test_uri = "{}/droplets".format(self.test_url)
+        self.test_reports = "{}/reports".format(self.test_url)
         self.test_token = "abc123"
         self.instantiate_args = (self.test_url, self.test_token)
 
@@ -193,7 +194,7 @@ class TestDroplet(TestCase):
 
         drop = self.klass(self.test_url, self.test_token)
         drop.droplet_neighbors()
-        test_uri = "{}/droplet_neighbors".format(self.test_uri)
+        test_uri = "{}/droplet_neighbors".format(self.test_reports)
 
         mock_make_request.assert_called_with(test_uri)
 
