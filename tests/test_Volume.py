@@ -93,18 +93,18 @@ class TestVolume(TestCase):
         info works with volume id or name
         """
 
-        volume_id = 12345
+        id = 12345
         volume = self.klass(self.test_url, self.test_token)
 
         # By id
 
-        volume.info(volume_id)
-        test_uri = "{}/{}".format(self.test_uri, volume_id)
+        volume.info(id)
+        test_uri = "{}/{}".format(self.test_uri, id)
         mock_make_request.assert_called_with(test_uri)
 
-        # By name
+        # By name and region
 
-        volume.info(volume_name="stuff", region="nyc1")
+        volume.info(name="stuff", region="nyc1")
         test_uri = self.test_uri
         mock_make_request.assert_called_with(test_uri, params={"name": "stuff", "region": "nyc1"})
 
@@ -114,37 +114,37 @@ class TestVolume(TestCase):
             ValueError, "Must supply an id or name and region", volume.info
         )
         self.assertRaisesRegexp(
-            ValueError, "Must supply an id or name and region", volume.info, volume_name="stuff"
+            ValueError, "Must supply an id or name and region", volume.info, name="stuff"
         )
         self.assertRaisesRegexp(
             ValueError, "Must supply an id or name and region", volume.info, region="nyc1"
         )
 
     @patch('doboto.Volume.Volume.make_request')
-    def test_list_snapshots(self, mock_make_request):
+    def test_snapshots(self, mock_make_request):
         """
         list_snapshots works with volume id
         """
 
-        volume_id = 12345
+        id = 12345
         volume = self.klass(self.test_url, self.test_token)
-        volume.list_snapshots(volume_id)
-        test_uri = "{}/{}/snapshots".format(self.test_uri, volume_id)
+        volume.snapshots(id)
+        test_uri = "{}/{}/snapshots".format(self.test_uri, id)
 
         mock_make_request.assert_called_with(test_uri)
 
     @patch('doboto.Volume.Volume.make_request')
-    def test_take_snapshot(self, mock_make_request):
+    def test_snapshot(self, mock_make_request):
         """
         test take_snapshot works with volume id
         """
         volume = self.klass(self.test_url, self.test_token)
-        volume_id = 12345
-        test_uri = "{}/{}/snapshots".format(self.test_uri, volume_id)
+        id = 12345
+        test_uri = "{}/{}/snapshots".format(self.test_uri, id)
 
         snap_name = "snap-1"
         datas = {"name": snap_name}
-        volume.take_snapshot(volume_id, snap_name)
+        volume.snapshot(id, snap_name)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
     @patch('doboto.Volume.Volume.make_request')
@@ -153,18 +153,18 @@ class TestVolume(TestCase):
         destroy works with volume id or name
         """
 
-        volume_id = 12345
+        id = 12345
         volume = self.klass(self.test_url, self.test_token)
 
         # By id
 
-        volume.destroy(volume_id)
-        test_uri = "{}/{}".format(self.test_uri, volume_id)
+        volume.destroy(id)
+        test_uri = "{}/{}".format(self.test_uri, id)
         mock_make_request.assert_called_with(test_uri, "DELETE")
 
         # By name
 
-        volume.destroy(volume_name="stuff", region="nyc1")
+        volume.destroy(name="stuff", region="nyc1")
         test_uri = self.test_uri
         mock_make_request.assert_called_with(
             test_uri, "DELETE", params={"name": "stuff", "region": "nyc1"}
@@ -176,7 +176,7 @@ class TestVolume(TestCase):
             ValueError, "Must supply an id or name and region", volume.destroy
         )
         self.assertRaisesRegexp(
-            ValueError, "Must supply an id or name and region", volume.destroy, volume_name="stuff"
+            ValueError, "Must supply an id or name and region", volume.destroy, name="stuff"
         )
         self.assertRaisesRegexp(
             ValueError, "Must supply an id or name and region", volume.destroy, region="nyc1"
@@ -185,7 +185,7 @@ class TestVolume(TestCase):
     @patch('doboto.Volume.Volume.make_request')
     def test_attach(self, mock_make_request):
         """
-        test that attach works with volume_id and/or name
+        test that attach works with id and/or name
         """
         volume = self.klass(self.test_url, self.test_token)
 
@@ -194,39 +194,45 @@ class TestVolume(TestCase):
 
         # By id
 
-        volume_id = 12345
-        test_uri = "{}/{}/actions".format(self.test_uri, volume_id)
+        id = 12345
+        test_uri = "{}/{}/actions".format(self.test_uri, id)
+        datas = {
+            "type": "attach",
+            "droplet_id": droplet_id
+        }
+        volume.attach(id=id, droplet_id=droplet_id)
+        mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
+
         datas = {
             "type": "attach",
             "droplet_id": droplet_id,
             "region": region
         }
-        volume.attach(droplet_id, region, volume_id)
+        volume.attach(id=id, droplet_id=droplet_id, region=region)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
         # By name
 
-        volume_name = "stuff"
+        name = "stuff"
         test_uri = "{}/actions".format(self.test_uri)
         datas = {
             "type": "attach",
             "droplet_id": droplet_id,
-            "region": region,
-            "volume_name": volume_name
+            "volume_name": name
         }
-        volume.attach(droplet_id, region, volume_name=volume_name)
+        volume.attach(name=name, droplet_id=droplet_id)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
         # Requirements met
 
         self.assertRaisesRegexp(
-            ValueError, "Must supply an id or name", volume.attach, droplet_id, region
+            ValueError, "Must supply an id or name", volume.attach, droplet_id=droplet_id
         )
 
     @patch('doboto.Volume.Volume.make_request')
     def test_detach(self, mock_make_request):
         """
-        test that detach works with volume_id and/or name
+        test that detach works with id and/or name
         """
         volume = self.klass(self.test_url, self.test_token)
 
@@ -235,33 +241,39 @@ class TestVolume(TestCase):
 
         # By id
 
-        volume_id = 12345
-        test_uri = "{}/{}/actions".format(self.test_uri, volume_id)
+        id = 12345
+        test_uri = "{}/{}/actions".format(self.test_uri, id)
+        datas = {
+            "type": "detach",
+            "droplet_id": droplet_id
+        }
+        volume.detach(id=id, droplet_id=droplet_id)
+        mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
+
         datas = {
             "type": "detach",
             "droplet_id": droplet_id,
             "region": region
         }
-        volume.detach(droplet_id, region, volume_id)
+        volume.detach(id=id, droplet_id=droplet_id, region=region)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
         # By name
 
-        volume_name = "stuff"
+        name = "stuff"
         test_uri = "{}/actions".format(self.test_uri)
         datas = {
             "type": "detach",
             "droplet_id": droplet_id,
-            "region": region,
-            "volume_name": volume_name
+            "volume_name": name
         }
-        volume.detach(droplet_id, region, volume_name=volume_name)
+        volume.detach(name=name, droplet_id=droplet_id)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
         # Requirements met
 
         self.assertRaisesRegexp(
-            ValueError, "Must supply an id or name", volume.detach, droplet_id, region
+            ValueError, "Must supply an id or name", volume.detach, droplet_id=droplet_id
         )
 
     @patch('doboto.Volume.Volume.make_request')
@@ -271,42 +283,49 @@ class TestVolume(TestCase):
         """
         volume = self.klass(self.test_url, self.test_token)
 
-        volume_id = 12345
+        id = 12345
         region = "nyc1"
         size = 2
-        test_uri = "{}/{}/actions".format(self.test_uri, volume_id)
+        test_uri = "{}/{}/actions".format(self.test_uri, id)
+        datas = {
+            "type": "resize",
+            "size_gigabytes": 2
+        }
+        volume.resize(id, size)
+        mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
+
         datas = {
             "type": "resize",
             "region": region,
             "size_gigabytes": 2
         }
-        volume.resize(size, region, volume_id)
+        volume.resize(id, size, region)
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
     @patch('doboto.Volume.Volume.make_request')
-    def test_list_actions(self, mock_make_request):
+    def test_actions(self, mock_make_request):
         """
-        list_actions works with volume id
+        actions works with volume id
         """
 
-        volume_id = 12345
+        id = 12345
         volume = self.klass(self.test_url, self.test_token)
-        volume.list_actions(volume_id)
-        test_uri = "{}/{}/actions".format(self.test_uri, volume_id)
+        volume.actions(id)
+        test_uri = "{}/{}/actions".format(self.test_uri, id)
 
         mock_make_request.assert_called_with(test_uri)
 
     @patch('doboto.Volume.Volume.make_request')
-    def test_get_action(self, mock_make_request):
+    def test_action_info(self, mock_make_request):
         """
-        get_actions works with volume id and action id
+        action_info works with volume id and action id
         """
 
-        volume_id = 12345
+        id = 12345
         action_id = 54321
         volume = self.klass(self.test_url, self.test_token)
-        volume.get_action(volume_id, action_id)
+        volume.action_info(id, action_id)
         test_uri = "{}/{}/actions/{}".format(
-            self.test_uri, volume_id, action_id)
+            self.test_uri, id, action_id)
 
         mock_make_request.assert_called_with(test_uri)
