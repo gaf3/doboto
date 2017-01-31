@@ -5,6 +5,7 @@ from .Action import Action
 from .Domain import Domain
 from .Droplet import Droplet
 from .Image import Image
+from .Snapshot import Snapshot
 from .Region import Region
 from .Size import Size
 from .SSHKey import SSHKey
@@ -21,7 +22,8 @@ class DO(object):
         self.action = Action(url, token)
         self.domain = Domain(url, token)
         self.droplet = Droplet(url, token)
-        self.image = Image(url, token)
+        self.image = Snapshot(url, token)
+        self.snapshot = Image(url, token)
         self.region = Region(url, token)
         self.size = Size(url, token)
         self.ssh_key = SSHKey(url, token)
