@@ -12,39 +12,60 @@ class Image(Endpoint):
         super(Image, self).__init__(token)
         self.uri = "%s/images" % url
 
-    def info(self, image_id):
+    def info(self, id_slug):
         """Retrieve image information"""
-        uri = self.uri + "/%s" % image_id
+        uri = self.uri + "/%s" % id_slug
 
         return self.make_request(uri)
 
-    def list(self, kind=None, private=None):
-        """list all images"""
+    def list(self, type=None, private=None):
+        """list images"""
 
         params = {}
 
-        if kind is not None:
-            params["type"] = kind
+        if type is not None:
+            params["type"] = type
 
         if private is not None:
             params["private"] = private
 
         return self.make_request(self.uri, params=params)
 
-    def list_actions(self, image_id_slug):
-        """Retrieve image actions information"""
-        uri = self.uri + "/%s/actions" % image_id_slug
-
-        return self.make_request(uri)
-
-    def update(self, image_id, name):
+    def update(self, id, name):
         """Updates an image's name"""
-        uri = self.uri + "/%s" % image_id
+        uri = self.uri + "/%s" % id
 
         return self.make_request(uri, request_method="PUT", attribs={"name": name})
 
-    def destroy(self, image_id):
+    def destroy(self, id):
         """Destroy image"""
-        uri = self.uri + "/%s" % image_id
+        uri = self.uri + "/%s" % id
 
         return self.make_request(uri, request_method="DELETE")
+
+    def actions(self, id):
+        """Retrieve image actions information"""
+        uri = self.uri + "/%s/actions" % id
+
+        return self.make_request(uri)
+
+    def convert(self, id):
+        """Convert an image to a snapshot"""
+        uri = self.uri + "/%s/actions" % id
+
+        return self.make_request(uri, request_method="POST", attribs={"type": "convert"})
+
+    def transfer(self, id, region):
+        """Transfer an image to a region"""
+        uri = self.uri + "/%s/actions" % id
+
+        return self.make_request(
+            uri, request_method="POST", attribs={"type": "transfer", "region": region}
+        )
+
+    def action_info(self, id, action_id):
+        """
+        Get the status of an image action
+        """
+        uri = "%s/%s/actions/%s" % (self.uri, id, action_id)
+        return self.make_request(uri)
