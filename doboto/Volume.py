@@ -14,6 +14,14 @@ class Volume(Endpoint):
         super(Volume, self).__init__(token)
         self.uri = "{}/volumes".format(url)
 
+    def create(self, attribs=None):
+        """Create a volume based off of parameters"""
+
+        if attribs is None:
+            attribs = {}
+
+        return self.make_request(self.uri, 'POST', attribs=attribs)
+
     def list(self, region=None):
         """
         list all volumes, or by region volumes
@@ -22,14 +30,6 @@ class Volume(Endpoint):
             return self.make_request(self.uri, params={"region": region})
         else:
             return self.make_request(self.uri)
-
-    def create(self, attribs=None):
-        """Create a volume based off of parameters"""
-
-        if attribs is None:
-            attribs = {}
-
-        return self.make_request(self.uri, 'POST', attribs=attribs)
 
     def info(self, id=None, name=None, region=None):
         """
