@@ -12,17 +12,17 @@ class SSHKey(Endpoint):
         super(SSHKey, self).__init__(token)
         self.uri = "%s/account/keys" % url
 
+    def list(self):
+        """list SSH Keys"""
+
+        return self.make_request(self.uri)
+
     def create(self, name, public_key):
         """Create SSH Key"""
         attribs = {'name': name,
                    'public_key': public_key}
 
         return self.make_request(self.uri, 'POST', attribs=attribs)
-
-    def list(self):
-        """list SSH Keys"""
-
-        return self.make_request(self.uri)
 
     def info(self, id_fingerprint):
         """Retrieve SSH Key"""

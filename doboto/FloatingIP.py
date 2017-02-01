@@ -17,6 +17,13 @@ class FloatingIP(Endpoint):
         super(FloatingIP, self).__init__(token)
         self.uri = "{}/floating_ips".format(url)
 
+    def list(self):
+        """
+        List all floating IPs
+        """
+
+        return self.make_request(self.uri)
+
     def create(self, droplet_id=None, region=None):
         """
         Create a new floating ip
@@ -31,13 +38,6 @@ class FloatingIP(Endpoint):
             raise ValueError("droplet_id or region must be specified")
 
         return self.make_request(self.uri, 'POST', attribs)
-
-    def list(self):
-        """
-        List all floating IPs
-        """
-
-        return self.make_request(self.uri)
 
     def info(self, ip):
         """
@@ -76,7 +76,7 @@ class FloatingIP(Endpoint):
 
         return self.make_request(uri, 'POST', attribs)
 
-    def actions(self, ip):
+    def action_list(self, ip):
         """Retrieve floating ip actions information"""
         uri = self.uri + "/%s/actions" % ip
 

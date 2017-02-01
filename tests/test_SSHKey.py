@@ -47,6 +47,34 @@ class TestSSHKey(TestCase):
         self.assertFalse(exc_thrown)
 
     @patch('doboto.SSHKey.SSHKey.make_request')
+    def test_list_happy(self, mock_make_request):
+        """
+        list works with happy path
+        """
+
+        mock_ret = {
+            "ssh_keys": [
+                {
+                    "id": 512189,
+                    "fingerprint": "3b:16:bf:e4:8b:00:8b:b8:59:8c:a9:d3:f0:19:45:fa",
+                    "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAQQDD example",
+                    "name": "My SSH Public Key"
+                }
+            ],
+            "links": {
+            },
+            "meta": {
+                "total": 1
+            }
+        }
+
+        mock_make_request.return_value = mock_ret
+        ssh_key = self.klass(self.test_uri, self.test_token)
+        result = ssh_key.list()
+
+        self.assertEqual(result, mock_ret)
+
+    @patch('doboto.SSHKey.SSHKey.make_request')
     def test_create(self, mock_make_request):
         """
         create works with datas
@@ -74,34 +102,6 @@ class TestSSHKey(TestCase):
         mock_make_request.assert_called_with(
             self.test_uri, 'POST', attribs=datas
         )
-
-        self.assertEqual(result, mock_ret)
-
-    @patch('doboto.SSHKey.SSHKey.make_request')
-    def test_list_happy(self, mock_make_request):
-        """
-        list works with happy path
-        """
-
-        mock_ret = {
-            "ssh_keys": [
-                {
-                    "id": 512189,
-                    "fingerprint": "3b:16:bf:e4:8b:00:8b:b8:59:8c:a9:d3:f0:19:45:fa",
-                    "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAQQDD example",
-                    "name": "My SSH Public Key"
-                }
-            ],
-            "links": {
-            },
-            "meta": {
-                "total": 1
-            }
-        }
-
-        mock_make_request.return_value = mock_ret
-        ssh_key = self.klass(self.test_uri, self.test_token)
-        result = ssh_key.list()
 
         self.assertEqual(result, mock_ret)
 

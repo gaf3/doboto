@@ -17,6 +17,27 @@ class Tag(Endpoint):
         super(Tag, self).__init__(token)
         self.uri = "{}/tags".format(url)
 
+    def list(self):
+        """
+        List all tags
+        """
+
+        return self.make_request(self.uri)
+
+    def names(self):
+        """
+        This call will provide a list of all tag names
+        """
+
+        result = self.make_request(self.uri, 'GET')
+
+        if 'tags' in result:
+            ret_val = [_['name'] for _ in result['tags']]
+        else:
+            ret_val = result
+
+        return ret_val
+
     def create(self, name):
         """
         Create a new tag
@@ -33,13 +54,6 @@ class Tag(Endpoint):
         uri = "%s/%s" % (self.uri, name)
         return self.make_request(uri)
 
-    def list(self):
-        """
-        List all tags
-        """
-
-        return self.make_request(self.uri)
-
     def update(self, name, new_name):
         """
         This call provides a way to rename an existing tag
@@ -49,6 +63,16 @@ class Tag(Endpoint):
         attribs = {'name': new_name}
 
         return self.make_request(uri, 'PUT', attribs)
+
+    def destroy(self, name):
+        """
+        Removes a named tag from all resources it is associated with, and
+        deletes the tag itself
+        """
+
+        uri = "{}/{}".format(self.uri, name)
+
+        return self.make_request(uri, 'DELETE')
 
     def attach(self, name, resources):
         """
@@ -69,27 +93,3 @@ class Tag(Endpoint):
         attribs = {'resources': resources}
 
         return self.make_request(uri, 'DELETE', attribs)
-
-    def destroy(self, name):
-        """
-        Removes a named tag from all resources it is associated with, and
-        deletes the tag itself
-        """
-
-        uri = "{}/{}".format(self.uri, name)
-
-        return self.make_request(uri, 'DELETE')
-
-    def names(self):
-        """
-        This call will provide a list of all tag names
-        """
-
-        result = self.make_request(self.uri, 'GET')
-
-        if 'tags' in result:
-            ret_val = [_['name'] for _ in result['tags']]
-        else:
-            ret_val = result
-
-        return ret_val

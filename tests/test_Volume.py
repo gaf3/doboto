@@ -121,33 +121,6 @@ class TestVolume(TestCase):
         )
 
     @patch('doboto.Volume.Volume.make_request')
-    def test_snapshots(self, mock_make_request):
-        """
-        list_snapshots works with volume id
-        """
-
-        id = 12345
-        volume = self.klass(self.test_url, self.test_token)
-        volume.snapshots(id)
-        test_uri = "{}/{}/snapshots".format(self.test_uri, id)
-
-        mock_make_request.assert_called_with(test_uri)
-
-    @patch('doboto.Volume.Volume.make_request')
-    def test_snapshot(self, mock_make_request):
-        """
-        test take_snapshot works with volume id
-        """
-        volume = self.klass(self.test_url, self.test_token)
-        id = 12345
-        test_uri = "{}/{}/snapshots".format(self.test_uri, id)
-
-        snap_name = "snap-1"
-        datas = {"name": snap_name}
-        volume.snapshot(id, snap_name)
-        mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
-
-    @patch('doboto.Volume.Volume.make_request')
     def test_destroy(self, mock_make_request):
         """
         destroy works with volume id or name
@@ -181,6 +154,33 @@ class TestVolume(TestCase):
         self.assertRaisesRegexp(
             ValueError, "Must supply an id or name and region", volume.destroy, region="nyc1"
         )
+
+    @patch('doboto.Volume.Volume.make_request')
+    def test_snapshot_list(self, mock_make_request):
+        """
+        snapshot_list works with volume id
+        """
+
+        id = 12345
+        volume = self.klass(self.test_url, self.test_token)
+        volume.snapshot_list(id)
+        test_uri = "{}/{}/snapshots".format(self.test_uri, id)
+
+        mock_make_request.assert_called_with(test_uri)
+
+    @patch('doboto.Volume.Volume.make_request')
+    def test_snapshot_create(self, mock_make_request):
+        """
+        test snapshot_create works with volume id
+        """
+        volume = self.klass(self.test_url, self.test_token)
+        id = 12345
+        test_uri = "{}/{}/snapshots".format(self.test_uri, id)
+
+        snap_name = "snap-1"
+        datas = {"name": snap_name}
+        volume.snapshot_create(id, snap_name)
+        mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
     @patch('doboto.Volume.Volume.make_request')
     def test_attach(self, mock_make_request):
@@ -303,14 +303,14 @@ class TestVolume(TestCase):
         mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
     @patch('doboto.Volume.Volume.make_request')
-    def test_actions(self, mock_make_request):
+    def test_action_list(self, mock_make_request):
         """
         actions works with volume id
         """
 
         id = 12345
         volume = self.klass(self.test_url, self.test_token)
-        volume.actions(id)
+        volume.action_list(id)
         test_uri = "{}/{}/actions".format(self.test_uri, id)
 
         mock_make_request.assert_called_with(test_uri)

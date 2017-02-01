@@ -12,12 +12,6 @@ class Image(Endpoint):
         super(Image, self).__init__(token)
         self.uri = "%s/images" % url
 
-    def info(self, id_slug):
-        """Retrieve image information"""
-        uri = self.uri + "/%s" % id_slug
-
-        return self.make_request(uri)
-
     def list(self, type=None, private=None):
         """list images"""
 
@@ -31,6 +25,12 @@ class Image(Endpoint):
 
         return self.make_request(self.uri, params=params)
 
+    def info(self, id_slug):
+        """Retrieve image information"""
+        uri = self.uri + "/%s" % id_slug
+
+        return self.make_request(uri)
+
     def update(self, id, name):
         """Updates an image's name"""
         uri = self.uri + "/%s" % id
@@ -42,12 +42,6 @@ class Image(Endpoint):
         uri = self.uri + "/%s" % id
 
         return self.make_request(uri, request_method="DELETE")
-
-    def actions(self, id):
-        """Retrieve image actions information"""
-        uri = self.uri + "/%s/actions" % id
-
-        return self.make_request(uri)
 
     def convert(self, id):
         """Convert an image to a snapshot"""
@@ -62,6 +56,12 @@ class Image(Endpoint):
         return self.make_request(
             uri, request_method="POST", attribs={"type": "transfer", "region": region}
         )
+
+    def action_list(self, id):
+        """Retrieve image actions information"""
+        uri = self.uri + "/%s/actions" % id
+
+        return self.make_request(uri)
 
     def action_info(self, id, action_id):
         """
