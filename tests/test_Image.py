@@ -165,7 +165,7 @@ class TestImage(TestCase):
         )
 
     @patch('doboto.Image.Image.make_request')
-    def test_delete(self, mock_make_request):
+    def test_destroy(self, mock_make_request):
         """
         destroy works with image id
         """
