@@ -272,7 +272,7 @@ class TestImage(TestCase):
     @patch('doboto.Image.Image.make_request')
     def test_action_info(self, mock_make_request):
         """
-        action_info works with droplet id
+        action_info works with image id
         """
 
         id = 12345
