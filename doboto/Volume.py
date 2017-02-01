@@ -14,14 +14,6 @@ class Volume(Endpoint):
         super(Volume, self).__init__(token)
         self.uri = "{}/volumes".format(url)
 
-    def create(self, attribs=None):
-        """Create a volume based off of parameters"""
-
-        if attribs is None:
-            attribs = {}
-
-        return self.make_request(self.uri, 'POST', attribs=attribs)
-
     def list(self, region=None):
         """
         list all volumes, or by region volumes
@@ -30,6 +22,14 @@ class Volume(Endpoint):
             return self.make_request(self.uri, params={"region": region})
         else:
             return self.make_request(self.uri)
+
+    def create(self, attribs=None):
+        """Create a volume based off of parameters"""
+
+        if attribs is None:
+            attribs = {}
+
+        return self.make_request(self.uri, 'POST', attribs=attribs)
 
     def info(self, id=None, name=None, region=None):
         """
@@ -43,24 +43,6 @@ class Volume(Endpoint):
         else:
             raise ValueError("Must supply an id or name and region")
 
-    def snapshots(self, id):
-        """
-        Retrieve volume snapshots information
-        """
-        uri = "{}/{}/snapshots".format(self.uri, id)
-        return self.make_request(uri)
-
-    def snapshot(self, id, snapshot_name):
-        """
-        Take a snapshot of a volume.
-        Must supply snapshot name
-        """
-
-        uri = "{}/{}/snapshots".format(self.uri, id)
-
-        attribs = {"name": snapshot_name}
-        return self.make_request(uri, 'POST', attribs=attribs)
-
     def destroy(self, id=None, name=None, region=None):
         """
         Destroy a volume by id or name
@@ -73,6 +55,24 @@ class Volume(Endpoint):
             )
         else:
             raise ValueError("Must supply an id or name and region")
+
+    def snapshot_list(self, id):
+        """
+        Retrieve volume snapshots information
+        """
+        uri = "{}/{}/snapshots".format(self.uri, id)
+        return self.make_request(uri)
+
+    def snapshot_create(self, id, snapshot_name):
+        """
+        Take a snapshot of a volume.
+        Must supply snapshot name
+        """
+
+        uri = "{}/{}/snapshots".format(self.uri, id)
+
+        attribs = {"name": snapshot_name}
+        return self.make_request(uri, 'POST', attribs=attribs)
 
     def attach(self, id=None, name=None, region=None, droplet_id=None):
         """
@@ -139,7 +139,7 @@ class Volume(Endpoint):
         uri = "{}/{}/actions".format(self.uri, id)
         return self.make_request(uri, 'POST', attribs=attribs)
 
-    def actions(self, id):
+    def action_list(self, id):
         """
         Retrieve volume actions information
         """

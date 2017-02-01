@@ -14,6 +14,12 @@ class Domain(Endpoint):
         super(Domain, self).__init__(token)
         self.uri = "{}/domains".format(url)
 
+    def list(self):
+        """
+        list all domains
+        """
+        return self.make_request(self.uri)
+
     def create(self, name, ip_address):
         """Create a domain based off of parameters"""
 
@@ -23,12 +29,6 @@ class Domain(Endpoint):
         }
 
         return self.make_request(self.uri, 'POST', attribs=attribs)
-
-    def list(self):
-        """
-        list all domains
-        """
-        return self.make_request(self.uri)
 
     def info(self, name):
         """
@@ -45,7 +45,7 @@ class Domain(Endpoint):
         uri = "{}/{}".format(self.uri, name)
         return self.make_request(uri, 'DELETE')
 
-    def records(self, name):
+    def record_list(self, name):
         """
         Retrieve all domain records
         """

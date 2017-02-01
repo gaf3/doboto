@@ -47,40 +47,6 @@ class TestImage(TestCase):
         self.assertFalse(exc_thrown)
 
     @patch('doboto.Image.Image.make_request')
-    def test_info(self, mock_make_request):
-        """
-        info works with image id
-        """
-
-        mock_ret = {
-            "image": {
-                "id": 7555620,
-                "name": "Nifty New Snapshot",
-                "distribution": "Ubuntu",
-                "slug": None,
-                "public": False,
-                "regions": [
-                    "nyc2",
-                    "nyc2"
-                ],
-                "created_at": "2014-11-04T22:23:02Z",
-                "type": "snapshot",
-                "min_disk_size": 20,
-                "size_gigabytes": 2.34
-            }
-        }
-
-        mock_make_request.return_value = mock_ret
-        id_slug = 7555620
-        image = self.klass(self.test_url, self.test_token)
-        result = image.info(id_slug)
-
-        self.assertEqual(result, mock_ret)
-
-        test_uri = "{}/{}".format(self.test_uri, id_slug)
-        mock_make_request.assert_called_with(test_uri)
-
-    @patch('doboto.Image.Image.make_request')
     def test_list_happy(self, mock_make_request):
         """
         list works with happy path
@@ -127,6 +93,40 @@ class TestImage(TestCase):
         result = image.list()
         self.assertEqual(result, mock_ret)
         mock_make_request.assert_called_with(self.test_uri, params={})
+
+    @patch('doboto.Image.Image.make_request')
+    def test_info(self, mock_make_request):
+        """
+        info works with image id
+        """
+
+        mock_ret = {
+            "image": {
+                "id": 7555620,
+                "name": "Nifty New Snapshot",
+                "distribution": "Ubuntu",
+                "slug": None,
+                "public": False,
+                "regions": [
+                    "nyc2",
+                    "nyc2"
+                ],
+                "created_at": "2014-11-04T22:23:02Z",
+                "type": "snapshot",
+                "min_disk_size": 20,
+                "size_gigabytes": 2.34
+            }
+        }
+
+        mock_make_request.return_value = mock_ret
+        id_slug = 7555620
+        image = self.klass(self.test_url, self.test_token)
+        result = image.info(id_slug)
+
+        self.assertEqual(result, mock_ret)
+
+        test_uri = "{}/{}".format(self.test_uri, id_slug)
+        mock_make_request.assert_called_with(test_uri)
 
     @patch('doboto.Image.Image.make_request')
     def test_update(self, mock_make_request):
@@ -177,31 +177,6 @@ class TestImage(TestCase):
         test_uri = "{}/{}".format(self.test_uri, id)
         mock_make_request.assert_called_with(
             test_uri, request_method="DELETE"
-        )
-
-    @patch('doboto.Image.Image.make_request')
-    def test_actions(self, mock_make_request):
-        """
-        list the actions of a image
-        """
-
-        mock_ret = {
-            "actions": [],
-            "links": {},
-            "meta": {
-                "total": 0
-            }
-        }
-
-        mock_make_request.return_value = mock_ret
-        id = 7555620
-        image = self.klass(self.test_url, self.test_token)
-        result = image.actions(id)
-
-        self.assertEqual(result, mock_ret)
-
-        mock_make_request.assert_called_with(
-            "%s/%s/actions" % (self.test_uri, id)
         )
 
     @patch('doboto.Image.Image.make_request')
@@ -267,6 +242,31 @@ class TestImage(TestCase):
         test_uri = "{}/{}/actions".format(self.test_uri, id)
         mock_make_request.assert_called_with(
             test_uri, attribs={"type": "transfer", "region": region}, request_method="POST"
+        )
+
+    @patch('doboto.Image.Image.make_request')
+    def test_action_list(self, mock_make_request):
+        """
+        list the actions of a image
+        """
+
+        mock_ret = {
+            "actions": [],
+            "links": {},
+            "meta": {
+                "total": 0
+            }
+        }
+
+        mock_make_request.return_value = mock_ret
+        id = 7555620
+        image = self.klass(self.test_url, self.test_token)
+        result = image.action_list(id)
+
+        self.assertEqual(result, mock_ret)
+
+        mock_make_request.assert_called_with(
+            "%s/%s/actions" % (self.test_uri, id)
         )
 
     @patch('doboto.Image.Image.make_request')

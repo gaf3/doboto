@@ -48,18 +48,6 @@ class TestDomain(TestCase):
         self.assertFalse(exc_thrown)
 
     @patch('doboto.Domain.Domain.make_request')
-    def test_create(self, mock_make_request):
-        """
-        test create method
-        """
-        domain_obj = self.klass(self.test_url, self.test_token)
-        datas = {"name": "test-domain.com", "ip_address": "1.2.3.4"}
-        domain_obj.create("test-domain.com", "1.2.3.4")
-        test_uri = "{}".format(self.test_uri)
-
-        mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
-
-    @patch('doboto.Domain.Domain.make_request')
     def test_list(self, mock_make_request):
         """
         test list method
@@ -70,6 +58,18 @@ class TestDomain(TestCase):
         test_uri = "{}".format(self.test_uri)
 
         mock_make_request.assert_called_with(test_uri)
+
+    @patch('doboto.Domain.Domain.make_request')
+    def test_create(self, mock_make_request):
+        """
+        test create method
+        """
+        domain_obj = self.klass(self.test_url, self.test_token)
+        datas = {"name": "test-domain.com", "ip_address": "1.2.3.4"}
+        domain_obj.create("test-domain.com", "1.2.3.4")
+        test_uri = "{}".format(self.test_uri)
+
+        mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
 
     @patch('doboto.Domain.Domain.make_request')
     def test_info(self, mock_make_request):
@@ -96,13 +96,13 @@ class TestDomain(TestCase):
         mock_make_request.assert_called_with(test_uri, 'DELETE')
 
     @patch('doboto.Domain.Domain.make_request')
-    def test_records(self, mock_make_request):
+    def test_record_list(self, mock_make_request):
         """
         test records method
         """
         name = "test-domain.com"
         domain_obj = self.klass(self.test_url, self.test_token)
-        domain_obj.records(name)
+        domain_obj.record_list(name)
         test_uri = "{}/{}/records".format(self.test_uri, name)
 
         mock_make_request.assert_called_with(test_uri)

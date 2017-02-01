@@ -47,26 +47,6 @@ class TestFloatingIP(TestCase):
         self.assertFalse(exc_thrown)
 
     @patch('doboto.FloatingIP.FloatingIP.make_request')
-    def test_create_happy(self, mock_make_request):
-        """
-        create works with happy path
-        """
-
-        droplet_id = 1234
-        floating_ip = self.klass(self.test_url, self.test_token)
-        floating_ip.create(droplet_id=droplet_id)
-
-        mock_make_request.assert_called_with(self.test_uri, 'POST', {'droplet_id': droplet_id})
-
-        region = 'nyc2'
-        floating_ip.create(region=region)
-
-        mock_make_request.assert_called_with(self.test_uri, 'POST', {'region': region})
-
-        with self.assertRaises(ValueError):
-            floating_ip.create()
-
-    @patch('doboto.FloatingIP.FloatingIP.make_request')
     def test_list(self, mock_make_request):
         """
         list works with nuttin
@@ -85,6 +65,27 @@ class TestFloatingIP(TestCase):
         self.assertEqual(result, mock_ret)
 
         mock_make_request.assert_called_with(self.test_uri)
+
+
+    @patch('doboto.FloatingIP.FloatingIP.make_request')
+    def test_create_happy(self, mock_make_request):
+        """
+        create works with happy path
+        """
+
+        droplet_id = 1234
+        floating_ip = self.klass(self.test_url, self.test_token)
+        floating_ip.create(droplet_id=droplet_id)
+
+        mock_make_request.assert_called_with(self.test_uri, 'POST', {'droplet_id': droplet_id})
+
+        region = 'nyc2'
+        floating_ip.create(region=region)
+
+        mock_make_request.assert_called_with(self.test_uri, 'POST', {'region': region})
+
+        with self.assertRaises(ValueError):
+            floating_ip.create()
 
     @patch('doboto.FloatingIP.FloatingIP.make_request')
     def test_info(self, mock_make_request):
@@ -156,7 +157,7 @@ class TestFloatingIP(TestCase):
         mock_make_request.assert_called_with(test_uri, 'POST', attribs)
 
     @patch('doboto.FloatingIP.FloatingIP.make_request')
-    def test_actions(self, mock_make_request):
+    def test_action_list(self, mock_make_request):
         """
         list the actions of a floating ip
         """
@@ -172,7 +173,7 @@ class TestFloatingIP(TestCase):
         mock_make_request.return_value = mock_ret
         ip = "1.2.3.4"
         floating_ip = self.klass(self.test_url, self.test_token)
-        result = floating_ip.actions(ip)
+        result = floating_ip.action_list(ip)
 
         self.assertEqual(result, mock_ret)
 

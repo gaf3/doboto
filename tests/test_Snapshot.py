@@ -47,36 +47,6 @@ class TestSnapshot(TestCase):
         self.assertFalse(exc_thrown)
 
     @patch('doboto.Snapshot.Snapshot.make_request')
-    def test_info(self, mock_make_request):
-        """
-        info works with snapshot id
-        """
-
-        mock_ret = {
-            "snapshot": {
-                "id": 7555620,
-                "name": "Nifty New Snapshot",
-                "regions": [
-                    "nyc2",
-                    "nyc2"
-                ],
-                "created_at": "2014-11-04T22:23:02Z",
-                "min_disk_size": 20,
-                "size_gigabytes": 2.34
-            }
-        }
-
-        mock_make_request.return_value = mock_ret
-        id = 7555620
-        snapshot = self.klass(self.test_url, self.test_token)
-        result = snapshot.info(id)
-
-        self.assertEqual(result, mock_ret)
-
-        test_uri = "{}/{}".format(self.test_uri, id)
-        mock_make_request.assert_called_with(test_uri)
-
-    @patch('doboto.Snapshot.Snapshot.make_request')
     def test_list_happy(self, mock_make_request):
         """
         list works with happy path
@@ -119,6 +89,36 @@ class TestSnapshot(TestCase):
         result = snapshot.list()
         self.assertEqual(result, mock_ret)
         mock_make_request.assert_called_with(self.test_uri, params={})
+
+    @patch('doboto.Snapshot.Snapshot.make_request')
+    def test_info(self, mock_make_request):
+        """
+        info works with snapshot id
+        """
+
+        mock_ret = {
+            "snapshot": {
+                "id": 7555620,
+                "name": "Nifty New Snapshot",
+                "regions": [
+                    "nyc2",
+                    "nyc2"
+                ],
+                "created_at": "2014-11-04T22:23:02Z",
+                "min_disk_size": 20,
+                "size_gigabytes": 2.34
+            }
+        }
+
+        mock_make_request.return_value = mock_ret
+        id = 7555620
+        snapshot = self.klass(self.test_url, self.test_token)
+        result = snapshot.info(id)
+
+        self.assertEqual(result, mock_ret)
+
+        test_uri = "{}/{}".format(self.test_uri, id)
+        mock_make_request.assert_called_with(test_uri)
 
     @patch('doboto.Snapshot.Snapshot.make_request')
     def test_destroy(self, mock_make_request):
