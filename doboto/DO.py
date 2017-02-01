@@ -8,6 +8,7 @@ from .Image import Image
 from .Snapshot import Snapshot
 from .Region import Region
 from .Size import Size
+from .FloatingIP import FloatingIP
 from .SSHKey import SSHKey
 from .Tag import Tag
 from .Volume import Volume
@@ -26,6 +27,7 @@ class DO(object):
         self.snapshot = Snapshot(url, token)
         self.region = Region(url, token)
         self.size = Size(url, token)
+        self.floating_ip = FloatingIP(url, token)
         self.ssh_key = SSHKey(url, token)
         self.tag = Tag(url, token)
         self.volume = Volume(url, token)
