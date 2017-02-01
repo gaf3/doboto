@@ -52,6 +52,13 @@ class Domain(Endpoint):
         uri = "{}/{}/records".format(self.uri, name)
         return self.make_request(uri)
 
+    def record_create(self, name, attribs):
+        """
+        Create domain record
+        """
+        uri = "{}/{}/records".format(self.uri, name)
+        return self.make_request(uri, 'POST', attribs=attribs)
+
     def record_info(self, name, record_id):
         """
         Retrieve specific domain record
@@ -59,13 +66,10 @@ class Domain(Endpoint):
         uri = "{}/{}/records/{}".format(self.uri, name, record_id)
         return self.make_request(uri)
 
-    def record_update(self, name, record_id, attribs=None):
+    def record_update(self, name, record_id, attribs):
         """
         Update specific domain record
         """
-
-        if attribs is None:
-            raise ValueError("Must supply a data to edit")
 
         uri = "{}/{}/records/{}".format(self.uri, name, record_id)
         return self.make_request(uri, 'PUT', attribs=attribs)

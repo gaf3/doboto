@@ -108,12 +108,25 @@ class TestDomain(TestCase):
         mock_make_request.assert_called_with(test_uri)
 
     @patch('doboto.Domain.Domain.make_request')
+    def test_record_create(self, mock_make_request):
+        """
+        test record_create method
+        """
+        name = "test-domain.com"
+        datas = {"type": "AAAA", "name": "dat-v6-tho", "data": "::"}
+        domain_obj = self.klass(self.test_url, self.test_token)
+        domain_obj.record_create(name, datas)
+        test_uri = "{}/{}/records".format(self.test_uri, name)
+
+        mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
+
+    @patch('doboto.Domain.Domain.make_request')
     def test_record_info(self, mock_make_request):
         """
         test record_info method
         """
         name = "test-domain.com"
-        record_id = "4567"
+        record_id = 4567
         domain_obj = self.klass(self.test_url, self.test_token)
         domain_obj.record_info(name, record_id)
         test_uri = "{}/{}/records/{}".format(self.test_uri, name, record_id)
@@ -133,9 +146,6 @@ class TestDomain(TestCase):
         test_uri = "{}/{}/records/{}".format(self.test_uri, name, record_id)
 
         mock_make_request.assert_called_with(test_uri, 'PUT', attribs=datas)
-
-        with self.assertRaises(ValueError):
-            domain_obj.record_update(name, record_id)
 
     @patch('doboto.Domain.Domain.make_request')
     def test_record_destroy(self, mock_make_request):
