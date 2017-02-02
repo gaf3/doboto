@@ -15,20 +15,20 @@ class SSHKey(Endpoint):
     def list(self):
         """list SSH Keys"""
 
-        return self.make_request(self.uri)
+        return self.pages(self.uri, "ssh_keys")
 
     def create(self, name, public_key):
         """Create SSH Key"""
         attribs = {'name': name,
                    'public_key': public_key}
 
-        return self.make_request(self.uri, 'POST', attribs=attribs)
+        return self.request(self.uri, "ssh_key", 'POST', attribs=attribs)
 
     def info(self, id_fingerprint):
         """Retrieve SSH Key"""
 
         uri = "%s/%s" % (self.uri, id_fingerprint)
-        return self.make_request(uri)
+        return self.request(uri, "ssh_key")
 
     def update(self, id_fingerprint, name):
         """Update SSH Key"""
@@ -36,11 +36,11 @@ class SSHKey(Endpoint):
         uri = "%s/%s" % (self.uri, id_fingerprint)
         attribs = {'name': name}
 
-        return self.make_request(uri, 'PUT', attribs=attribs)
+        return self.request(uri, "ssh_key", 'PUT', attribs=attribs)
 
     def destroy(self, id_fingerprint):
         """Destroy SSH Key"""
 
         uri = "%s/%s" % (self.uri, id_fingerprint)
 
-        return self.make_request(uri, 'DELETE')
+        return self.request(uri, request_method='DELETE')

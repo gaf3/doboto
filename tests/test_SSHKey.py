@@ -46,133 +46,76 @@ class TestSSHKey(TestCase):
 
         self.assertFalse(exc_thrown)
 
-    @patch('doboto.SSHKey.SSHKey.make_request')
-    def test_list_happy(self, mock_make_request):
+    @patch('doboto.SSHKey.SSHKey.pages')
+    def test_list_happy(self, mock_pages):
         """
         list works with happy path
         """
 
-        mock_ret = {
-            "ssh_keys": [
-                {
-                    "id": 512189,
-                    "fingerprint": "3b:16:bf:e4:8b:00:8b:b8:59:8c:a9:d3:f0:19:45:fa",
-                    "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAQQDD example",
-                    "name": "My SSH Public Key"
-                }
-            ],
-            "links": {
-            },
-            "meta": {
-                "total": 1
-            }
-        }
-
-        mock_make_request.return_value = mock_ret
-        ssh_key = self.klass(self.test_uri, self.test_token)
+        ssh_key = self.klass(self.test_url, self.test_token)
         result = ssh_key.list()
 
-        self.assertEqual(result, mock_ret)
+        mock_pages.assert_called_with(self.test_uri, "ssh_keys")
 
-    @patch('doboto.SSHKey.SSHKey.make_request')
-    def test_create(self, mock_make_request):
+    @patch('doboto.SSHKey.SSHKey.request')
+    def test_create(self, mock_request):
         """
         create works with datas
         """
 
         ssh_key = self.klass(self.test_url, self.test_token)
+
         datas = {
             "name": "My SSH Public Key",
             "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAQQD example"
         }
-        mock_ret = {
-            "ssh_key": {
-                "id": 512189,
-                "fingerprint": "3b:16:bf:e4:8b:00:8b:b8:59:8c:a9:d3:f0:19:45:fa",
-                "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAQQDD example",
-                "name": "My SSH Public Key"
-            }
-        }
 
-        mock_make_request.return_value = mock_ret
         result = ssh_key.create(
             datas["name"], datas["public_key"]
         )
 
-        mock_make_request.assert_called_with(
-            self.test_uri, 'POST', attribs=datas
+        mock_request.assert_called_with(
+            self.test_uri, "ssh_key", 'POST', attribs=datas
         )
 
-        self.assertEqual(result, mock_ret)
 
-    @patch('doboto.SSHKey.SSHKey.make_request')
-    def test_info(self, mock_make_request):
+    @patch('doboto.SSHKey.SSHKey.request')
+    def test_info(self, mock_request):
         """
         info works with ssh id or fingerprint
         """
 
-        mock_ret = {
-            "ssh_key": {
-                "id": 512189,
-                "fingerprint": "3b:16:bf:e4:8b:00:8b:b8:59:8c:a9:d3:f0:19:45:fa",
-                "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAQQDD example",
-                "name": "My SSH Public Key"
-            }
-        }
-
-        mock_make_request.return_value = mock_ret
         ssh_key_id = 512189
         ssh_key = self.klass(self.test_url, self.test_token)
         result = ssh_key.info(ssh_key_id)
 
-        self.assertEqual(result, mock_ret)
-
         test_uri = "{}/{}".format(self.test_uri, ssh_key_id)
-        mock_make_request.assert_called_with(test_uri)
+        mock_request.assert_called_with(test_uri, "ssh_key")
 
-    @patch('doboto.SSHKey.SSHKey.make_request')
-    def test_update(self, mock_make_request):
+    @patch('doboto.SSHKey.SSHKey.request')
+    def test_update(self, mock_request):
         """
         update works with ssh id or fingerprint
         """
 
-        mock_ret = {
-            "ssh_key": {
-                "id": 512189,
-                "fingerprint": "3b:16:bf:e4:8b:00:8b:b8:59:8c:a9:d3:f0:19:45:fa",
-                "public_key": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAQQDD example",
-                "name": "My Other Public Key"
-            }
-        }
-
-        mock_make_request.return_value = mock_ret
         ssh_key_id = 512189
         ssh_key = self.klass(self.test_url, self.test_token)
         result = ssh_key.update(ssh_key_id, "My Other Public Key")
 
-        self.assertEqual(result, mock_ret)
-
         test_uri = "{}/{}".format(self.test_uri, ssh_key_id)
-        mock_make_request.assert_called_with(
-            test_uri, 'PUT', attribs={"name": "My Other Public Key"}
+        mock_request.assert_called_with(
+            test_uri, "ssh_key", 'PUT', attribs={"name": "My Other Public Key"}
         )
 
-    @patch('doboto.SSHKey.SSHKey.make_request')
-    def test_destroy(self, mock_make_request):
+    @patch('doboto.SSHKey.SSHKey.request')
+    def test_destroy(self, mock_request):
         """
         destroy works with ssh id or fingerprint
         """
 
-        mock_ret = {
-            "status": 204
-        }
-
-        mock_make_request.return_value = mock_ret
         ssh_key_id = 512189
         ssh_key = self.klass(self.test_url, self.test_token)
         result = ssh_key.destroy(ssh_key_id)
 
-        self.assertEqual(result, mock_ret)
-
         test_uri = "{}/{}".format(self.test_uri, ssh_key_id)
-        mock_make_request.assert_called_with(test_uri, 'DELETE')
+        mock_request.assert_called_with(test_uri, request_method='DELETE')

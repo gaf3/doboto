@@ -17,4 +17,4 @@ class Account(Endpoint):
         Gets account info
         """
 
-        return self.make_request(self.uri)
+        return self.request(self.uri, "account")

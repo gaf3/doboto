@@ -46,27 +46,19 @@ class TestTag(TestCase):
 
         self.assertFalse(exc_thrown)
 
-    @patch('doboto.Tag.Tag.make_request')
-    def test_list(self, mock_make_request):
+    @patch('doboto.Tag.Tag.pages')
+    def test_list(self, mock_pages):
         """
         list works with nuttin
         """
 
-        mock_ret = [{
-            "name": "hay",
-            "resources": [1, 2, 3]
-        }]
-
-        mock_make_request.return_value = mock_ret
         tag = self.klass(self.test_url, self.test_token)
         result = tag.list()
 
-        self.assertEqual(result, mock_ret)
+        mock_pages.assert_called_with(self.test_uri, "tags")
 
-        mock_make_request.assert_called_with(self.test_uri)
-
-    @patch('doboto.Tag.Tag.make_request')
-    def test_names_happy(self, mock_make_request):
+    @patch('doboto.Tag.Tag.pages')
+    def test_names_happy(self, mock_pages):
         """
         names works with happy path
         """
@@ -75,31 +67,18 @@ class TestTag(TestCase):
             'droplet': 'some data', 'your aunt': 'bessie', 'a moose once bit': 'my sister'
         }
         names = ['alpha', 'beta', 'gamma']
-        mock_ret = {'tags': [{'name': _, 'resources': extra_data} for _ in names]}
+        mock_ret = [{'name': _, 'resources': extra_data} for _ in names]
 
-        mock_make_request.return_value = mock_ret
-        tag = self.klass(self.test_uri, self.test_token)
+        mock_pages.return_value = mock_ret
+        tag = self.klass(self.test_url, self.test_token)
         result = tag.names()
+
+        mock_pages.assert_called_with(self.test_uri, "tags")
 
         self.assertListEqual(result, names)
 
-    @patch('doboto.Tag.Tag.make_request')
-    def test_names_happy_without_tags(self, mock_make_request):
-        """
-        names method works when no tags are returned
-        """
-
-        mock_ret = {'status': 'you suck, go away'}
-
-        mock_make_request.return_value = mock_ret
-
-        tag = self.klass(self.test_uri, self.test_token)
-        result = tag.names()
-
-        self.assertDictEqual(result, mock_ret)
-
-    @patch('doboto.Tag.Tag.make_request')
-    def test_create_happy(self, mock_make_request):
+    @patch('doboto.Tag.Tag.request')
+    def test_create_happy(self, mock_request):
         """
         create works with happy path
         """
@@ -108,31 +87,23 @@ class TestTag(TestCase):
         tag = self.klass(self.test_url, self.test_token)
         tag.create(test_name)
 
-        mock_make_request.assert_called_with(self.test_uri, 'POST', {'name': test_name})
+        mock_request.assert_called_with(self.test_uri, "tag", 'POST', {'name': test_name})
 
-    @patch('doboto.Tag.Tag.make_request')
-    def test_info(self, mock_make_request):
+    @patch('doboto.Tag.Tag.request')
+    def test_info(self, mock_request):
         """
         info works with name
         """
 
-        mock_ret = {
-            "name": "hay",
-            "resources": [1, 2, 3]
-        }
-
-        mock_make_request.return_value = mock_ret
         name = "hay"
         tag = self.klass(self.test_url, self.test_token)
         result = tag.info(name)
 
-        self.assertEqual(result, mock_ret)
-
         test_uri = "{}/{}".format(self.test_uri, name)
-        mock_make_request.assert_called_with(test_uri)
+        mock_request.assert_called_with(test_uri, "tag")
 
-    @patch('doboto.Tag.Tag.make_request')
-    def test_update_happy(self, mock_make_request):
+    @patch('doboto.Tag.Tag.request')
+    def test_update_happy(self, mock_request):
         """
         update works with happy path
         """
@@ -143,10 +114,10 @@ class TestTag(TestCase):
         tag.update(test_name, test_new_name)
         test_uri = "{}/{}".format(self.test_uri, test_name)
 
-        mock_make_request.assert_called_with(test_uri, 'PUT', {'name': test_new_name})
+        mock_request.assert_called_with(test_uri, "tag", 'PUT', {'name': test_new_name})
 
-    @patch('doboto.Tag.Tag.make_request')
-    def test_destroy_happy(self, mock_make_request):
+    @patch('doboto.Tag.Tag.request')
+    def test_destroy_happy(self, mock_request):
         """
         destroy works with happy path
         """
@@ -156,10 +127,10 @@ class TestTag(TestCase):
         tag.destroy(test_name)
         test_uri = "{}/{}".format(self.test_uri, test_name)
 
-        mock_make_request.assert_called_with(test_uri, 'DELETE')
+        mock_request.assert_called_with(test_uri, request_method='DELETE')
 
-    @patch('doboto.Tag.Tag.make_request')
-    def test_attach_happy(self, mock_make_request):
+    @patch('doboto.Tag.Tag.request')
+    def test_attach_happy(self, mock_request):
         """
         update works with happy path
         """
@@ -170,10 +141,10 @@ class TestTag(TestCase):
         tag.attach(test_name, resources)
         test_uri = "{}/{}/resources".format(self.test_uri, test_name)
 
-        mock_make_request.assert_called_with(test_uri, 'POST', {'resources': resources})
+        mock_request.assert_called_with(test_uri, "action", 'POST', {'resources': resources})
 
-    @patch('doboto.Tag.Tag.make_request')
-    def test_detach_happy(self, mock_make_request):
+    @patch('doboto.Tag.Tag.request')
+    def test_detach_happy(self, mock_request):
         """
         update works with happy path
         """
@@ -184,4 +155,4 @@ class TestTag(TestCase):
         tag.detach(test_name, resources)
         test_uri = "{}/{}/resources".format(self.test_uri, test_name)
 
-        mock_make_request.assert_called_with(test_uri, 'DELETE', {'resources': resources})
+        mock_request.assert_called_with(test_uri,  "action", 'DELETE', {'resources': resources})

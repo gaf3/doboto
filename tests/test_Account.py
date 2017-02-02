@@ -46,27 +46,15 @@ class TestAccount(TestCase):
 
         self.assertFalse(exc_thrown)
 
-    @patch('doboto.Account.Account.make_request')
-    def test_info(self, mock_make_request):
+    @patch('doboto.Endpoint.Endpoint.request')
+    def test_info(self, mock_request):
         """
-        info gets it
+        info calls request
         """
 
-        mock_ret = {
-            "account": {
-                "droplet_limit": 25,
-                "floating_ip_limit": 5,
-                "email": "sammy@digitalocean.com",
-                "uuid": "b6fr89dbf6d9156cace5f3c78dc9851d957381ef",
-                "email_verified": True,
-                "status": "active",
-                "status_message": ""
-            }
-        }
-
-        mock_make_request.return_value = mock_ret
         account = self.klass(*self.instantiate_args)
-        result = account.info()
+        account.info()
 
-        self.assertEqual(result, mock_ret)
-        mock_make_request.assert_called_with(self.test_uri)
+        mock_request.assert_called_with(
+            self.test_uri, "account"
+        )

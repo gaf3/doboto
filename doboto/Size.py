@@ -15,4 +15,4 @@ class Size(Endpoint):
     def list(self):
         """list all sizes"""
 
-        return self.make_request(self.uri)
+        return self.pages(self.uri, "sizes")

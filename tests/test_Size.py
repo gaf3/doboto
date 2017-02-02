@@ -46,42 +46,13 @@ class TestSize(TestCase):
 
         self.assertFalse(exc_thrown)
 
-    @patch('doboto.Size.Size.make_request')
-    def test_list_happy(self, mock_make_request):
+    @patch('doboto.Size.Size.pages')
+    def test_list_happy(self, mock_pages):
         """
         list works with happy path
         """
 
-        mock_ret = {
-            "sizes": [
-                {
-                    "slug": "512mb",
-                    "memory": 512,
-                    "vcpus": 1,
-                    "disk": 20,
-                    "transfer": 1.0,
-                    "price_monthly": 5.0,
-                    "price_hourly": 0.00744,
-                    "regions": [
-                        "nyc1",
-                        "sgp1",
-                        "ams1",
-                        "ams2",
-                        "sfo1",
-                        "nyc2",
-                        "lon1",
-                        "nyc3",
-                        "ams3"
-                    ],
-                    "available": True
-                }
-            ]
-        }
-
-        mock_make_request.return_value = mock_ret
         size = self.klass(self.test_url, self.test_token)
         result = size.list()
 
-        self.assertEqual(result, mock_ret)
-
-        mock_make_request.assert_called_with(self.test_uri)
+        mock_pages.assert_called_with(self.test_uri, "sizes")
