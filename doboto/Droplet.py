@@ -80,19 +80,19 @@ class Droplet(Endpoint):
         if attribs is None:
             attribs = {}
 
-        if tag_name is not None:
-            uri = "%s/actions?tag_name=%s" % (self.uri, tag_name)
-        elif id is not None:
-            uri = "%s/%s/actions" % (self.uri, id)
-        else:
-            raise ValueError("id or tag_name must be specified")
-
         if type is None:
             raise ValueError("type must be specified")
 
         attribs["type"] = type
 
-        return self.request(uri, "action", 'POST', attribs=attribs)
+        if tag_name is not None:
+            uri = "%s/actions?tag_name=%s" % (self.uri, tag_name)
+            return self.request(uri, "actions", 'POST', attribs=attribs)
+        elif id is not None:
+            uri = "%s/%s/actions" % (self.uri, id)
+            return self.request(uri, "action", 'POST', attribs=attribs)
+        else:
+            raise ValueError("id or tag_name must be specified")
 
     def backup_list(self, id):
         """

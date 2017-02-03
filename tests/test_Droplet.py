@@ -171,14 +171,14 @@ class TestDroplet(TestCase):
         test_uri = "{}/actions?tag_name={}".format(self.test_uri, tag_name)
 
         mock_request.assert_called_with(
-            test_uri, "action", 'POST', attribs={"type": "test", "extra": True}
+            test_uri, "actions", 'POST', attribs={"type": "test", "extra": True}
         )
 
         with self.assertRaises(ValueError):
             drop.action()
 
         with self.assertRaises(ValueError):
-            drop.action(id=0)
+            drop.action(type='stuff')
 
     @patch('doboto.Droplet.Droplet.pages')
     def test_backup_list(self, mock_pages):
