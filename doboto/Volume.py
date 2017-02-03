@@ -39,7 +39,7 @@ class Volume(Endpoint):
         if id is not None:
             return self.request("{}/{}".format(self.uri, id), "volume")
         elif name is not None and region is not None:
-            return self.request(self.uri, "volume", params={"name": name, "region": region})
+            return self.request(self.uri, "volumes", params={"name": name, "region": region})[0]
         else:
             raise ValueError("Must supply an id or name and region")
 
