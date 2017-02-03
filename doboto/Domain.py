@@ -18,7 +18,7 @@ class Domain(Endpoint):
         """
         list all domains
         """
-        return self.make_request(self.uri)
+        return self.pages(self.uri, "domains")
 
     def create(self, name, ip_address):
         """Create a domain based off of parameters"""
@@ -28,14 +28,14 @@ class Domain(Endpoint):
             "ip_address": ip_address
         }
 
-        return self.make_request(self.uri, 'POST', attribs=attribs)
+        return self.request(self.uri, "domain", 'POST', attribs=attribs)
 
     def info(self, name):
         """
         Retrieve domain information
         """
         uri = "{}/{}".format(self.uri, name)
-        return self.make_request(uri)
+        return self.request(uri, "domain")
 
     def destroy(self, name):
         """
@@ -43,28 +43,28 @@ class Domain(Endpoint):
         """
 
         uri = "{}/{}".format(self.uri, name)
-        return self.make_request(uri, 'DELETE')
+        return self.request(uri, request_method='DELETE')
 
     def record_list(self, name):
         """
         Retrieve all domain records
         """
         uri = "{}/{}/records".format(self.uri, name)
-        return self.make_request(uri)
+        return self.pages(uri, "domain_records")
 
     def record_create(self, name, attribs):
         """
         Create domain record
         """
         uri = "{}/{}/records".format(self.uri, name)
-        return self.make_request(uri, 'POST', attribs=attribs)
+        return self.request(uri, "domain_record", 'POST', attribs=attribs)
 
     def record_info(self, name, record_id):
         """
         Retrieve specific domain record
         """
         uri = "{}/{}/records/{}".format(self.uri, name, record_id)
-        return self.make_request(uri)
+        return self.request(uri, "domain_record")
 
     def record_update(self, name, record_id, attribs):
         """
@@ -72,7 +72,7 @@ class Domain(Endpoint):
         """
 
         uri = "{}/{}/records/{}".format(self.uri, name, record_id)
-        return self.make_request(uri, 'PUT', attribs=attribs)
+        return self.request(uri, "domain_record", 'PUT', attribs=attribs)
 
     def record_destroy(self, name, record_id):
         """
@@ -80,4 +80,4 @@ class Domain(Endpoint):
         """
 
         uri = "{}/{}/records/{}".format(self.uri, name, record_id)
-        return self.make_request(uri, 'DELETE')
+        return self.request(uri, request_method='DELETE')

@@ -20,16 +20,16 @@ class Snapshot(Endpoint):
         if resource_type is not None:
             params["resource_type"] = resource_type
 
-        return self.make_request(self.uri, params=params)
+        return self.pages(self.uri, "snapshots", params=params)
 
     def info(self, id):
         """Retrieve snapshot information"""
         uri = self.uri + "/%s" % id
 
-        return self.make_request(uri)
+        return self.request(uri, "snapshot")
 
     def destroy(self, id):
         """Destroy snapshot"""
         uri = self.uri + "/%s" % id
 
-        return self.make_request(uri, request_method="DELETE")
+        return self.request(uri, request_method="DELETE")

@@ -22,7 +22,7 @@ class FloatingIP(Endpoint):
         List all floating IPs
         """
 
-        return self.make_request(self.uri)
+        return self.pages(self.uri, "floating_ips")
 
     def create(self, droplet_id=None, region=None):
         """
@@ -37,7 +37,7 @@ class FloatingIP(Endpoint):
         else:
             raise ValueError("droplet_id or region must be specified")
 
-        return self.make_request(self.uri, 'POST', attribs)
+        return self.request(self.uri, "floating_ip", 'POST', attribs)
 
     def info(self, ip):
         """
@@ -45,7 +45,7 @@ class FloatingIP(Endpoint):
         """
 
         uri = "%s/%s" % (self.uri, ip)
-        return self.make_request(uri)
+        return self.request(uri, "floating_ip")
 
     def destroy(self, ip):
         """
@@ -54,7 +54,7 @@ class FloatingIP(Endpoint):
 
         uri = "{}/{}".format(self.uri, ip)
 
-        return self.make_request(uri, 'DELETE')
+        return self.request(uri, request_method='DELETE')
 
     def assign(self, ip, droplet_id):
         """
@@ -64,7 +64,7 @@ class FloatingIP(Endpoint):
         uri = "{}/{}/actions".format(self.uri, ip)
         attribs = {'type': 'assign', 'droplet_id': droplet_id}
 
-        return self.make_request(uri, 'POST', attribs)
+        return self.request(uri, "action", 'POST', attribs)
 
     def unassign(self, ip):
         """
@@ -74,17 +74,17 @@ class FloatingIP(Endpoint):
         uri = "{}/{}/actions".format(self.uri, ip)
         attribs = {'type': 'unassign'}
 
-        return self.make_request(uri, 'POST', attribs)
+        return self.request(uri, "action", 'POST', attribs)
 
     def action_list(self, ip):
         """Retrieve floating ip actions information"""
         uri = self.uri + "/%s/actions" % ip
 
-        return self.make_request(uri)
+        return self.pages(uri, "actions")
 
     def action_info(self, ip, action_id):
         """
         Get the status of an floating ip action
         """
         uri = "%s/%s/actions/%s" % (self.uri, ip, action_id)
-        return self.make_request(uri)
+        return self.request(uri, "action")

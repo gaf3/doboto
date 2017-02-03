@@ -22,21 +22,16 @@ class Tag(Endpoint):
         List all tags
         """
 
-        return self.make_request(self.uri)
+        return self.pages(self.uri, "tags")
 
     def names(self):
         """
         This call will provide a list of all tag names
         """
 
-        result = self.make_request(self.uri, 'GET')
+        tags = self.pages(self.uri, "tags")
 
-        if 'tags' in result:
-            ret_val = [_['name'] for _ in result['tags']]
-        else:
-            ret_val = result
-
-        return ret_val
+        return [_['name'] for _ in tags]
 
     def create(self, name):
         """
@@ -44,7 +39,7 @@ class Tag(Endpoint):
         """
         attribs = {'name': name}
 
-        return self.make_request(self.uri, 'POST', attribs)
+        return self.request(self.uri, "tag", 'POST', attribs)
 
     def info(self, name):
         """
@@ -52,7 +47,7 @@ class Tag(Endpoint):
         """
 
         uri = "%s/%s" % (self.uri, name)
-        return self.make_request(uri)
+        return self.request(uri, "tag")
 
     def update(self, name, new_name):
         """
@@ -62,7 +57,7 @@ class Tag(Endpoint):
         uri = "{}/{}".format(self.uri, name)
         attribs = {'name': new_name}
 
-        return self.make_request(uri, 'PUT', attribs)
+        return self.request(uri, "tag", 'PUT', attribs)
 
     def destroy(self, name):
         """
@@ -72,7 +67,7 @@ class Tag(Endpoint):
 
         uri = "{}/{}".format(self.uri, name)
 
-        return self.make_request(uri, 'DELETE')
+        return self.request(uri, request_method='DELETE')
 
     def attach(self, name, resources):
         """
@@ -82,7 +77,7 @@ class Tag(Endpoint):
         uri = "{}/{}/resources".format(self.uri, name)
         attribs = {'resources': resources}
 
-        return self.make_request(uri, 'POST', attribs)
+        return self.request(uri, "action", 'POST', attribs)
 
     def detach(self, name, resources):
         """
@@ -92,4 +87,4 @@ class Tag(Endpoint):
         uri = "{}/{}/resources".format(self.uri, name)
         attribs = {'resources': resources}
 
-        return self.make_request(uri, 'DELETE', attribs)
+        return self.request(uri, "action", 'DELETE', attribs)

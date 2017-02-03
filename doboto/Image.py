@@ -23,49 +23,49 @@ class Image(Endpoint):
         if private is not None:
             params["private"] = private
 
-        return self.make_request(self.uri, params=params)
+        return self.pages(self.uri, "images", params=params)
 
     def info(self, id_slug):
         """Retrieve image information"""
         uri = self.uri + "/%s" % id_slug
 
-        return self.make_request(uri)
+        return self.request(uri, "image")
 
     def update(self, id, name):
         """Updates an image's name"""
         uri = self.uri + "/%s" % id
 
-        return self.make_request(uri, request_method="PUT", attribs={"name": name})
+        return self.request(uri, "image", request_method="PUT", attribs={"name": name})
 
     def destroy(self, id):
         """Destroy image"""
         uri = self.uri + "/%s" % id
 
-        return self.make_request(uri, request_method="DELETE")
+        return self.request(uri, request_method="DELETE")
 
     def convert(self, id):
         """Convert an image to a snapshot"""
         uri = self.uri + "/%s/actions" % id
 
-        return self.make_request(uri, request_method="POST", attribs={"type": "convert"})
+        return self.request(uri, "action", request_method="POST", attribs={"type": "convert"})
 
     def transfer(self, id, region):
         """Transfer an image to a region"""
         uri = self.uri + "/%s/actions" % id
 
-        return self.make_request(
-            uri, request_method="POST", attribs={"type": "transfer", "region": region}
+        return self.request(
+            uri, "action", request_method="POST", attribs={"type": "transfer", "region": region}
         )
 
     def action_list(self, id):
         """Retrieve image actions information"""
         uri = self.uri + "/%s/actions" % id
 
-        return self.make_request(uri)
+        return self.pages(uri, "actions")
 
     def action_info(self, id, action_id):
         """
         Get the status of an image action
         """
         uri = "%s/%s/actions/%s" % (self.uri, id, action_id)
-        return self.make_request(uri)
+        return self.request(uri, "action")

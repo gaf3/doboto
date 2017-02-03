@@ -46,29 +46,19 @@ class TestFloatingIP(TestCase):
 
         self.assertFalse(exc_thrown)
 
-    @patch('doboto.FloatingIP.FloatingIP.make_request')
-    def test_list(self, mock_make_request):
+    @patch('doboto.FloatingIP.FloatingIP.pages')
+    def test_list(self, mock_pages):
         """
         list works with nuttin
         """
 
-        mock_ret = [{
-            "ip": "1.2.3.4",
-            "region": "nyc2",
-            "droplet_id": 1234
-        }]
-
-        mock_make_request.return_value = mock_ret
         floating_ip = self.klass(self.test_url, self.test_token)
         result = floating_ip.list()
 
-        self.assertEqual(result, mock_ret)
+        mock_pages.assert_called_with(self.test_uri, "floating_ips")
 
-        mock_make_request.assert_called_with(self.test_uri)
-
-
-    @patch('doboto.FloatingIP.FloatingIP.make_request')
-    def test_create_happy(self, mock_make_request):
+    @patch('doboto.FloatingIP.FloatingIP.request')
+    def test_create_happy(self, mock_request):
         """
         create works with happy path
         """
@@ -77,42 +67,35 @@ class TestFloatingIP(TestCase):
         floating_ip = self.klass(self.test_url, self.test_token)
         floating_ip.create(droplet_id=droplet_id)
 
-        mock_make_request.assert_called_with(self.test_uri, 'POST', {'droplet_id': droplet_id})
+        mock_request.assert_called_with(
+            self.test_uri, "floating_ip", 'POST', {'droplet_id': droplet_id}
+        )
 
         region = 'nyc2'
         floating_ip.create(region=region)
 
-        mock_make_request.assert_called_with(self.test_uri, 'POST', {'region': region})
+        mock_request.assert_called_with(self.test_uri, "floating_ip", 'POST', {'region': region})
 
         with self.assertRaises(ValueError):
             floating_ip.create()
 
-    @patch('doboto.FloatingIP.FloatingIP.make_request')
-    def test_info(self, mock_make_request):
+    @patch('doboto.FloatingIP.FloatingIP.request')
+    def test_info(self, mock_request):
         """
-        info works with name
+        info works with ip
         """
 
-        mock_ret = {
-            "ip": "1.2.3.4",
-            "region": "nyc2",
-            "droplet_id": 1234
-        }
-
-        mock_make_request.return_value = mock_ret
         ip = "1.2.3.4"
         floating_ip = self.klass(self.test_url, self.test_token)
         result = floating_ip.info(ip)
 
-        self.assertEqual(result, mock_ret)
-
         test_uri = "{}/{}".format(self.test_uri, ip)
-        mock_make_request.assert_called_with(test_uri)
+        mock_request.assert_called_with(test_uri, "floating_ip")
 
-    @patch('doboto.FloatingIP.FloatingIP.make_request')
-    def test_destroy(self, mock_make_request):
+    @patch('doboto.FloatingIP.FloatingIP.request')
+    def test_destroy(self, mock_request):
         """
-        info works with name
+        info works with ip
         """
 
         ip = "1.2.3.4"
@@ -120,10 +103,10 @@ class TestFloatingIP(TestCase):
         result = floating_ip.destroy(ip)
 
         test_uri = "{}/{}".format(self.test_uri, ip)
-        mock_make_request.assert_called_with(test_uri, 'DELETE')
+        mock_request.assert_called_with(test_uri, request_method='DELETE')
 
-    @patch('doboto.FloatingIP.FloatingIP.make_request')
-    def test_assign(self, mock_make_request):
+    @patch('doboto.FloatingIP.FloatingIP.request')
+    def test_assign(self, mock_request):
         """
         assign works with happy path
         """
@@ -138,10 +121,10 @@ class TestFloatingIP(TestCase):
             'droplet_id': droplet_id,
         }
 
-        mock_make_request.assert_called_with(test_uri, 'POST', attribs)
+        mock_request.assert_called_with(test_uri, "action", 'POST', attribs)
 
-    @patch('doboto.FloatingIP.FloatingIP.make_request')
-    def test_unassign(self, mock_make_request):
+    @patch('doboto.FloatingIP.FloatingIP.request')
+    def test_unassign(self, mock_request):
         """
         unassign works with happy path
         """
@@ -154,35 +137,24 @@ class TestFloatingIP(TestCase):
             'type': 'unassign'
         }
 
-        mock_make_request.assert_called_with(test_uri, 'POST', attribs)
+        mock_request.assert_called_with(test_uri, "action", 'POST', attribs)
 
-    @patch('doboto.FloatingIP.FloatingIP.make_request')
-    def test_action_list(self, mock_make_request):
+    @patch('doboto.FloatingIP.FloatingIP.pages')
+    def test_action_list(self, mock_pages):
         """
         list the actions of a floating ip
         """
 
-        mock_ret = {
-            "actions": [],
-            "links": {},
-            "meta": {
-                "total": 0
-            }
-        }
-
-        mock_make_request.return_value = mock_ret
         ip = "1.2.3.4"
         floating_ip = self.klass(self.test_url, self.test_token)
         result = floating_ip.action_list(ip)
 
-        self.assertEqual(result, mock_ret)
-
-        mock_make_request.assert_called_with(
-            "%s/%s/actions" % (self.test_uri, ip)
+        mock_pages.assert_called_with(
+            "%s/%s/actions" % (self.test_uri, ip), "actions"
         )
 
-    @patch('doboto.FloatingIP.FloatingIP.make_request')
-    def test_action_info(self, mock_make_request):
+    @patch('doboto.FloatingIP.FloatingIP.request')
+    def test_action_info(self, mock_request):
         """
         action_info works with ip
         """
@@ -194,4 +166,4 @@ class TestFloatingIP(TestCase):
         test_uri = "{}/{}/actions/{}".format(
             self.test_uri, ip, action_id)
 
-        mock_make_request.assert_called_with(test_uri)
+        mock_request.assert_called_with(test_uri, "action")

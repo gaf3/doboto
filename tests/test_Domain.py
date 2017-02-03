@@ -47,8 +47,8 @@ class TestDomain(TestCase):
 
         self.assertFalse(exc_thrown)
 
-    @patch('doboto.Domain.Domain.make_request')
-    def test_list(self, mock_make_request):
+    @patch('doboto.Domain.Domain.pages')
+    def test_list(self, mock_pages):
         """
         test list method
         """
@@ -57,10 +57,10 @@ class TestDomain(TestCase):
         domain_obj.list()
         test_uri = "{}".format(self.test_uri)
 
-        mock_make_request.assert_called_with(test_uri)
+        mock_pages.assert_called_with(test_uri, "domains")
 
-    @patch('doboto.Domain.Domain.make_request')
-    def test_create(self, mock_make_request):
+    @patch('doboto.Domain.Domain.request')
+    def test_create(self, mock_request):
         """
         test create method
         """
@@ -69,10 +69,10 @@ class TestDomain(TestCase):
         domain_obj.create("test-domain.com", "1.2.3.4")
         test_uri = "{}".format(self.test_uri)
 
-        mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
+        mock_request.assert_called_with(test_uri, "domain", 'POST', attribs=datas)
 
-    @patch('doboto.Domain.Domain.make_request')
-    def test_info(self, mock_make_request):
+    @patch('doboto.Domain.Domain.request')
+    def test_info(self, mock_request):
         """
         test info method
         """
@@ -81,10 +81,10 @@ class TestDomain(TestCase):
         domain_obj.info(name)
         test_uri = "{}/{}".format(self.test_uri, name)
 
-        mock_make_request.assert_called_with(test_uri)
+        mock_request.assert_called_with(test_uri, "domain")
 
-    @patch('doboto.Domain.Domain.make_request')
-    def test_destroy(self, mock_make_request):
+    @patch('doboto.Domain.Domain.request')
+    def test_destroy(self, mock_request):
         """
         test destroy method
         """
@@ -93,22 +93,22 @@ class TestDomain(TestCase):
         domain_obj.destroy(name)
         test_uri = "{}/{}".format(self.test_uri, name)
 
-        mock_make_request.assert_called_with(test_uri, 'DELETE')
+        mock_request.assert_called_with(test_uri, request_method='DELETE')
 
-    @patch('doboto.Domain.Domain.make_request')
-    def test_record_list(self, mock_make_request):
+    @patch('doboto.Domain.Domain.pages')
+    def test_record_list(self, mock_pages):
         """
-        test records method
+        test record_list method
         """
         name = "test-domain.com"
         domain_obj = self.klass(self.test_url, self.test_token)
         domain_obj.record_list(name)
         test_uri = "{}/{}/records".format(self.test_uri, name)
 
-        mock_make_request.assert_called_with(test_uri)
+        mock_pages.assert_called_with(test_uri, "domain_records")
 
-    @patch('doboto.Domain.Domain.make_request')
-    def test_record_create(self, mock_make_request):
+    @patch('doboto.Domain.Domain.request')
+    def test_record_create(self, mock_request):
         """
         test record_create method
         """
@@ -118,10 +118,10 @@ class TestDomain(TestCase):
         domain_obj.record_create(name, datas)
         test_uri = "{}/{}/records".format(self.test_uri, name)
 
-        mock_make_request.assert_called_with(test_uri, 'POST', attribs=datas)
+        mock_request.assert_called_with(test_uri, "domain_record", 'POST', attribs=datas)
 
-    @patch('doboto.Domain.Domain.make_request')
-    def test_record_info(self, mock_make_request):
+    @patch('doboto.Domain.Domain.request')
+    def test_record_info(self, mock_request):
         """
         test record_info method
         """
@@ -131,10 +131,10 @@ class TestDomain(TestCase):
         domain_obj.record_info(name, record_id)
         test_uri = "{}/{}/records/{}".format(self.test_uri, name, record_id)
 
-        mock_make_request.assert_called_with(test_uri)
+        mock_request.assert_called_with(test_uri, "domain_record")
 
-    @patch('doboto.Domain.Domain.make_request')
-    def test_record_update(self, mock_make_request):
+    @patch('doboto.Domain.Domain.request')
+    def test_record_update(self, mock_request):
         """
         test record_update method
         """
@@ -145,10 +145,10 @@ class TestDomain(TestCase):
         domain_obj.record_update(name, record_id, datas)
         test_uri = "{}/{}/records/{}".format(self.test_uri, name, record_id)
 
-        mock_make_request.assert_called_with(test_uri, 'PUT', attribs=datas)
+        mock_request.assert_called_with(test_uri, "domain_record", 'PUT', attribs=datas)
 
-    @patch('doboto.Domain.Domain.make_request')
-    def test_record_destroy(self, mock_make_request):
+    @patch('doboto.Domain.Domain.request')
+    def test_record_destroy(self, mock_request):
         """
         test record_destroy method
         """
@@ -158,4 +158,4 @@ class TestDomain(TestCase):
         domain_obj.record_destroy(name, record_id)
         test_uri = "{}/{}/records/{}".format(self.test_uri, name, record_id)
 
-        mock_make_request.assert_called_with(test_uri, 'DELETE')
+        mock_request.assert_called_with(test_uri, request_method='DELETE')

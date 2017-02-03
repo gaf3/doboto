@@ -46,31 +46,13 @@ class TestRegion(TestCase):
 
         self.assertFalse(exc_thrown)
 
-    @patch('doboto.Region.Region.make_request')
-    def test_list_happy(self, mock_make_request):
+    @patch('doboto.Region.Region.pages')
+    def test_list_happy(self, mock_pages):
         """
         list works with happy path
         """
 
-        mock_ret = {
-            "regions": [
-                {
-                    "name": "New York 1",
-                    "slug": "nyc1",
-                    "sizes": [
-
-                    ],
-                    "features": [
-                        "virtio",
-                        "backups"
-                    ],
-                    "available": False
-                }
-            ]
-        }
-
-        mock_make_request.return_value = mock_ret
-        region = self.klass(self.test_uri, self.test_token)
+        region = self.klass(self.test_url, self.test_token)
         result = region.list()
 
-        self.assertEqual(result, mock_ret)
+        mock_pages.assert_called_with(self.test_uri, "regions")

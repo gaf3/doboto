@@ -15,4 +15,4 @@ class Region(Endpoint):
     def list(self):
         """list all Regions"""
 
-        return self.make_request(self.uri)
+        return self.pages(self.uri, "regions")

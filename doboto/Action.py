@@ -15,11 +15,11 @@ class Action(Endpoint):
     def list(self):
         """list all actions"""
 
-        return self.make_request(self.uri)
+        return self.pages(self.uri, "actions")
 
     def info(self, id):
         """
         Retrieve action information
         """
         uri = "%s/%s" % (self.uri, id)
-        return self.make_request(uri)
+        return self.request(uri, "action")

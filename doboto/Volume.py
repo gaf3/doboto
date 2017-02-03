@@ -19,9 +19,9 @@ class Volume(Endpoint):
         list all volumes, or by region volumes
         """
         if region is not None:
-            return self.make_request(self.uri, params={"region": region})
+            return self.pages(self.uri, "volumes", params={"region": region})
         else:
-            return self.make_request(self.uri)
+            return self.pages(self.uri, "volumes")
 
     def create(self, attribs=None):
         """Create a volume based off of parameters"""
@@ -29,7 +29,7 @@ class Volume(Endpoint):
         if attribs is None:
             attribs = {}
 
-        return self.make_request(self.uri, 'POST', attribs=attribs)
+        return self.request(self.uri, "volume", 'POST', attribs=attribs)
 
     def info(self, id=None, name=None, region=None):
         """
@@ -37,9 +37,9 @@ class Volume(Endpoint):
         """
 
         if id is not None:
-            return self.make_request("{}/{}".format(self.uri, id))
+            return self.request("{}/{}".format(self.uri, id), "volume")
         elif name is not None and region is not None:
-            return self.make_request(self.uri, params={"name": name, "region": region})
+            return self.request(self.uri, "volume", params={"name": name, "region": region})
         else:
             raise ValueError("Must supply an id or name and region")
 
@@ -48,10 +48,10 @@ class Volume(Endpoint):
         Destroy a volume by id or name
         """
         if id is not None:
-            return self.make_request("{}/{}".format(self.uri, id), "DELETE")
+            return self.request("{}/{}".format(self.uri, id), request_method="DELETE")
         elif name is not None and region is not None:
-            return self.make_request(
-                self.uri, "DELETE", params={"name": name, "region": region}
+            return self.request(
+                self.uri, request_method="DELETE", params={"name": name, "region": region}
             )
         else:
             raise ValueError("Must supply an id or name and region")
@@ -61,7 +61,7 @@ class Volume(Endpoint):
         Retrieve volume snapshots information
         """
         uri = "{}/{}/snapshots".format(self.uri, id)
-        return self.make_request(uri)
+        return self.pages(uri, "snapshots")
 
     def snapshot_create(self, id, snapshot_name):
         """
@@ -72,7 +72,7 @@ class Volume(Endpoint):
         uri = "{}/{}/snapshots".format(self.uri, id)
 
         attribs = {"name": snapshot_name}
-        return self.make_request(uri, 'POST', attribs=attribs)
+        return self.request(uri, "snapshot", 'POST', attribs=attribs)
 
     def attach(self, id=None, name=None, region=None, droplet_id=None):
         """
@@ -88,13 +88,13 @@ class Volume(Endpoint):
             attribs["region"] = region
 
         if id is not None:
-            return self.make_request(
-                "{}/{}/actions".format(self.uri, id), "POST", attribs=attribs
+            return self.request(
+                "{}/{}/actions".format(self.uri, id), "action", "POST", attribs=attribs
             )
         elif name is not None:
             attribs["volume_name"] = name
-            return self.make_request(
-                "{}/actions".format(self.uri), "POST", attribs=attribs
+            return self.request(
+                "{}/actions".format(self.uri), "action", "POST", attribs=attribs
             )
         else:
             raise ValueError("Must supply an id or name")
@@ -113,13 +113,13 @@ class Volume(Endpoint):
             attribs["region"] = region
 
         if id is not None:
-            return self.make_request(
-                "{}/{}/actions".format(self.uri, id), "POST", attribs=attribs
+            return self.request(
+                "{}/{}/actions".format(self.uri, id), "action", "POST", attribs=attribs
             )
         elif name is not None:
             attribs["volume_name"] = name
-            return self.make_request(
-                "{}/actions".format(self.uri), "POST", attribs=attribs
+            return self.request(
+                "{}/actions".format(self.uri), "action", "POST", attribs=attribs
             )
         else:
             raise ValueError("Must supply an id or name")
@@ -137,18 +137,18 @@ class Volume(Endpoint):
             attribs["region"] = region
 
         uri = "{}/{}/actions".format(self.uri, id)
-        return self.make_request(uri, 'POST', attribs=attribs)
+        return self.request(uri, "action", 'POST', attribs=attribs)
 
     def action_list(self, id):
         """
         Retrieve volume actions information
         """
         uri = "{}/{}/actions".format(self.uri, id)
-        return self.make_request(uri)
+        return self.pages(uri, "actions")
 
     def action_info(self, id, action_id):
         """
         Get the status of an volume action
         """
         uri = "{}/{}/actions/{}".format(self.uri, id, action_id)
-        return self.make_request(uri)
+        return self.request(uri, "action")

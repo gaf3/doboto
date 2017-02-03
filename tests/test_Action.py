@@ -46,69 +46,26 @@ class TestAction(TestCase):
 
         self.assertFalse(exc_thrown)
 
-    @patch('doboto.Action.Action.make_request')
-    def test_list(self, mock_make_request):
+    @patch('doboto.Action.Action.pages')
+    def test_list(self, mock_pages):
         """
         list works with happy path
         """
 
-        mock_ret = {
-            "actions": [
-                {
-                    "id": 36804636,
-                    "status": "completed",
-                    "type": "create",
-                    "started_at": "2014-11-14T16:29:21Z",
-                    "completed_at": "2014-11-14T16:30:06Z",
-                    "resource_id": 3164444,
-                    "resource_type": "droplet",
-                    "region": "nyc3",
-                    "region_slug": "nyc3"
-                }
-            ],
-            "links": {
-                "pages": {
-                    "last": "https://api.digitalocean.com/v2/actions?page=159&per_page=1",
-                    "next": "https://api.digitalocean.com/v2/actions?page=2&per_page=1"
-                }
-            },
-            "meta": {
-                "total": 159
-            }
-        }
-
-        mock_make_request.return_value = mock_ret
         action = self.klass(self.test_url, self.test_token)
         result = action.list()
 
-        self.assertEqual(result, mock_ret)
-        mock_make_request.assert_called_with(self.test_uri)
+        mock_pages.assert_called_with(self.test_uri, "actions")
 
-    @patch('doboto.Action.Action.make_request')
-    def test_info(self, mock_make_request):
+    @patch('doboto.Action.Action.request')
+    def test_info(self, mock_request):
         """
         info works with action id
         """
 
-        mock_ret = {
-            "action": {
-                "id": 36804636,
-                "status": "completed",
-                "type": "create",
-                "started_at": "2014-11-14T16:29:21Z",
-                "completed_at": "2014-11-14T16:30:06Z",
-                "resource_id": 3164444,
-                "resource_type": "droplet",
-                "region": "nyc3",
-                "region_slug": "nyc3"
-            }
-        }
-
         id = 12345
-        mock_make_request.return_value = mock_ret
         action = self.klass(self.test_url, self.test_token)
         result = action.info(id)
 
         test_uri = "{}/{}".format(self.test_uri, id)
-        self.assertEqual(result, mock_ret)
-        mock_make_request.assert_called_with(test_uri)
+        mock_request.assert_called_with(test_uri, "action")

@@ -5,7 +5,7 @@ This module contains tests for the Endpoint class
 from unittest import TestCase
 from mock import Mock, MagicMock, patch
 from doboto import Endpoint
-from doboto.Endpoint import paginate
+from doboto.DOBOTOException import DOBOTOException
 
 import requests
 
@@ -25,134 +25,6 @@ class TestEndpoint(TestCase):
 
         self.klass_name = "Endpoint"
         self.klass = getattr(Endpoint, self.klass_name)
-
-    def test_paginate(self):
-        """
-        Verify pagination processes repsonse and forwards requests
-        """
-
-        fake_requests = []
-        fake_responses = [
-            {
-                "a": 1,
-                "b": [2, 3, 4],
-                "c": {
-                    "d": 5,
-                    "e": 6
-                },
-                "f": 7,
-                "links": {
-                    "pages": {
-                        "next": "things"
-                    }
-                }
-            },
-            {
-                "b": [5, 6],
-                "c": {
-                    "d": 8
-                },
-                "f": 9,
-                "links": {
-                    "pages": {
-                        "next": "things"
-                    }
-                }
-            },
-            {
-                "links": {
-                    "pages": {
-                    }
-                }
-            },
-            []
-        ]
-
-        @paginate
-        def fake_request(self, request_url, request_method='GET', attribs=None, params=None):
-
-            if request_method == "SELF":
-                return {
-                    "self": self,
-                    "request_url": request_url,
-                    "request_method": request_method,
-                    "attribs": attribs,
-                    "params": params
-                }
-
-            fake_requests.append(
-                {
-                    "request_url": request_url,
-                    "attribs": attribs,
-                    "params": params
-                }
-            )
-
-            return fake_responses.pop(0)
-
-        # Make sure no url returns a dict
-
-        result = fake_request(self, None)
-        self.assertEqual(result, {})
-
-        # Method other than GET is untouched
-
-        result = fake_request(
-            self, request_url="people", request_method="SELF", attribs=1, params=2
-        )
-        self.assertEqual(
-            result,
-            {
-                "self": self,
-                "request_url": "people",
-                "request_method": "SELF",
-                "attribs": 1,
-                "params": 2
-            }
-        )
-
-        # Call so it cycles
-
-        result = fake_request(
-            self, request_url="stuff", request_method="GET", attribs=10, params=11
-        )
-        self.assertEqual(
-            result,
-            {
-                "a": 1,
-                "b": [2, 3, 4, 5, 6],
-                "c": {
-                    "d": 8
-                },
-                "f": 9,
-                "links": {
-                    "pages": {
-                    }
-                }
-            }
-        )
-        self.assertEqual(fake_requests, [
-            {
-                "request_url": "stuff",
-                "attribs": 10,
-                "params": 11
-            },
-            {
-                "request_url": "things",
-                "attribs": 10,
-                "params": 11
-            },
-            {
-                "request_url": "things",
-                "attribs": 10,
-                "params": 11
-            }
-        ])
-
-        result = fake_request(
-            self, request_url="stuff", request_method="GET", attribs=10, params=11
-        )
-        self.assertEqual(result, {})
 
     def test_class_exists(self):
         """
@@ -175,31 +47,30 @@ class TestEndpoint(TestCase):
 
         self.assertFalse(exc_thrown)
 
-    def test_process_response(self):
-        """
-        Responses return status if 204, else pass through
-        """
-
-        response = MagicMock()
-        response.status_code = 200
-        response.json = MagicMock(return_value={"a": 1})
+    def test_headers(self):
 
         endpoint = self.klass(*self.instantiate_args)
-        self.assertEqual(endpoint.process_response(response), {"a": 1})
 
-        response.status_code = 204
-        self.assertEqual(endpoint.process_response(response), {"status": 204})
+        self.assertEqual(
+            endpoint.headers(),
+            {
+                'Authorization': "Bearer %s" % self.test_token,
+                'Content-Type': 'application/json'
+            }
+        )
 
     @patch('requests.get')
-    def test_make_request(self, mock_get):
+    @patch('requests.delete')
+    def test_request(self, mock_delete, mock_get):
 
         endpoint = self.klass(*self.instantiate_args)
         response = MagicMock()
         response.status_code = 200
-        response.json = MagicMock(return_value={"a": 1})
+        response.json = MagicMock(return_value={"people": {"a": 1}})
         mock_get.return_value = response
 
-        response = endpoint.make_request(request_url="people", attribs={"b": 2}, params={"c": 2})
+        result = endpoint.request("people", "people", attribs={"b": 2}, params={"c": 2})
+        self.assertEqual(result, {"a": 1})
 
         mock_get.assert_called_with(
             "people",
@@ -210,4 +81,113 @@ class TestEndpoint(TestCase):
                 'Content-Type': 'application/json'
             },
             timeout=60
+        )
+
+        self.assertRaises(
+            DOBOTOException, endpoint.request, "people", "stuff"
+        )
+
+        response = MagicMock()
+        response.status_code = 204
+        mock_delete.return_value = response
+        result = endpoint.request(request_url="people", request_method='DELETE')
+        self.assertIsNone(result)
+
+        response.status_code = 202
+        self.assertRaises(
+            DOBOTOException, endpoint.request, request_url="people", request_method='DELETE'
+        )
+
+    @patch('requests.get')
+    def test_pages(self, mock_get):
+
+        fake_requests = []
+        fake_responses = [
+            MagicMock(),
+            MagicMock(),
+            MagicMock()
+        ]
+
+        fake_responses[0].json = MagicMock(return_value={
+            "people": [1, 2, 3],
+            "links": {
+                "pages": {
+                    "next": "stuff"
+                }
+            }
+        })
+
+        fake_responses[1].json = MagicMock(return_value={
+            "people": [4, 5, 6],
+            "links": {
+                "pages": {
+                    "next": "things"
+                }
+            }
+        })
+
+        fake_responses[2].json = MagicMock(return_value={
+            "people": [],
+            "links": {
+                "pages": {
+                }
+            }
+        })
+
+        def fake_get(*args, **kwargs):
+
+            fake_requests.append({
+                "url": args[0],
+                "params": kwargs["params"]
+            })
+            return fake_responses.pop(0)
+
+        mock_get.side_effect = fake_get
+
+        endpoint = self.klass(*self.instantiate_args)
+        response = MagicMock()
+        mock_get.return_value = response
+
+        result = endpoint.pages("people", "people", params={"c": 2})
+        self.assertEqual(result, [1, 2, 3, 4, 5, 6])
+        self.assertEqual(fake_requests, [
+            {
+                "url": "people",
+                "params": {"c": 2, 'per_page': 200}
+            },
+            {
+                "url": "stuff",
+                "params": None
+            },
+            {
+                "url": "things",
+                "params": None
+            }
+        ])
+
+        mock_get.assert_called_with(
+            "things",
+            params=None,
+            headers={
+                'Authorization': "Bearer %s" % self.test_token,
+                'Content-Type': 'application/json'
+            },
+            timeout=60
+        )
+
+        fake_responses = [
+            MagicMock()
+        ]
+
+        fake_responses[0].json = MagicMock(return_value={
+            "people": [1, 2, 3],
+            "links": {
+                "pages": {
+                    "next": "stuff"
+                }
+            }
+        })
+
+        self.assertRaises(
+            DOBOTOException, endpoint.pages, "people", "items"
         )

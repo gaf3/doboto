@@ -3,41 +3,7 @@
 import json
 import requests
 from six import wraps
-
-
-def paginate(func):
-    """
-    paginate wrapper function - adapted from github.com/Wiredcraft/dopy
-    """
-
-    @wraps(func)
-    def wrapper(self, request_url, request_method='GET', attribs=None, params=None):
-        """wrapper function"""
-        if request_method != 'GET':
-            return func(self, request_url, request_method, attribs, params)
-
-        nxt = request_url
-        out = {}
-
-        while nxt is not None:
-            result = func(self, nxt, 'GET', attribs, params)
-            nxt = None
-
-            if isinstance(result, dict):
-                for key, value in result.items():
-                    if key in out and isinstance(out[key], list):
-                        out[key].extend(value)
-                    else:
-                        out[key] = value
-
-                if 'links' in result \
-                        and 'pages' in result['links'] \
-                        and 'next' in result['links']['pages']:
-                    nxt = result['links']['pages']['next']
-
-        return out
-    return wrapper
-
+from .DOBOTOException import DOBOTOException
 
 class Endpoint(object):
 
@@ -47,23 +13,68 @@ class Endpoint(object):
         """Take token and sets its token for API authorization."""
         self.token = token
 
-    def process_response(self, response):
-        """Process response."""
-        if response.status_code == 204:
-            return {'status': response.status_code}
-        else:
-            return response.json()
+    def headers(self):
+        """ Headers to use on API calls """
 
-    @paginate
-    def make_request(self, request_url, request_method='GET', attribs=None, params=None):
-        """Make request to DO API."""
-        headers = {'Authorization': "Bearer %s" % self.token,
-                   'Content-Type': 'application/json'}
+        return {
+            'Authorization': "Bearer %s" % self.token,
+            'Content-Type': 'application/json'
+        }
+
+    def request(self, request_url, expect=None, request_method='GET', attribs=None, params=None):
+        """ Single API Call """
+
+        headers = self.headers()
 
         requests_method = getattr(requests, request_method.lower())
 
-        resp = requests_method(
+        response = requests_method(
             request_url, params=params, data=json.dumps(attribs), headers=headers, timeout=60
         )
 
-        return self.process_response(resp)
+        if request_method == 'DELETE':
+
+            if response.status_code != 204:
+                raise DOBOTOException(result=response.json())
+
+        else:
+
+            result = response.json()
+
+            if expect not in result:
+                raise DOBOTOException(result=response.json())
+
+            return result[expect]
+
+    def pages(self, request_url, expect, params=None):
+        """ Paged API Calls """
+
+        if params is None:
+            params = {}
+
+        next_url = request_url
+        headers = self.headers()
+        params["per_page"] = 200
+        items = []
+
+        while next_url:
+
+            result = requests.get(next_url, params=params, headers=headers, timeout=60).json()
+
+            if expect not in result:
+                raise DOBOTOException(result=result)
+
+            items.extend(result[expect])
+
+            if 'links' in result and \
+               'pages' in result['links'] and \
+               'next' in result['links']['pages']:
+
+                next_url = result['links']['pages']['next']
+                params = None
+
+            else:
+
+                next_url = None
+
+        return items

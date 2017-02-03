@@ -24,7 +24,7 @@ class Droplet(Endpoint):
         else:
             uri = self.uri
 
-        return self.make_request(uri)
+        return self.pages(uri, "droplets")
 
     def neighbor_list(self, id):
         """
@@ -32,7 +32,7 @@ class Droplet(Endpoint):
         """
         uri = "%s/%s/neighbors" % (self.uri, id)
 
-        return self.make_request(uri)
+        return self.pages(uri, "droplets")
 
     def droplet_neighbor_list(self):
         """
@@ -40,7 +40,7 @@ class Droplet(Endpoint):
         """
         uri = "%s/droplet_neighbors" % (self.reports)
 
-        return self.make_request(uri)
+        return self.pages(uri, "neighbors")
 
     def create(self, attribs=None):
         """Create a droplet based off of parameters"""
@@ -48,14 +48,17 @@ class Droplet(Endpoint):
         if attribs is None:
             attribs = {}
 
-        return self.make_request(self.uri, 'POST', attribs=attribs)
+        if "names" in attribs:
+            return self.request(self.uri, "droplets", 'POST', attribs=attribs)
+        else:
+            return self.request(self.uri, "droplet", 'POST', attribs=attribs)
 
     def info(self, id):
         """
         Retrieve droplet information
         """
         uri = "%s/%s" % (self.uri, id)
-        return self.make_request(uri)
+        return self.request(uri, "droplet")
 
     def destroy(self, id=None, tag_name=None):
         """
@@ -67,7 +70,7 @@ class Droplet(Endpoint):
             uri = "%s/%s" % (self.uri, id)
         else:
             raise ValueError("id or tag_name must be specified")
-        return self.make_request(uri, 'DELETE')
+        return self.request(uri, request_method='DELETE')
 
     def action(self, id=None, tag_name=None, type=None, attribs=None):
         """
@@ -89,14 +92,14 @@ class Droplet(Endpoint):
 
         attribs["type"] = type
 
-        return self.make_request(uri, 'POST', attribs=attribs)
+        return self.request(uri, "action", 'POST', attribs=attribs)
 
     def backup_list(self, id):
         """
         Retrieve droplet backups information
         """
         uri = "%s/%s/backups" % (self.uri, id)
-        return self.make_request(uri)
+        return self.pages(uri, "backups")
 
     def backup_enable(self, id=None, tag_name=None):
         """
@@ -118,7 +121,7 @@ class Droplet(Endpoint):
         """
         uri = "%s/%s/actions" % (self.uri, id)
         attribs = {"type": "reboot"}
-        return self.make_request(uri, 'POST', attribs=attribs)
+        return self.request(uri, "action", 'POST', attribs=attribs)
 
     def shutdown(self, id=None, tag_name=None):
         """
@@ -161,7 +164,7 @@ class Droplet(Endpoint):
 
         attribs = {"type": "restore", "image": image}
 
-        return self.make_request(uri, 'POST', attribs=attribs)
+        return self.request(uri, "action", 'POST', attribs=attribs)
 
     def password_reset(self, id):
         """
@@ -169,7 +172,7 @@ class Droplet(Endpoint):
         """
         uri = "%s/%s/actions" % (self.uri, id)
         attribs = {"type": "password_reset"}
-        return self.make_request(uri, 'POST', attribs=attribs)
+        return self.request(uri, "action", 'POST', attribs=attribs)
 
     def resize(self, id, size, disk=False):
         """
@@ -179,7 +182,7 @@ class Droplet(Endpoint):
         uri = "%s/%s/actions" % (self.uri, id)
         disk = str(disk).lower()
         attribs = {"type": "resize", "size": "%s" % size, "disk": disk}
-        return self.make_request(uri, 'POST', attribs=attribs)
+        return self.request(uri, "action", 'POST', attribs=attribs)
 
     def rebuild(self, id, image):
         """
@@ -193,7 +196,7 @@ class Droplet(Endpoint):
             pass
 
         attribs = {"type": "rebuild", "image": image}
-        return self.make_request(uri, 'POST', attribs=attribs)
+        return self.request(uri, "action", 'POST', attribs=attribs)
 
     def rename(self, id, name):
         """
@@ -201,14 +204,14 @@ class Droplet(Endpoint):
         """
         uri = "%s/%s/actions" % (self.uri, id)
         attribs = {"type": "rename", "name": "%s" % name}
-        return self.make_request(uri, 'POST', attribs=attribs)
+        return self.request(uri, "action", 'POST', attribs=attribs)
 
     def kernel_list(self, id):
         """
         Retrieve droplet kernels information
         """
         uri = "%s/%s/kernels" % (self.uri, id)
-        return self.make_request(uri)
+        return self.pages(uri, "kernels")
 
     def kernel_update(self, id, kernel_id):
         """
@@ -216,7 +219,7 @@ class Droplet(Endpoint):
         """
         uri = "%s/%s/actions" % (self.uri, id)
         attribs = {"type": "change_kernel", "kernel": kernel_id}
-        return self.make_request(uri, 'POST', attribs=attribs)
+        return self.request(uri, "action", 'POST', attribs=attribs)
 
     def ipv6_enable(self, id=None, tag_name=None):
         """
@@ -237,7 +240,7 @@ class Droplet(Endpoint):
         Retrieve droplet snapshots information
         """
         uri = "%s/%s/snapshots" % (self.uri, id)
-        return self.make_request(uri)
+        return self.pages(uri, "snapshots")
 
     def snapshot_create(self, id=None, tag_name=None, name=None):
         """
@@ -254,11 +257,11 @@ class Droplet(Endpoint):
         Retrieve droplet actions information
         """
         uri = "%s/%s/actions" % (self.uri, id)
-        return self.make_request(uri)
+        return self.pages(uri, "actions")
 
     def action_info(self, id, action_id):
         """
         Get the status of an droplet action
         """
         uri = "%s/%s/actions/%s" % (self.uri, id, action_id)
-        return self.make_request(uri)
+        return self.request(uri, "action")
