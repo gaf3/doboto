@@ -491,14 +491,14 @@ class TestDroplet(TestCase):
 
         id = 12345
         drop = self.klass(self.test_url, self.test_token)
-        drop.snapshot_create(id=id, name="test")
+        drop.snapshot_create(id=id, snapshot_name="test")
 
         mock_action.assert_called_with(
             id=id, tag_name=None, type="snapshot", attribs={"name": "test"}
         )
 
         tag_name = "rando-tag"
-        drop.snapshot_create(tag_name=tag_name, name="test")
+        drop.snapshot_create(tag_name=tag_name, snapshot_name="test")
 
         mock_action.assert_called_with(
             id=None, tag_name='rando-tag', type="snapshot", attribs={"name": "test"}

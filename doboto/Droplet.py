@@ -242,15 +242,17 @@ class Droplet(Endpoint):
         uri = "%s/%s/snapshots" % (self.uri, id)
         return self.pages(uri, "snapshots")
 
-    def snapshot_create(self, id=None, tag_name=None, name=None):
+    def snapshot_create(self, id=None, tag_name=None, snapshot_name=None):
         """
         Snaphot by id or tag with name
         """
 
-        if name is None:
-            raise ValueError("name must be specified")
+        if snapshot_name is None:
+            raise ValueError("snapshot_name must be specified")
 
-        return self.action(id=id, tag_name=tag_name, type="snapshot", attribs={"name": name})
+        return self.action(
+            id=id, tag_name=tag_name, type="snapshot", attribs={"name": snapshot_name}
+        )
 
     def action_list(self, id):
         """
