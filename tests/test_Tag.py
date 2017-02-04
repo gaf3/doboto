@@ -141,7 +141,9 @@ class TestTag(TestCase):
         tag.attach(test_name, resources)
         test_uri = "{}/{}/resources".format(self.test_uri, test_name)
 
-        mock_request.assert_called_with(test_uri, "action", 'POST', {'resources': resources})
+        mock_request.assert_called_with(
+            test_uri, request_method='POST', attribs={'resources': resources}
+        )
 
     @patch('doboto.Tag.Tag.request')
     def test_detach_happy(self, mock_request):
@@ -155,4 +157,6 @@ class TestTag(TestCase):
         tag.detach(test_name, resources)
         test_uri = "{}/{}/resources".format(self.test_uri, test_name)
 
-        mock_request.assert_called_with(test_uri,  "action", 'DELETE', {'resources': resources})
+        mock_request.assert_called_with(
+            test_uri,  request_method='DELETE', attribs={'resources': resources}
+        )

@@ -77,7 +77,7 @@ class Tag(Endpoint):
         uri = "{}/{}/resources".format(self.uri, name)
         attribs = {'resources': resources}
 
-        return self.request(uri, "action", 'POST', attribs)
+        return self.request(uri, request_method='POST', attribs=attribs)
 
     def detach(self, name, resources):
         """
@@ -87,4 +87,4 @@ class Tag(Endpoint):
         uri = "{}/{}/resources".format(self.uri, name)
         attribs = {'resources': resources}
 
-        return self.request(uri, "action", 'DELETE', attribs)
+        return self.request(uri, request_method='DELETE', attribs=attribs)
