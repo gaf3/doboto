@@ -24,7 +24,7 @@ class Tag(Endpoint):
 
         return self.pages(self.uri, "tags")
 
-    def names(self):
+    def name_list(self):
         """
         This call will provide a list of all tag names
         """

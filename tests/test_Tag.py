@@ -58,9 +58,9 @@ class TestTag(TestCase):
         mock_pages.assert_called_with(self.test_uri, "tags")
 
     @patch('doboto.Tag.Tag.pages')
-    def test_names_happy(self, mock_pages):
+    def test_name_list_happy(self, mock_pages):
         """
-        names works with happy path
+        name_list works with happy path
         """
 
         extra_data = {
@@ -71,7 +71,7 @@ class TestTag(TestCase):
 
         mock_pages.return_value = mock_ret
         tag = self.klass(self.test_url, self.test_token)
-        result = tag.names()
+        result = tag.name_list()
 
         mock_pages.assert_called_with(self.test_uri, "tags")
 
