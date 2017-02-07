@@ -60,8 +60,7 @@ class TestEndpoint(TestCase):
         )
 
     @patch('requests.get')
-    @patch('requests.delete')
-    def test_request(self, mock_delete, mock_get):
+    def test_request(self, mock_get):
 
         endpoint = self.klass(*self.instantiate_args)
         response = MagicMock()
@@ -89,14 +88,12 @@ class TestEndpoint(TestCase):
 
         response = MagicMock()
         response.status_code = 204
-        mock_delete.return_value = response
-        result = endpoint.request(request_url="people", request_method='DELETE')
+        mock_get.return_value = response
+        result = endpoint.request("people")
         self.assertIsNone(result)
 
         response.status_code = 202
-        self.assertRaises(
-            DOBOTOException, endpoint.request, request_url="people", request_method='DELETE'
-        )
+        self.assertRaises(DOBOTOException, endpoint.request, "people")
 
     @patch('requests.get')
     def test_pages(self, mock_get):

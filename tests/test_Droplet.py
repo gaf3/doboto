@@ -171,14 +171,14 @@ class TestDroplet(TestCase):
         test_uri = "{}/actions?tag_name={}".format(self.test_uri, tag_name)
 
         mock_request.assert_called_with(
-            test_uri, "action", 'POST', attribs={"type": "test", "extra": True}
+            test_uri, "actions", 'POST', attribs={"type": "test", "extra": True}
         )
 
         with self.assertRaises(ValueError):
             drop.action()
 
         with self.assertRaises(ValueError):
-            drop.action(id=0)
+            drop.action(type='stuff')
 
     @patch('doboto.Droplet.Droplet.pages')
     def test_backup_list(self, mock_pages):
@@ -491,14 +491,14 @@ class TestDroplet(TestCase):
 
         id = 12345
         drop = self.klass(self.test_url, self.test_token)
-        drop.snapshot_create(id=id, name="test")
+        drop.snapshot_create(id=id, snapshot_name="test")
 
         mock_action.assert_called_with(
             id=id, tag_name=None, type="snapshot", attribs={"name": "test"}
         )
 
         tag_name = "rando-tag"
-        drop.snapshot_create(tag_name=tag_name, name="test")
+        drop.snapshot_create(tag_name=tag_name, snapshot_name="test")
 
         mock_action.assert_called_with(
             id=None, tag_name='rando-tag', type="snapshot", attribs={"name": "test"}

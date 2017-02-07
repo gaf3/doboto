@@ -32,7 +32,7 @@ class Endpoint(object):
             request_url, params=params, data=json.dumps(attribs), headers=headers, timeout=60
         )
 
-        if request_method == 'DELETE':
+        if expect is None:
 
             if response.status_code != 204:
                 raise DOBOTOException(result=response.json())

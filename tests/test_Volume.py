@@ -106,7 +106,9 @@ class TestVolume(TestCase):
 
         volume.info(name="stuff", region="nyc1")
         test_uri = self.test_uri
-        mock_request.assert_called_with(test_uri, "volume", params={"name": "stuff", "region": "nyc1"})
+        mock_request.assert_called_with(
+            test_uri, "volumes", params={"name": "stuff", "region": "nyc1"}
+        )
 
         # Requirements met
 
