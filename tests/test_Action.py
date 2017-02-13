@@ -20,7 +20,8 @@ class TestAction(TestCase):
         self.test_url = "http://abc.example.com"
         self.test_uri = "{}/actions".format(self.test_url)
         self.test_token = "abc123"
-        self.instantiate_args = (self.test_url, self.test_token)
+        self.test_agent = "Unit"
+        self.instantiate_args = (self.test_token, self.test_url, self.test_agent)
 
         self.klass_name = "Action"
         self.klass = getattr(Action, self.klass_name)
@@ -52,7 +53,7 @@ class TestAction(TestCase):
         list works with happy path
         """
 
-        action = self.klass(self.test_url, self.test_token)
+        action = self.klass(*self.instantiate_args)
         result = action.list()
 
         mock_pages.assert_called_with(self.test_uri, "actions")
@@ -64,7 +65,7 @@ class TestAction(TestCase):
         """
 
         id = 12345
-        action = self.klass(self.test_url, self.test_token)
+        action = self.klass(*self.instantiate_args)
         result = action.info(id)
 
         test_uri = "{}/{}".format(self.test_uri, id)

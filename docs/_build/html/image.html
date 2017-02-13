@@ -1,0 +1,368 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Image (do.image) &#8212; DOBOTO 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Region (do.region)" href="region.html" />
+    <link rel="prev" title="FloatingIP (do.floating_ip)" href="floating_ip.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="region.html" title="Region (do.region)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="floating_ip.html" title="FloatingIP (do.floating_ip)"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="image-do-image">
+<h1>Image (do.image)<a class="headerlink" href="#image-do-image" title="Permalink to this headline">¶</a></h1>
+<p>Images in DigitalOcean may refer to one of a few different kinds of dict&#8217;s.</p>
+<p>An image may refer to a snapshot that has been taken of a Droplet instance. It may also mean an image representing an automatic backup of a Droplet. The third category that it can represent is a public Linux distribution or application image that is used as a base to create Droplets.</p>
+<div class="section" id="list-all-distribution-application-or-user-images">
+<h2>List all, distribution, application, or user images.<a class="headerlink" href="#list-all-distribution-application-or-user-images" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.image.list">
+<code class="descclassname">do.image.</code><code class="descname">list</code><span class="sig-paren">(</span><em>type=None</em>, <em>private=None</em><span class="sig-paren">)</span><a class="headerlink" href="#do.image.list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>type</em> - string - Can be &#8220;distribution&#8221; or &#8220;application&#8221; for images thereof.</li>
+<li><em>private</em> - boolean - Set to True for user images</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A list of Image dict&#8217;s<ul>
+<li><em>id</em> - number - A unique number that can be used to identify and reference a specific image.</li>
+<li><em>name</em> - string - The display name that has been given to an image. This is what is shown in the control panel and is generally a descriptive title for the image in question.</li>
+<li><em>type</em> - string - The kind of image, describing the duration of how long the image is stored. This is either &#8220;snapshot&#8221; or &#8220;backup&#8221;.</li>
+<li><em>distribution</em> - string - This attribute describes the base distribution used for this image.</li>
+<li><em>slug</em> - nullable string - A uniquely identifying string that is associated with each of the DigitalOcean-provided public images. These can be used to reference a public image as an alternative to the numeric id.</li>
+<li><em>public</em> - boolean - This is a boolean value that indicates whether the image in question is public or not. An image that is public is available to all accounts. A non-public image is only accessible from your account.</li>
+<li><em>regions</em> - list - This attribute is a list of the regions that the image is available in. The regions are represented by their identifying slug values.</li>
+<li><em>min_disk_size</em> - number - The minimum &#8216;disk&#8217; required for a size to use this image.</li>
+<li><em>size_gigabytes</em> - number - The size of the image in gigabytes.</li>
+<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-all-images">https://developers.digitalocean.com/documentation/v2/#list-all-images</a></li>
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-all-distribution-images">https://developers.digitalocean.com/documentation/v2/#list-all-distribution-images</a></li>
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-all-application-images">https://developers.digitalocean.com/documentation/v2/#list-all-application-images</a></li>
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-a-user-s-images">https://developers.digitalocean.com/documentation/v2/#list-a-user-s-images</a></li>
+</ul>
+</div>
+<div class="section" id="retrieve-an-existing-image-by-id-or-slug">
+<h2>Retrieve an existing image by id or slug<a class="headerlink" href="#retrieve-an-existing-image-by-id-or-slug" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.image.info">
+<code class="descclassname">do.image.</code><code class="descname">info</code><span class="sig-paren">(</span><em>id_slug</em><span class="sig-paren">)</span><a class="headerlink" href="#do.image.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id_slug</em> - number / string - id or slug of the Image</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An Image dict<ul>
+<li><em>id</em> - number - A unique number that can be used to identify and reference a specific image.</li>
+<li><em>name</em> - string - The display name that has been given to an image. This is what is shown in the control panel and is generally a descriptive title for the image in question.</li>
+<li><em>type</em> - string - The kind of image, describing the duration of how long the image is stored. This is either &#8220;snapshot&#8221; or &#8220;backup&#8221;.</li>
+<li><em>distribution</em> - string - This attribute describes the base distribution used for this image.</li>
+<li><em>slug</em> - nullable string - A uniquely identifying string that is associated with each of the DigitalOcean-provided public images. These can be used to reference a public image as an alternative to the numeric id.</li>
+<li><em>public</em> - boolean - This is a boolean value that indicates whether the image in question is public or not. An image that is public is available to all accounts. A non-public image is only accessible from your account.</li>
+<li><em>regions</em> - list - This attribute is a list of the regions that the image is available in. The regions are represented by their identifying slug values.</li>
+<li><em>min_disk_size</em> - number - The minimum &#8216;disk&#8217; required for a size to use this image.</li>
+<li><em>size_gigabytes</em> - number - The size of the image in gigabytes.</li>
+<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-image-by-id">https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-image-by-id</a></li>
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-image-by-slug">https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-image-by-slug</a></li>
+</ul>
+</div>
+<div class="section" id="update-an-image">
+<h2>Update an Image<a class="headerlink" href="#update-an-image" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.image.update">
+<code class="descclassname">do.image.</code><code class="descname">update</code><span class="sig-paren">(</span><em>id</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#do.image.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - id of the Image</li>
+<li><em>name</em> - string - The new name that you would like to use for the image.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An Image dict<ul>
+<li><em>id</em> - number - A unique number that can be used to identify and reference a specific image.</li>
+<li><em>name</em> - string - The display name that has been given to an image. This is what is shown in the control panel and is generally a descriptive title for the image in question.</li>
+<li><em>type</em> - string - The kind of image, describing the duration of how long the image is stored. This is either &#8220;snapshot&#8221; or &#8220;backup&#8221;.</li>
+<li><em>distribution</em> - string - This attribute describes the base distribution used for this image.</li>
+<li><em>slug</em> - nullable string - A uniquely identifying string that is associated with each of the DigitalOcean-provided public images. These can be used to reference a public image as an alternative to the numeric id.</li>
+<li><em>public</em> - boolean - This is a boolean value that indicates whether the image in question is public or not. An image that is public is available to all accounts. A non-public image is only accessible from your account.</li>
+<li><em>regions</em> - list - This attribute is a list of the regions that the image is available in. The regions are represented by their identifying slug values.</li>
+<li><em>min_disk_size</em> - number - The minimum &#8216;disk&#8217; required for a size to use this image.</li>
+<li><em>size_gigabytes</em> - number - The size of the image in gigabytes.</li>
+<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#update-an-image">https://developers.digitalocean.com/documentation/v2/#update-an-image</a></li>
+</ul>
+</div>
+<div class="section" id="delete-an-image">
+<h2>Delete an Image<a class="headerlink" href="#delete-an-image" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.image.destroy">
+<code class="descclassname">do.image.</code><code class="descname">destroy</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.image.destroy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - id of the Image</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>None. A DOBOTOException is thrown if an issue is encountered.</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#delete-an-image">https://developers.digitalocean.com/documentation/v2/#delete-an-image</a></li>
+</ul>
+</div>
+<div class="section" id="transfer-an-image-to-another-region">
+<h2>Transfer an Image to another Region<a class="headerlink" href="#transfer-an-image-to-another-region" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.image.transfer">
+<code class="descclassname">do.image.</code><code class="descname">transfer</code><span class="sig-paren">(</span><em>id</em>, <em>region</em><span class="sig-paren">)</span><a class="headerlink" href="#do.image.transfer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - id of the Image</li>
+<li><em>region</em> - string - The region slug that represents the region target.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An Action dictt<ul>
+<li><em>id</em> - number - A unique numeric ID that can be used to identify and reference an image action.</li>
+<li><em>status</em> - string - The current status of the image action. This will be either &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - This is the type of the image action that the JSON dict represents. For example, this could be &#8220;transfer&#8221; to represent the state of an image transfer action.</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#transfer-an-image">https://developers.digitalocean.com/documentation/v2/#transfer-an-image</a></li>
+</ul>
+</div>
+<div class="section" id="convert-an-image-to-a-snapshot">
+<h2>Convert an Image to a Snapshot<a class="headerlink" href="#convert-an-image-to-a-snapshot" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.image.convert">
+<code class="descclassname">do.image.</code><code class="descname">convert</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.image.convert" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - id of the Image</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An Action dict<ul>
+<li><em>id</em> - number - A unique numeric ID that can be used to identify and reference an image action.</li>
+<li><em>status</em> - string - The current status of the image action. This will be either &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - This is the type of the image action that the JSON dict represents. For example, this could be &#8220;transfer&#8221; to represent the state of an image transfer action.</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#convert-an-image-to-a-snapshot">https://developers.digitalocean.com/documentation/v2/#convert-an-image-to-a-snapshot</a></li>
+</ul>
+</div>
+<div class="section" id="list-all-actions-for-an-image">
+<h2>List all actions for an Image<a class="headerlink" href="#list-all-actions-for-an-image" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.image.action_list">
+<code class="descclassname">do.image.</code><code class="descname">action_list</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.image.action_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - id of the Image</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A list of Action dict&#8217;s<ul>
+<li><em>id</em> - number - A unique numeric ID that can be used to identify and reference an image action.</li>
+<li><em>status</em> - string - The current status of the image action. This will be either &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - This is the type of the image action that the JSON dict represents. For example, this could be &#8220;transfer&#8221; to represent the state of an image transfer action.</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-all-actions-for-an-image">https://developers.digitalocean.com/documentation/v2/#list-all-actions-for-an-image</a></li>
+</ul>
+</div>
+<div class="section" id="retrieve-an-existing-image-action">
+<h2>Retrieve an existing Image Action<a class="headerlink" href="#retrieve-an-existing-image-action" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.image.action_info">
+<code class="descclassname">do.image.</code><code class="descname">action_info</code><span class="sig-paren">(</span><em>id</em>, <em>action_id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.image.action_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - id of the Image</li>
+<li><em>action_id</em> - number - id of the Action</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An Action dict<ul>
+<li><em>id</em> - number - A unique numeric ID that can be used to identify and reference an image action.</li>
+<li><em>status</em> - string - The current status of the image action. This will be either &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - This is the type of the image action that the JSON dict represents. For example, this could be &#8220;transfer&#8221; to represent the state of an image transfer action.</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-image-action">https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-image-action</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Image (do.image)</a><ul>
+<li><a class="reference internal" href="#list-all-distribution-application-or-user-images">List all, distribution, application, or user images.</a></li>
+<li><a class="reference internal" href="#retrieve-an-existing-image-by-id-or-slug">Retrieve an existing image by id or slug</a></li>
+<li><a class="reference internal" href="#update-an-image">Update an Image</a></li>
+<li><a class="reference internal" href="#delete-an-image">Delete an Image</a></li>
+<li><a class="reference internal" href="#transfer-an-image-to-another-region">Transfer an Image to another Region</a></li>
+<li><a class="reference internal" href="#convert-an-image-to-a-snapshot">Convert an Image to a Snapshot</a></li>
+<li><a class="reference internal" href="#list-all-actions-for-an-image">List all actions for an Image</a></li>
+<li><a class="reference internal" href="#retrieve-an-existing-image-action">Retrieve an existing Image Action</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="floating_ip.html"
+                        title="previous chapter">FloatingIP (do.floating_ip)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="region.html"
+                        title="next chapter">Region (do.region)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/image.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="region.html" title="Region (do.region)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="floating_ip.html" title="FloatingIP (do.floating_ip)"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Digital Ocean - SWE-Data.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

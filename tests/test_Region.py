@@ -20,7 +20,8 @@ class TestRegion(TestCase):
         self.test_url = "http://abc.example.com"
         self.test_uri = "{}/regions".format(self.test_url)
         self.test_token = "abc123"
-        self.instantiate_args = (self.test_url, self.test_token)
+        self.test_agent = "Unit"
+        self.instantiate_args = (self.test_token, self.test_url, self.test_agent)
 
         self.klass_name = "Region"
         self.klass = getattr(Region, self.klass_name)
@@ -52,7 +53,7 @@ class TestRegion(TestCase):
         list works with happy path
         """
 
-        region = self.klass(self.test_url, self.test_token)
+        region = self.klass(*self.instantiate_args)
         result = region.list()
 
         mock_pages.assert_called_with(self.test_uri, "regions")

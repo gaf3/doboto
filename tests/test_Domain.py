@@ -21,7 +21,8 @@ class TestDomain(TestCase):
         self.test_url = "http://abc.example.com"
         self.test_uri = "{}/domains".format(self.test_url)
         self.test_token = "abc123"
-        self.instantiate_args = (self.test_url, self.test_token)
+        self.test_agent = "Unit"
+        self.instantiate_args = (self.test_token, self.test_url, self.test_agent)
 
         self.klass_name = "Domain"
         self.klass = getattr(Domain, self.klass_name)
@@ -53,7 +54,7 @@ class TestDomain(TestCase):
         test list method
         """
 
-        domain_obj = self.klass(self.test_url, self.test_token)
+        domain_obj = self.klass(*self.instantiate_args)
         domain_obj.list()
         test_uri = "{}".format(self.test_uri)
 
@@ -64,7 +65,7 @@ class TestDomain(TestCase):
         """
         test create method
         """
-        domain_obj = self.klass(self.test_url, self.test_token)
+        domain_obj = self.klass(*self.instantiate_args)
         datas = {"name": "test-domain.com", "ip_address": "1.2.3.4"}
         domain_obj.create("test-domain.com", "1.2.3.4")
         test_uri = "{}".format(self.test_uri)
@@ -77,7 +78,7 @@ class TestDomain(TestCase):
         test info method
         """
         name = "test-domain.com"
-        domain_obj = self.klass(self.test_url, self.test_token)
+        domain_obj = self.klass(*self.instantiate_args)
         domain_obj.info(name)
         test_uri = "{}/{}".format(self.test_uri, name)
 
@@ -89,7 +90,7 @@ class TestDomain(TestCase):
         test destroy method
         """
         name = "test-domain.com"
-        domain_obj = self.klass(self.test_url, self.test_token)
+        domain_obj = self.klass(*self.instantiate_args)
         domain_obj.destroy(name)
         test_uri = "{}/{}".format(self.test_uri, name)
 
@@ -101,7 +102,7 @@ class TestDomain(TestCase):
         test record_list method
         """
         name = "test-domain.com"
-        domain_obj = self.klass(self.test_url, self.test_token)
+        domain_obj = self.klass(*self.instantiate_args)
         domain_obj.record_list(name)
         test_uri = "{}/{}/records".format(self.test_uri, name)
 
@@ -114,7 +115,7 @@ class TestDomain(TestCase):
         """
         name = "test-domain.com"
         datas = {"type": "AAAA", "name": "dat-v6-tho", "data": "::"}
-        domain_obj = self.klass(self.test_url, self.test_token)
+        domain_obj = self.klass(*self.instantiate_args)
         domain_obj.record_create(name, datas)
         test_uri = "{}/{}/records".format(self.test_uri, name)
 
@@ -127,7 +128,7 @@ class TestDomain(TestCase):
         """
         name = "test-domain.com"
         record_id = 4567
-        domain_obj = self.klass(self.test_url, self.test_token)
+        domain_obj = self.klass(*self.instantiate_args)
         domain_obj.record_info(name, record_id)
         test_uri = "{}/{}/records/{}".format(self.test_uri, name, record_id)
 
@@ -141,7 +142,7 @@ class TestDomain(TestCase):
         name = "test-domain.com"
         record_id = "4567"
         datas = {"type": "AAAA", "name": "dat-v6-tho", "data": "::"}
-        domain_obj = self.klass(self.test_url, self.test_token)
+        domain_obj = self.klass(*self.instantiate_args)
         domain_obj.record_update(name, record_id, datas)
         test_uri = "{}/{}/records/{}".format(self.test_uri, name, record_id)
 
@@ -154,7 +155,7 @@ class TestDomain(TestCase):
         """
         name = "test-domain.com"
         record_id = 4567
-        domain_obj = self.klass(self.test_url, self.test_token)
+        domain_obj = self.klass(*self.instantiate_args)
         domain_obj.record_destroy(name, record_id)
         test_uri = "{}/{}/records/{}".format(self.test_uri, name, record_id)
 

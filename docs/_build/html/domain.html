@@ -1,0 +1,370 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Domain (do.domain) &#8212; DOBOTO 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Droplet (do.droplet)" href="droplet.html" />
+    <link rel="prev" title="Action (do.action)" href="action.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="droplet.html" title="Droplet (do.droplet)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="action.html" title="Action (do.action)"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="domain-do-domain">
+<h1>Domain (do.domain)<a class="headerlink" href="#domain-do-domain" title="Permalink to this headline">¶</a></h1>
+<p>Domain resources are domain names that you have purchased from a domain name registrar that you are managing through the DigitalOcean DNS interface.</p>
+<p>This resource establishes top-level control over each domain. Actions that affect individual domain records should be taken on the [Domain Records] resource.</p>
+<div class="section" id="list-all-domains">
+<h2>List all Domains<a class="headerlink" href="#list-all-domains" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.domain.list">
+<code class="descclassname">do.domain.</code><code class="descname">list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#do.domain.list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Returns:</p>
+<ul class="simple">
+<li>A list of Domain dict&#8217;s<ul>
+<li><em>name</em> - string - The name of the domain itself. This should follow the standard domain format of domain.TLD. For instance, example.com is a valid domain name.</li>
+<li><em>ttl</em> - number - This value is the time to live for the records on this domain, in seconds. This defines the time frame that clients can cache queried information before a refresh should be requested.</li>
+<li><em>zone_file</em> - string - This attribute contains the complete contents of the zone file for the selected domain. Individual domain record resources should be used to get more granular control over records. However, this attribute can also be used to get information about the SOA record, which is created automatically and is not accessible as an individual record resource.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-all-domains">https://developers.digitalocean.com/documentation/v2/#list-all-domains</a></li>
+</ul>
+</div>
+<div class="section" id="create-a-new-domain">
+<h2>Create a new Domain<a class="headerlink" href="#create-a-new-domain" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.domain.create">
+<code class="descclassname">do.domain.</code><code class="descname">create</code><span class="sig-paren">(</span><em>name</em>, <em>ip_address</em><span class="sig-paren">)</span><a class="headerlink" href="#do.domain.create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>name</em> - string - The domain name to add to the DigitalOcean DNS management interface. The name must be unique in DigitalOcean&#8217;s DNS system. The request will fail if the name has already been taken.</li>
+<li><em>ip_address</em> - string - This attribute contains the IP address you want the domain to point to.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A Domain dict<ul>
+<li><em>name</em> - string - The name of the domain itself. This should follow the standard domain format of domain.TLD. For instance, example.com is a valid domain name.</li>
+<li><em>ttl</em> - number - This value is the time to live for the records on this domain, in seconds. This defines the time frame that clients can cache queried information before a refresh should be requested.</li>
+<li><em>zone_file</em> - string - This attribute contains the complete contents of the zone file for the selected domain. Individual domain record resources should be used to get more granular control over records. However, this attribute can also be used to get information about the SOA record, which is created automatically and is not accessible as an individual record resource.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#create-a-new-domain">https://developers.digitalocean.com/documentation/v2/#create-a-new-domain</a></li>
+</ul>
+</div>
+<div class="section" id="retrieve-an-existing-domain">
+<h2>Retrieve an existing Domain<a class="headerlink" href="#retrieve-an-existing-domain" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.domain.info">
+<code class="descclassname">do.domain.</code><code class="descname">info</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#do.domain.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>name</em> - string - The name of the domain to retrieve</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A Domain dict<ul>
+<li><em>name</em> - string - The name of the domain itself. This should follow the standard domain format of domain.TLD. For instance, example.com is a valid domain name.</li>
+<li><em>ttl</em> - number - This value is the time to live for the records on this domain, in seconds. This defines the time frame that clients can cache queried information before a refresh should be requested.</li>
+<li><em>zone_file</em> - string - This attribute contains the complete contents of the zone file for the selected domain. Individual domain record resources should be used to get more granular control over records. However, this attribute can also be used to get information about the SOA record, which is created automatically and is not accessible as an individual record resource.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-domain">https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-domain</a></li>
+</ul>
+</div>
+<div class="section" id="delete-a-domain">
+<h2>Delete a Domain<a class="headerlink" href="#delete-a-domain" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.domain.destroy">
+<code class="descclassname">do.domain.</code><code class="descname">destroy</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#do.domain.destroy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>name</em> - string - The name of the domain to destroy</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>None. A DOBOTOException is thrown if an issue is encountered.</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#delete-a-domain">https://developers.digitalocean.com/documentation/v2/#delete-a-domain</a></li>
+</ul>
+</div>
+<div class="section" id="list-all-domain-records">
+<h2>List all Domain Records<a class="headerlink" href="#list-all-domain-records" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.domain.record_list">
+<code class="descclassname">do.domain.</code><code class="descname">record_list</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#do.domain.record_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>name</em> - string - The name of the domain, the Domain Records of which to retrieve</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A list of Domain Record dict&#8217;s<ul>
+<li><em>id</em> - number - A unique identifier for each domain record.</li>
+<li><em>type</em> - string - The type of the DNS record (A, CNAME, TXT, ...).</li>
+<li><em>name</em> - string - The name to use for the DNS record.</li>
+<li><em>data</em> - string - The value to use for the DNS record.</li>
+<li><em>priority</em> - nullable number - The priority for SRV and MX records.</li>
+<li><em>port</em> - nullable number - The port for SRV records.</li>
+<li><em>weight</em> - nullable number - The weight for SRV records.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-all-domain-records">https://developers.digitalocean.com/documentation/v2/#list-all-domain-records</a></li>
+</ul>
+</div>
+<div class="section" id="create-a-new-domain-record">
+<h2>Create a new Domain Record<a class="headerlink" href="#create-a-new-domain-record" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.domain.record_create">
+<code class="descclassname">do.domain.</code><code class="descname">record_create</code><span class="sig-paren">(</span><em>name</em>, <em>attribs</em><span class="sig-paren">)</span><a class="headerlink" href="#do.domain.record_create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>name</em> - string - The name of the domain</li>
+<li><em>attribs</em> - dict - The data of the Domain Record in the following format<ul>
+<li><em>type</em> - string - The record type (A, MX, CNAME, etc). - All Records</li>
+<li><em>name</em> - string - The host name, alias, or service being defined by the record. - A, AAAA, CNAME, TXT, SRV</li>
+<li><em>data</em> - string - Variable data depending on record type. See the [Domain Records]() section for more detail on each record type. - A, AAAA, CNAME, MX, TXT, SRV, NS</li>
+<li><em>priority</em> - nullable number - The priority of the host (for SRV and MX records. null otherwise). - MX, SRV</li>
+<li><em>port</em> - nullable number - The port that the service is accessible on (for SRV records only. null otherwise). - SRV</li>
+<li><em>weight</em> - nullable number - The weight of records with the same priority (for SRV records only. null otherwise). - SRV</li>
+</ul>
+</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A Domain Record dict<ul>
+<li><em>id</em> - number - A unique identifier for each domain record.</li>
+<li><em>type</em> - string - The type of the DNS record (A, CNAME, TXT, ...).</li>
+<li><em>name</em> - string - The name to use for the DNS record.</li>
+<li><em>data</em> - string - The value to use for the DNS record.</li>
+<li><em>priority</em> - nullable number - The priority for SRV and MX records.</li>
+<li><em>port</em> - nullable number - The port for SRV records.</li>
+<li><em>weight</em> - nullable number - The weight for SRV records.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#create-a-new-domain-record">https://developers.digitalocean.com/documentation/v2/#create-a-new-domain-record</a></li>
+</ul>
+</div>
+<div class="section" id="retrieve-an-existing-domain-record">
+<h2>Retrieve an existing Domain Record<a class="headerlink" href="#retrieve-an-existing-domain-record" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.domain.record_info">
+<code class="descclassname">do.domain.</code><code class="descname">record_info</code><span class="sig-paren">(</span><em>name</em>, <em>record_id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.domain.record_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>name</em> - string - The name of the domain</li>
+<li><em>record_id</em> - number - The id of the domain record to retrieve</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A Domain Record dict<ul>
+<li><em>id</em> - number - A unique identifier for each domain record.</li>
+<li><em>type</em> - string - The type of the DNS record (A, CNAME, TXT, ...).</li>
+<li><em>name</em> - string - The name to use for the DNS record.</li>
+<li><em>data</em> - string - The value to use for the DNS record.</li>
+<li><em>priority</em> - nullable number - The priority for SRV and MX records.</li>
+<li><em>port</em> - nullable number - The port for SRV records.</li>
+<li><em>weight</em> - nullable number - The weight for SRV records.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-domain-record">https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-domain-record</a></li>
+</ul>
+</div>
+<div class="section" id="update-a-domain-record">
+<h2>Update a Domain Record<a class="headerlink" href="#update-a-domain-record" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.domain.record_update">
+<code class="descclassname">do.domain.</code><code class="descname">record_update</code><span class="sig-paren">(</span><em>name</em>, <em>record_id</em>, <em>attribs</em><span class="sig-paren">)</span><a class="headerlink" href="#do.domain.record_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>name</em> - string - The name of the domain</li>
+<li><em>record_id</em> - number - The id of the domain record to update</li>
+<li><em>attribs</em> - dict - The data of the Domain Record in the following format<ul>
+<li><em>type</em> - string - The record type (A, MX, CNAME, etc). - All Records</li>
+<li><em>name</em> - string - The host name, alias, or service being defined by the record. - A, AAAA, CNAME, TXT, SRV</li>
+<li><em>data</em> - string - Variable data depending on record type. See the [Domain Records]() section for more detail on each record type. - A, AAAA, CNAME, MX, TXT, SRV, NS</li>
+<li><em>priority</em> - nullable number - The priority of the host (for SRV and MX records. null otherwise). - MX, SRV</li>
+<li><em>port</em> - nullable number - The port that the service is accessible on (for SRV records only. null otherwise). - SRV</li>
+<li><em>weight</em> - nullable number - The weight of records with the same priority (for SRV records only. null otherwise). - SRV</li>
+</ul>
+</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A Domain Record dict<ul>
+<li><em>id</em> - number - A unique identifier for each domain record.</li>
+<li><em>type</em> - string - The type of the DNS record (A, CNAME, TXT, ...).</li>
+<li><em>name</em> - string - The name to use for the DNS record.</li>
+<li><em>data</em> - string - The value to use for the DNS record.</li>
+<li><em>priority</em> - nullable number - The priority for SRV and MX records.</li>
+<li><em>port</em> - nullable number - The port for SRV records.</li>
+<li><em>weight</em> - nullable number - The weight for SRV records.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#update-a-domain-record">https://developers.digitalocean.com/documentation/v2/#update-a-domain-record</a></li>
+</ul>
+</div>
+<div class="section" id="delete-a-domain-record">
+<h2>Delete a Domain Record<a class="headerlink" href="#delete-a-domain-record" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.domain.record_destroy">
+<code class="descclassname">do.domain.</code><code class="descname">record_destroy</code><span class="sig-paren">(</span><em>name</em>, <em>record_id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.domain.record_destroy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>name</em> - string - The name of the domain</li>
+<li><em>record_id</em> - number - The id of the domain record to destroy</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>None. A DOBOTOException is thrown if an issue is encountered.</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#delete-a-domain-record">https://developers.digitalocean.com/documentation/v2/#delete-a-domain-record</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Domain (do.domain)</a><ul>
+<li><a class="reference internal" href="#list-all-domains">List all Domains</a></li>
+<li><a class="reference internal" href="#create-a-new-domain">Create a new Domain</a></li>
+<li><a class="reference internal" href="#retrieve-an-existing-domain">Retrieve an existing Domain</a></li>
+<li><a class="reference internal" href="#delete-a-domain">Delete a Domain</a></li>
+<li><a class="reference internal" href="#list-all-domain-records">List all Domain Records</a></li>
+<li><a class="reference internal" href="#create-a-new-domain-record">Create a new Domain Record</a></li>
+<li><a class="reference internal" href="#retrieve-an-existing-domain-record">Retrieve an existing Domain Record</a></li>
+<li><a class="reference internal" href="#update-a-domain-record">Update a Domain Record</a></li>
+<li><a class="reference internal" href="#delete-a-domain-record">Delete a Domain Record</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="action.html"
+                        title="previous chapter">Action (do.action)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="droplet.html"
+                        title="next chapter">Droplet (do.droplet)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/domain.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="droplet.html" title="Droplet (do.droplet)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="action.html" title="Action (do.action)"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Digital Ocean - SWE-Data.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

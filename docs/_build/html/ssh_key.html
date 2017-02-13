@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SSHKey (do.ssh_key) &#8212; DOBOTO 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Tag (do.tag)" href="tag.html" />
+    <link rel="prev" title="Snapshot (do.snapshot)" href="snapshot.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="tag.html" title="Tag (do.tag)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="snapshot.html" title="Snapshot (do.snapshot)"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="sshkey-do-ssh-key">
+<h1>SSHKey (do.ssh_key)<a class="headerlink" href="#sshkey-do-ssh-key" title="Permalink to this headline">¶</a></h1>
+<p>DigitalOcean allows you to add SSH public keys to the interface so that you can embed your public key into a Droplet at the time of creation. Only the public key is required to take advantage of this functionality.</p>
+<div class="section" id="list-all-keys">
+<h2>List all Keys<a class="headerlink" href="#list-all-keys" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.ssh_key.list">
+<code class="descclassname">do.ssh_key.</code><code class="descname">list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#do.ssh_key.list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Returns:</p>
+<ul class="simple">
+<li>A list of SSH Key dict&#8217;s<ul>
+<li><em>id</em> - number - This is a unique identification number for the key. This can be used to reference a specific SSH key when you wish to embed a key into a Droplet.</li>
+<li><em>fingerprint</em> - string - This attribute contains the fingerprint value that is generated from the public key. This is a unique identifier that will differentiate it from other keys using a format that SSH recognizes.</li>
+<li><em>public_key</em> - string - This attribute contains the entire public key string that was uploaded. This is what is embedded into the root user&#8217;s authorized_keys file if you choose to include this SSH key during Droplet creation.</li>
+<li><em>name</em> - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-all-keys">https://developers.digitalocean.com/documentation/v2/#list-all-keys</a></li>
+</ul>
+</div>
+<div class="section" id="create-a-new-key">
+<h2>Create a new Key<a class="headerlink" href="#create-a-new-key" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.ssh_key.create">
+<code class="descclassname">do.ssh_key.</code><code class="descname">create</code><span class="sig-paren">(</span><em>name</em>, <em>public_key</em><span class="sig-paren">)</span><a class="headerlink" href="#do.ssh_key.create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>name</em> - string - The name to give the new SSH key in your account.</li>
+<li><em>public_key</em> - string - A string containing the entire public key.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An SSH Key dict<ul>
+<li><em>id</em> - number - This is a unique identification number for the key. This can be used to reference a specific SSH key when you wish to embed a key into a Droplet.</li>
+<li><em>fingerprint</em> - string - This attribute contains the fingerprint value that is generated from the public key. This is a unique identifier that will differentiate it from other keys using a format that SSH recognizes.</li>
+<li><em>public_key</em> - string - This attribute contains the entire public key string that was uploaded. This is what is embedded into the root user&#8217;s authorized_keys file if you choose to include this SSH key during Droplet creation.</li>
+<li><em>name</em> - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#create-a-new-key">https://developers.digitalocean.com/documentation/v2/#create-a-new-key</a></li>
+</ul>
+</div>
+<div class="section" id="retrieve-an-existing-key">
+<h2>Retrieve an existing Key<a class="headerlink" href="#retrieve-an-existing-key" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.ssh_key.info">
+<code class="descclassname">do.ssh_key.</code><code class="descname">info</code><span class="sig-paren">(</span><em>id_fingerprint</em><span class="sig-paren">)</span><a class="headerlink" href="#do.ssh_key.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id_fingerprint</em> - number / string - id or fingerprint of the key</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An SSH Key dict<ul>
+<li><em>id</em> - number - This is a unique identification number for the key. This can be used to reference a specific SSH key when you wish to embed a key into a Droplet.</li>
+<li><em>fingerprint</em> - string - This attribute contains the fingerprint value that is generated from the public key. This is a unique identifier that will differentiate it from other keys using a format that SSH recognizes.</li>
+<li><em>public_key</em> - string - This attribute contains the entire public key string that was uploaded. This is what is embedded into the root user&#8217;s authorized_keys file if you choose to include this SSH key during Droplet creation.</li>
+<li><em>name</em> - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-key">https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-key</a></li>
+</ul>
+</div>
+<div class="section" id="update-a-key">
+<h2>Update a Key<a class="headerlink" href="#update-a-key" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.ssh_key.update">
+<code class="descclassname">do.ssh_key.</code><code class="descname">update</code><span class="sig-paren">(</span><em>id_fingerprint</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#do.ssh_key.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id_fingerprint</em> - number / string - id or fingerprint of the key</li>
+<li><em>name</em> - string - The name to give the new SSH key in your account.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An SSH Key dict<ul>
+<li><em>id</em> - number - This is a unique identification number for the key. This can be used to reference a specific SSH key when you wish to embed a key into a Droplet.</li>
+<li><em>fingerprint</em> - string - This attribute contains the fingerprint value that is generated from the public key. This is a unique identifier that will differentiate it from other keys using a format that SSH recognizes.</li>
+<li><em>public_key</em> - string - This attribute contains the entire public key string that was uploaded. This is what is embedded into the root user&#8217;s authorized_keys file if you choose to include this SSH key during Droplet creation.</li>
+<li><em>name</em> - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#update-a-key">https://developers.digitalocean.com/documentation/v2/#update-a-key</a></li>
+</ul>
+</div>
+<div class="section" id="destroy-a-key">
+<h2>Destroy a Key<a class="headerlink" href="#destroy-a-key" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.ssh_key.destroy">
+<code class="descclassname">do.ssh_key.</code><code class="descname">destroy</code><span class="sig-paren">(</span><em>id_fingerprint</em><span class="sig-paren">)</span><a class="headerlink" href="#do.ssh_key.destroy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id_fingerprint</em> - number / string - id or fingerprint of the key</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>None. A DOBOTOException is thrown if an issue is encountered.</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#destroy-a-key">https://developers.digitalocean.com/documentation/v2/#destroy-a-key</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">SSHKey (do.ssh_key)</a><ul>
+<li><a class="reference internal" href="#list-all-keys">List all Keys</a></li>
+<li><a class="reference internal" href="#create-a-new-key">Create a new Key</a></li>
+<li><a class="reference internal" href="#retrieve-an-existing-key">Retrieve an existing Key</a></li>
+<li><a class="reference internal" href="#update-a-key">Update a Key</a></li>
+<li><a class="reference internal" href="#destroy-a-key">Destroy a Key</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="snapshot.html"
+                        title="previous chapter">Snapshot (do.snapshot)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tag.html"
+                        title="next chapter">Tag (do.tag)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/ssh_key.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="tag.html" title="Tag (do.tag)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="snapshot.html" title="Snapshot (do.snapshot)"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Digital Ocean - SWE-Data.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

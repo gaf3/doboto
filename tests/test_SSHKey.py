@@ -20,7 +20,8 @@ class TestSSHKey(TestCase):
         self.test_url = "http://abc.example.com"
         self.test_uri = "{}/account/keys".format(self.test_url)
         self.test_token = "abc123"
-        self.instantiate_args = (self.test_url, self.test_token)
+        self.test_agent = "Unit"
+        self.instantiate_args = (self.test_token, self.test_url, self.test_agent)
 
         self.klass_name = "SSHKey"
         self.klass = getattr(SSHKey, self.klass_name)
@@ -52,7 +53,7 @@ class TestSSHKey(TestCase):
         list works with happy path
         """
 
-        ssh_key = self.klass(self.test_url, self.test_token)
+        ssh_key = self.klass(*self.instantiate_args)
         result = ssh_key.list()
 
         mock_pages.assert_called_with(self.test_uri, "ssh_keys")
@@ -63,7 +64,7 @@ class TestSSHKey(TestCase):
         create works with datas
         """
 
-        ssh_key = self.klass(self.test_url, self.test_token)
+        ssh_key = self.klass(*self.instantiate_args)
 
         datas = {
             "name": "My SSH Public Key",
@@ -86,7 +87,7 @@ class TestSSHKey(TestCase):
         """
 
         ssh_key_id = 512189
-        ssh_key = self.klass(self.test_url, self.test_token)
+        ssh_key = self.klass(*self.instantiate_args)
         result = ssh_key.info(ssh_key_id)
 
         test_uri = "{}/{}".format(self.test_uri, ssh_key_id)
@@ -99,7 +100,7 @@ class TestSSHKey(TestCase):
         """
 
         ssh_key_id = 512189
-        ssh_key = self.klass(self.test_url, self.test_token)
+        ssh_key = self.klass(*self.instantiate_args)
         result = ssh_key.update(ssh_key_id, "My Other Public Key")
 
         test_uri = "{}/{}".format(self.test_uri, ssh_key_id)
@@ -114,7 +115,7 @@ class TestSSHKey(TestCase):
         """
 
         ssh_key_id = 512189
-        ssh_key = self.klass(self.test_url, self.test_token)
+        ssh_key = self.klass(*self.instantiate_args)
         result = ssh_key.destroy(ssh_key_id)
 
         test_uri = "{}/{}".format(self.test_uri, ssh_key_id)

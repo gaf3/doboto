@@ -22,7 +22,8 @@ class TestDroplet(TestCase):
         self.test_uri = "{}/droplets".format(self.test_url)
         self.test_reports = "{}/reports".format(self.test_url)
         self.test_token = "abc123"
-        self.instantiate_args = (self.test_url, self.test_token)
+        self.test_agent = "Unit"
+        self.instantiate_args = (self.test_token, self.test_url, self.test_agent)
 
         self.klass_name = "Droplet"
         self.klass = getattr(Droplet, self.klass_name)
@@ -54,7 +55,7 @@ class TestDroplet(TestCase):
         list works with droplet id
         """
 
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
 
         tag_name = "rando_tag"
 
@@ -72,7 +73,7 @@ class TestDroplet(TestCase):
         """
 
         id = 12345
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         drop.neighbor_list(id)
         test_uri = "{}/{}/neighbors".format(self.test_uri, id)
 
@@ -84,7 +85,7 @@ class TestDroplet(TestCase):
         neighbors works alone
         """
 
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         drop.droplet_neighbor_list()
         test_uri = "{}/droplet_neighbors".format(self.test_reports)
 
@@ -96,7 +97,7 @@ class TestDroplet(TestCase):
         create works with droplet id
         """
 
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         datas = {"name": "test.com", "region": "nyc3",
                  "size": "512mb", "image": "ubuntu-14-04-x64"}
         drop.create(datas)
@@ -125,7 +126,7 @@ class TestDroplet(TestCase):
         """
 
         id = 12345
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         drop.info(id)
 
         test_uri = "{}/{}".format(self.test_uri, id)
@@ -138,7 +139,7 @@ class TestDroplet(TestCase):
         """
 
         id = 12345
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         drop.destroy(id)
         test_uri = "{}/{}".format(self.test_uri, id)
 
@@ -160,7 +161,7 @@ class TestDroplet(TestCase):
         """
 
         id = 12345
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         drop.action(id=id, type='test')
         test_uri = "{}/{}/actions".format(self.test_uri, id)
 
@@ -187,7 +188,7 @@ class TestDroplet(TestCase):
         """
 
         id = 12345
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         drop.backup_list(id)
         test_uri = "{}/{}/backups".format(self.test_uri, id)
 
@@ -200,7 +201,7 @@ class TestDroplet(TestCase):
         """
 
         id = 12345
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         drop.backup_enable(id=id)
 
         mock_action.assert_called_with(id=id, tag_name=None, type="enable_backups")
@@ -217,7 +218,7 @@ class TestDroplet(TestCase):
         """
 
         id = 12345
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         drop.backup_disable(id=id)
 
         mock_action.assert_called_with(id=id, tag_name=None, type="disable_backups")
@@ -232,7 +233,7 @@ class TestDroplet(TestCase):
         """
         test that reboot works with id and action
         """
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
 
         id = 12345
         test_uri = "{}/{}/actions".format(self.test_uri, id)
@@ -249,7 +250,7 @@ class TestDroplet(TestCase):
         """
 
         id = 12345
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         drop.shutdown(id=id)
 
         mock_action.assert_called_with(id=id, tag_name=None, type="shutdown")
@@ -266,7 +267,7 @@ class TestDroplet(TestCase):
         """
 
         id = 12345
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         drop.power_on(id=id)
 
         mock_action.assert_called_with(id=id, tag_name=None, type="power_on")
@@ -283,7 +284,7 @@ class TestDroplet(TestCase):
         """
 
         id = 12345
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         drop.power_off(id=id)
 
         mock_action.assert_called_with(id=id, tag_name=None, type="power_off")
@@ -300,7 +301,7 @@ class TestDroplet(TestCase):
         """
 
         id = 12345
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         drop.power_cycle(id=id)
 
         mock_action.assert_called_with(id=id, tag_name=None, type="power_cycle")
@@ -315,7 +316,7 @@ class TestDroplet(TestCase):
         """
         test that restore commands with id and image
         """
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         id = 12345
         test_uri = "{}/{}/actions".format(self.test_uri, id)
 
@@ -334,7 +335,7 @@ class TestDroplet(TestCase):
         """
         test password_reset works with droplet id
         """
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         id = 12345
         test_uri = "{}/{}/actions".format(self.test_uri, id)
 
@@ -347,7 +348,7 @@ class TestDroplet(TestCase):
         """
         test resize works with droplet id, size, and optionally disk resize flag
         """
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         id = 12345
         test_uri = "{}/{}/actions".format(self.test_uri, id)
 
@@ -369,7 +370,7 @@ class TestDroplet(TestCase):
         """
         test rebuild works with droplet id, image
         """
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         id = 12345
         test_uri = "{}/{}/actions".format(self.test_uri, id)
 
@@ -390,7 +391,7 @@ class TestDroplet(TestCase):
         """
         test rename works with droplet id, image
         """
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         id = 12345
         test_uri = "{}/{}/actions".format(self.test_uri, id)
 
@@ -407,7 +408,7 @@ class TestDroplet(TestCase):
         """
 
         id = 12345
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         drop.kernel_list(id)
         test_uri = "{}/{}/kernels".format(self.test_uri, id)
 
@@ -418,7 +419,7 @@ class TestDroplet(TestCase):
         """
         test kernel_update works with droplet id, kernel id
         """
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         id = 12345
         test_uri = "{}/{}/actions".format(self.test_uri, id)
 
@@ -441,7 +442,7 @@ class TestDroplet(TestCase):
         """
 
         id = 12345
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         drop.ipv6_enable(id=id)
 
         mock_action.assert_called_with(id=id, tag_name=None, type="enable_ipv6")
@@ -458,7 +459,7 @@ class TestDroplet(TestCase):
         """
 
         id = 12345
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         drop.private_networking_enable(id=id)
 
         mock_action.assert_called_with(id=id, tag_name=None, type="enable_private_networking")
@@ -477,7 +478,7 @@ class TestDroplet(TestCase):
         """
 
         id = 12345
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         drop.snapshot_list(id)
         test_uri = "{}/{}/snapshots".format(self.test_uri, id)
 
@@ -490,7 +491,7 @@ class TestDroplet(TestCase):
         """
 
         id = 12345
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         drop.snapshot_create(id=id, snapshot_name="test")
 
         mock_action.assert_called_with(
@@ -514,7 +515,7 @@ class TestDroplet(TestCase):
         """
 
         id = 12345
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         drop.action_list(id)
         test_uri = "{}/{}/actions".format(self.test_uri, id)
 
@@ -528,7 +529,7 @@ class TestDroplet(TestCase):
 
         id = 12345
         action_id = 54321
-        drop = self.klass(self.test_url, self.test_token)
+        drop = self.klass(*self.instantiate_args)
         drop.action_info(id, action_id)
         test_uri = "{}/{}/actions/{}".format(
             self.test_uri, id, action_id)

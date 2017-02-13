@@ -15,19 +15,29 @@ from .Tag import Tag
 
 
 class DO(object):
-    """Overall class for interacting with the DO API."""
+    """
+    description:
+        Main class to instantiate.
 
-    def __init__(self, url, token):
+    in:
+        token - string - Your DO API token. Create through your account UI on the main site
+        url - string - URL to use instead of the main.  Used for experimentation
+        agent - string - Agent to use instead of DOBOTO.  Used by the DOBOTO Ansible modules
+
+    related: https://developers.digitalocean.com/documentation/v2/#introduction
+    """
+
+    def __init__(self, token, url="https://api.digitalocean.com/v2/", agent="DOBOTO"):
         """Take URL and token, and create a sub instance for each endpoint."""
-        self.account = Account(url, token)
-        self.action = Action(url, token)
-        self.volume = Volume(url, token)
-        self.domain = Domain(url, token)
-        self.droplet = Droplet(url, token)
-        self.image = Image(url, token)
-        self.snapshot = Snapshot(url, token)
-        self.region = Region(url, token)
-        self.size = Size(url, token)
-        self.floating_ip = FloatingIP(url, token)
-        self.ssh_key = SSHKey(url, token)
-        self.tag = Tag(url, token)
+        self.account = Account(token, url, agent)
+        self.action = Action(token, url, agent)
+        self.volume = Volume(token, url, agent)
+        self.domain = Domain(token, url, agent)
+        self.droplet = Droplet(token, url, agent)
+        self.image = Image(token, url, agent)
+        self.snapshot = Snapshot(token, url, agent)
+        self.region = Region(token, url, agent)
+        self.size = Size(token, url, agent)
+        self.floating_ip = FloatingIP(token, url, agent)
+        self.ssh_key = SSHKey(token, url, agent)
+        self.tag = Tag(token, url, agent)

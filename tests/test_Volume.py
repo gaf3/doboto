@@ -21,7 +21,8 @@ class TestVolume(TestCase):
         self.test_url = "http://abc.example.com"
         self.test_uri = "{}/volumes".format(self.test_url)
         self.test_token = "abc123"
-        self.instantiate_args = (self.test_url, self.test_token)
+        self.test_agent = "Unit"
+        self.instantiate_args = (self.test_token, self.test_url, self.test_agent)
 
         self.klass_name = "Volume"
         self.klass = getattr(Volume, self.klass_name)
@@ -53,7 +54,7 @@ class TestVolume(TestCase):
         list works
         """
 
-        volume = self.klass(self.test_url, self.test_token)
+        volume = self.klass(*self.instantiate_args)
 
         # Alone
 
@@ -72,7 +73,7 @@ class TestVolume(TestCase):
         create works with volume id
         """
 
-        volume = self.klass(self.test_url, self.test_token)
+        volume = self.klass(*self.instantiate_args)
         datas = {"name": "test.com", "region": "nyc3",
                  "size": "512mb", "image": "ubuntu-14-04-x64"}
         volume.create(datas)
@@ -94,7 +95,7 @@ class TestVolume(TestCase):
         """
 
         id = 12345
-        volume = self.klass(self.test_url, self.test_token)
+        volume = self.klass(*self.instantiate_args)
 
         # By id
 
@@ -129,7 +130,7 @@ class TestVolume(TestCase):
         """
 
         id = 12345
-        volume = self.klass(self.test_url, self.test_token)
+        volume = self.klass(*self.instantiate_args)
 
         # By id
 
@@ -164,7 +165,7 @@ class TestVolume(TestCase):
         """
 
         id = 12345
-        volume = self.klass(self.test_url, self.test_token)
+        volume = self.klass(*self.instantiate_args)
         volume.snapshot_list(id)
         test_uri = "{}/{}/snapshots".format(self.test_uri, id)
 
@@ -175,7 +176,7 @@ class TestVolume(TestCase):
         """
         test snapshot_create works with volume id
         """
-        volume = self.klass(self.test_url, self.test_token)
+        volume = self.klass(*self.instantiate_args)
         id = 12345
         test_uri = "{}/{}/snapshots".format(self.test_uri, id)
 
@@ -189,7 +190,7 @@ class TestVolume(TestCase):
         """
         test that attach works with id and/or name
         """
-        volume = self.klass(self.test_url, self.test_token)
+        volume = self.klass(*self.instantiate_args)
 
         droplet_id = 123
         region = "nyc1"
@@ -236,7 +237,7 @@ class TestVolume(TestCase):
         """
         test that detach works with id and/or name
         """
-        volume = self.klass(self.test_url, self.test_token)
+        volume = self.klass(*self.instantiate_args)
 
         droplet_id = 123
         region = "nyc1"
@@ -283,7 +284,7 @@ class TestVolume(TestCase):
         """
         test that resize works
         """
-        volume = self.klass(self.test_url, self.test_token)
+        volume = self.klass(*self.instantiate_args)
 
         id = 12345
         region = "nyc1"
@@ -311,7 +312,7 @@ class TestVolume(TestCase):
         """
 
         id = 12345
-        volume = self.klass(self.test_url, self.test_token)
+        volume = self.klass(*self.instantiate_args)
         volume.action_list(id)
         test_uri = "{}/{}/actions".format(self.test_uri, id)
 
@@ -325,7 +326,7 @@ class TestVolume(TestCase):
 
         id = 12345
         action_id = 54321
-        volume = self.klass(self.test_url, self.test_token)
+        volume = self.klass(*self.instantiate_args)
         volume.action_info(id, action_id)
         test_uri = "{}/{}/actions/{}".format(
             self.test_uri, id, action_id)

@@ -1,0 +1,323 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tag (do.tag) &#8212; DOBOTO 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Volume (do.volume)" href="volume.html" />
+    <link rel="prev" title="SSHKey (do.ssh_key)" href="ssh_key.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="volume.html" title="Volume (do.volume)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ssh_key.html" title="SSHKey (do.ssh_key)"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tag-do-tag">
+<h1>Tag (do.tag)<a class="headerlink" href="#tag-do-tag" title="Permalink to this headline">¶</a></h1>
+<p>A Tag is a label that can be applied to a resource (currently only Droplets) in order to better organize or facilitate the lookups and actions on it.</p>
+<p>Tags have two attributes, a user defined name attribute and an embedded resources attribute with information about resources that have been taggedself.</p>
+<div class="section" id="list-all-tags">
+<h2>List all tags<a class="headerlink" href="#list-all-tags" title="Permalink to this headline">¶</a></h2>
+<p>Currently only a resource_type of &#8216;droplet&#8217; is supported.  Thus, resource_id is droplet id.</p>
+<dl class="method">
+<dt id="do.tag.list">
+<code class="descclassname">do.tag.</code><code class="descname">list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#do.tag.list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Returns:</p>
+<ul class="simple">
+<li>A list of Tag dict&#8217;s<ul>
+<li><em>name</em> - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.</li>
+<li><em>resources</em> - list - An list of Resource dict&#8217;s<ul>
+<li><em>resource_id</em> - string - The identifier of a resource</li>
+<li><em>resource_type</em> - string - The type of the resource</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-all-tags">https://developers.digitalocean.com/documentation/v2/#list-all-tags</a></li>
+</ul>
+</div>
+<div class="section" id="list-all-tag-names">
+<h2>List all tag names<a class="headerlink" href="#list-all-tag-names" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.tag.name_list">
+<code class="descclassname">do.tag.</code><code class="descname">name_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#do.tag.name_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Returns:</p>
+<ul class="simple">
+<li>A list of Tag names</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-all-tags">https://developers.digitalocean.com/documentation/v2/#list-all-tags</a></li>
+</ul>
+</div>
+<div class="section" id="create-a-new-tag">
+<h2>Create a new Tag<a class="headerlink" href="#create-a-new-tag" title="Permalink to this headline">¶</a></h2>
+<p>Currently only a resource_type of &#8216;droplet&#8217; is supported.  Thus, resource_id is droplet id.</p>
+<dl class="method">
+<dt id="do.tag.create">
+<code class="descclassname">do.tag.</code><code class="descname">create</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#do.tag.create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>name</em> - string - name of the Tag</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A Tag dict<ul>
+<li><em>name</em> - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.</li>
+<li><em>resources</em> - list - An list of Resource dict&#8217;s<ul>
+<li><em>resource_id</em> - string - The identifier of a resource</li>
+<li><em>resource_type</em> - string - The type of the resource</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#create-a-new-tag">https://developers.digitalocean.com/documentation/v2/#create-a-new-tag</a></li>
+</ul>
+</div>
+<div class="section" id="retrieve-a-tag">
+<h2>Retrieve a Tag<a class="headerlink" href="#retrieve-a-tag" title="Permalink to this headline">¶</a></h2>
+<p>Currently only a resource_type of &#8216;droplet&#8217; is supported.  Thus, resource_id is droplet id.</p>
+<dl class="method">
+<dt id="do.tag.info">
+<code class="descclassname">do.tag.</code><code class="descname">info</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#do.tag.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>name</em> - string - name of the Tag</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A Tag dict<ul>
+<li><em>name</em> - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.</li>
+<li><em>resources</em> - list - An list of Resource dict&#8217;s<ul>
+<li><em>resource_id</em> - string - The identifier of a resource</li>
+<li><em>resource_type</em> - string - The type of the resource</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#retrieve-a-tag">https://developers.digitalocean.com/documentation/v2/#retrieve-a-tag</a></li>
+</ul>
+</div>
+<div class="section" id="update-a-tag">
+<h2>Update a Tag<a class="headerlink" href="#update-a-tag" title="Permalink to this headline">¶</a></h2>
+<p>Currently only a resource_type of &#8216;droplet&#8217; is supported.  Thus, resource_id is droplet id.</p>
+<dl class="method">
+<dt id="do.tag.update">
+<code class="descclassname">do.tag.</code><code class="descname">update</code><span class="sig-paren">(</span><em>name</em>, <em>new_name</em><span class="sig-paren">)</span><a class="headerlink" href="#do.tag.update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>name</em> - string - name of the Tag currently</li>
+<li><em>new_name</em> - string - desired name of the Tag</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A Tag dict<ul>
+<li><em>name</em> - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.</li>
+<li><em>resources</em> - list - An list of Resource dict&#8217;s<ul>
+<li><em>resource_id</em> - string - The identifier of a resource</li>
+<li><em>resource_type</em> - string - The type of the resource</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#update-a-tag">https://developers.digitalocean.com/documentation/v2/#update-a-tag</a></li>
+</ul>
+</div>
+<div class="section" id="delete-a-tag">
+<h2>Delete a Tag<a class="headerlink" href="#delete-a-tag" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.tag.destroy">
+<code class="descclassname">do.tag.</code><code class="descname">destroy</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#do.tag.destroy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>name</em> - string - name of the Tag</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>None. A DOBOTOException is thrown if an issue is encountered.</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#delete-a-tag">https://developers.digitalocean.com/documentation/v2/#delete-a-tag</a></li>
+</ul>
+</div>
+<div class="section" id="tag-a-resorce">
+<h2>Tag a Resorce<a class="headerlink" href="#tag-a-resorce" title="Permalink to this headline">¶</a></h2>
+<p>Currently only a resource_type of &#8216;droplet&#8217; is supported.  Thus, resource_id is droplet id.</p>
+<dl class="method">
+<dt id="do.tag.attach">
+<code class="descclassname">do.tag.</code><code class="descname">attach</code><span class="sig-paren">(</span><em>name</em>, <em>resources</em><span class="sig-paren">)</span><a class="headerlink" href="#do.tag.attach" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>name</em> - string - name of the Tag</li>
+<li><em>resources</em> - list - An list of Resource dict&#8217;s<ul>
+<li><em>resource_id</em> - string - The identifier of a resource</li>
+<li><em>resource_type</em> - string - The type of the resource</li>
+</ul>
+</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>None. A DOBOTOException is thrown if an issue is encountered.</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#tag-a-resource">https://developers.digitalocean.com/documentation/v2/#tag-a-resource</a></li>
+</ul>
+</div>
+<div class="section" id="untag-a-resource">
+<h2>Untag a Resource<a class="headerlink" href="#untag-a-resource" title="Permalink to this headline">¶</a></h2>
+<p>Currently only a resource_type of &#8216;droplet&#8217; is supported.  Thus, resource_id is droplet id.</p>
+<dl class="method">
+<dt id="do.tag.detach">
+<code class="descclassname">do.tag.</code><code class="descname">detach</code><span class="sig-paren">(</span><em>name</em>, <em>resources</em><span class="sig-paren">)</span><a class="headerlink" href="#do.tag.detach" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>name</em> - string - name of the Tag</li>
+<li><em>resources</em> - list - An list of Resource dict&#8217;s<ul>
+<li><em>resource_id</em> - string - The identifier of a resource</li>
+<li><em>resource_type</em> - string - The type of the resource</li>
+</ul>
+</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>None. A DOBOTOException is thrown if an issue is encountered.</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#untag-a-resource">https://developers.digitalocean.com/documentation/v2/#untag-a-resource</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tag (do.tag)</a><ul>
+<li><a class="reference internal" href="#list-all-tags">List all tags</a></li>
+<li><a class="reference internal" href="#list-all-tag-names">List all tag names</a></li>
+<li><a class="reference internal" href="#create-a-new-tag">Create a new Tag</a></li>
+<li><a class="reference internal" href="#retrieve-a-tag">Retrieve a Tag</a></li>
+<li><a class="reference internal" href="#update-a-tag">Update a Tag</a></li>
+<li><a class="reference internal" href="#delete-a-tag">Delete a Tag</a></li>
+<li><a class="reference internal" href="#tag-a-resorce">Tag a Resorce</a></li>
+<li><a class="reference internal" href="#untag-a-resource">Untag a Resource</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ssh_key.html"
+                        title="previous chapter">SSHKey (do.ssh_key)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="volume.html"
+                        title="next chapter">Volume (do.volume)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/tag.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="volume.html" title="Volume (do.volume)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ssh_key.html" title="SSHKey (do.ssh_key)"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Digital Ocean - SWE-Data.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

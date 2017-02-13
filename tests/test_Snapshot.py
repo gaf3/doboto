@@ -20,7 +20,8 @@ class TestSnapshot(TestCase):
         self.test_url = "http://abc.example.com"
         self.test_uri = "{}/snapshots".format(self.test_url)
         self.test_token = "abc123"
-        self.instantiate_args = (self.test_url, self.test_token)
+        self.test_agent = "Unit"
+        self.instantiate_args = (self.test_token, self.test_url, self.test_agent)
 
         self.klass_name = "Snapshot"
         self.klass = getattr(Snapshot, self.klass_name)
@@ -52,7 +53,7 @@ class TestSnapshot(TestCase):
         list works with happy path
         """
 
-        snapshot = self.klass(self.test_url, self.test_token)
+        snapshot = self.klass(*self.instantiate_args)
 
         result = snapshot.list("fee")
         mock_pages.assert_called_with(
@@ -69,7 +70,7 @@ class TestSnapshot(TestCase):
         """
 
         id = 7555620
-        snapshot = self.klass(self.test_url, self.test_token)
+        snapshot = self.klass(*self.instantiate_args)
         result = snapshot.info(id)
 
         test_uri = "{}/{}".format(self.test_uri, id)
@@ -82,7 +83,7 @@ class TestSnapshot(TestCase):
         """
 
         id = 7555620
-        snapshot = self.klass(self.test_url, self.test_token)
+        snapshot = self.klass(*self.instantiate_args)
         result = snapshot.destroy(id)
 
         test_uri = "{}/{}".format(self.test_uri, id)
