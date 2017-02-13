@@ -49,6 +49,10 @@
             
   <div class="section" id="doboto-boto-like-interface-for-digitalocean">
 <h1>DOBOTO: BOTO like interface for DigitalOcean<a class="headerlink" href="#doboto-boto-like-interface-for-digitalocean" title="Permalink to this headline">¶</a></h1>
+<p>DOBOTO was created to be a feature complete Python API to the DigitalOcean RESTful API.</p>
+<p>While there are several existing projects along these lines, we at DigitalOcean felt they weren&#8217;t
+feature complete and weren&#8217;t being updated as the DigitalOcean API grew.</p>
+<p>With DOBOTO, we aim to fix that.</p>
 <p><strong>Simple straight forward API</strong>:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">doboto.DO</span> <span class="k">import</span> <span class="n">DO</span>
 
@@ -61,7 +65,7 @@
     <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="s2">&quot;512mb&quot;</span><span class="p">,</span>
     <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;ubuntu-14-04-x64&quot;</span><span class="p">,</span>
     <span class="s2">&quot;ssh_keys&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">ssh_key</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">ssh_key</span> <span class="ow">in</span> <span class="n">ssh_keys</span><span class="p">]</span>
-<span class="p">)</span>
+<span class="p">})</span>
 
 <span class="n">do</span><span class="o">.</span><span class="n">droplet</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">droplet</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">])</span>
 </pre></div>
