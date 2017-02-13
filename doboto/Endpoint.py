@@ -9,15 +9,17 @@ class Endpoint(object):
 
     """Base class for interacting with an endpoint of the DO API."""
 
-    def __init__(self, token):
-        """Take token and sets its token for API authorization."""
+    def __init__(self, token, agent):
+        """Take token and sets its token for API authorization and agent for tracking."""
         self.token = token
+        self.agent = agent
 
     def headers(self):
         """ Headers to use on API calls """
 
         return {
             'Authorization': "Bearer %s" % self.token,
+            'User-Agent': self.agent,
             'Content-Type': 'application/json'
         }
 

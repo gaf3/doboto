@@ -20,7 +20,8 @@ class TestFloatingIP(TestCase):
         self.test_url = "http://abc.example.com"
         self.test_uri = "{}/floating_ips".format(self.test_url)
         self.test_token = "abc123"
-        self.instantiate_args = (self.test_url, self.test_token)
+        self.test_agent = "Unit"
+        self.instantiate_args = (self.test_token, self.test_url, self.test_agent)
 
         self.klass_name = "FloatingIP"
         self.klass = getattr(FloatingIP, self.klass_name)
@@ -52,7 +53,7 @@ class TestFloatingIP(TestCase):
         list works with nuttin
         """
 
-        floating_ip = self.klass(self.test_url, self.test_token)
+        floating_ip = self.klass(*self.instantiate_args)
         result = floating_ip.list()
 
         mock_pages.assert_called_with(self.test_uri, "floating_ips")
@@ -64,7 +65,7 @@ class TestFloatingIP(TestCase):
         """
 
         droplet_id = 1234
-        floating_ip = self.klass(self.test_url, self.test_token)
+        floating_ip = self.klass(*self.instantiate_args)
         floating_ip.create(droplet_id=droplet_id)
 
         mock_request.assert_called_with(
@@ -86,7 +87,7 @@ class TestFloatingIP(TestCase):
         """
 
         ip = "1.2.3.4"
-        floating_ip = self.klass(self.test_url, self.test_token)
+        floating_ip = self.klass(*self.instantiate_args)
         result = floating_ip.info(ip)
 
         test_uri = "{}/{}".format(self.test_uri, ip)
@@ -99,7 +100,7 @@ class TestFloatingIP(TestCase):
         """
 
         ip = "1.2.3.4"
-        floating_ip = self.klass(self.test_url, self.test_token)
+        floating_ip = self.klass(*self.instantiate_args)
         result = floating_ip.destroy(ip)
 
         test_uri = "{}/{}".format(self.test_uri, ip)
@@ -113,7 +114,7 @@ class TestFloatingIP(TestCase):
 
         ip = "1.2.3.4"
         droplet_id = 1234
-        floating_ip = self.klass(self.test_url, self.test_token)
+        floating_ip = self.klass(*self.instantiate_args)
         floating_ip.assign(ip, droplet_id)
         test_uri = "{}/{}/actions".format(self.test_uri, ip)
         attribs = {
@@ -130,7 +131,7 @@ class TestFloatingIP(TestCase):
         """
 
         ip = "1.2.3.4"
-        floating_ip = self.klass(self.test_url, self.test_token)
+        floating_ip = self.klass(*self.instantiate_args)
         floating_ip.unassign(ip)
         test_uri = "{}/{}/actions".format(self.test_uri, ip)
         attribs = {
@@ -146,7 +147,7 @@ class TestFloatingIP(TestCase):
         """
 
         ip = "1.2.3.4"
-        floating_ip = self.klass(self.test_url, self.test_token)
+        floating_ip = self.klass(*self.instantiate_args)
         result = floating_ip.action_list(ip)
 
         mock_pages.assert_called_with(
@@ -161,7 +162,7 @@ class TestFloatingIP(TestCase):
 
         ip = "1.2.3.4"
         action_id = 54321
-        floating_ip = self.klass(self.test_url, self.test_token)
+        floating_ip = self.klass(*self.instantiate_args)
         floating_ip.action_info(ip, action_id)
         test_uri = "{}/{}/actions/{}".format(
             self.test_uri, ip, action_id)

@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>DOBOTO: BOTO like interface for DigitalOcean &#8212; DOBOTO 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="DO (do)" href="do.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="do.html" title="DO (do)"
+             accesskey="N">next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">DOBOTO 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="doboto-boto-like-interface-for-digitalocean">
+<h1>DOBOTO: BOTO like interface for DigitalOcean<a class="headerlink" href="#doboto-boto-like-interface-for-digitalocean" title="Permalink to this headline">¶</a></h1>
+<p><strong>Simple straight forward API</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">doboto.DO</span> <span class="k">import</span> <span class="n">DO</span>
+
+<span class="n">do</span> <span class="o">=</span> <span class="n">DO</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="s2">&quot;secret&quot;</span><span class="p">)</span>
+
+<span class="n">ssh_keys</span> <span class="o">=</span> <span class="n">do</span><span class="o">.</span><span class="n">ssh_key</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+<span class="n">droplet</span> <span class="o">=</span> <span class="n">do</span><span class="o">.</span><span class="n">droplet</span><span class="o">.</span><span class="n">create</span><span class="p">({</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;example.com&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="s2">&quot;nyc3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="s2">&quot;512mb&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;ubuntu-14-04-x64&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ssh_keys&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">ssh_key</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">ssh_key</span> <span class="ow">in</span> <span class="n">ssh_keys</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">do</span><span class="o">.</span><span class="n">droplet</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">droplet</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="section" id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
+<p>DOBOTO has an interesting design, made for decent code organization and collaboration.  Rather than
+have a single giant class, there&#8217;s a central class, DO, which has attribute instantiations of
+sub classes.  The Account example below shows this with do.account.</p>
+<p><strong>Accessing account information</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">doboto.DO</span> <span class="k">import</span> <span class="n">DO</span>
+
+<span class="n">do</span> <span class="o">=</span> <span class="n">DO</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="s2">&quot;secret&quot;</span><span class="p">)</span>
+
+<span class="n">account</span> <span class="o">=</span> <span class="n">do</span><span class="o">.</span><span class="n">account</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For more information, see the documentation for each class:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="do.html">DO (do)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="account.html">Account (do.account)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="action.html">Action (do.action)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="domain.html">Domain (do.domain)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="droplet.html">Droplet (do.droplet)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="floating_ip.html">FloatingIP (do.floating_ip)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="image.html">Image (do.image)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="region.html">Region (do.region)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="size.html">Size (do.size)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="snapshot.html">Snapshot (do.snapshot)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ssh_key.html">SSHKey (do.ssh_key)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tag.html">Tag (do.tag)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="volume.html">Volume (do.volume)</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="expectations-and-exceptions">
+<h2>Expectations and Exceptions<a class="headerlink" href="#expectations-and-exceptions" title="Permalink to this headline">¶</a></h2>
+<p>The DigitalOcean API sends back JSON objects with expected formats. Rather than have you check
+that format with every call, DOBOTO checks it for you, raising an DOBOTOException when its
+expectations aren&#8217;t met:</p>
+<p><strong>Bad token</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">doboto.DO</span> <span class="k">import</span> <span class="n">DO</span>
+
+<span class="n">do</span> <span class="o">=</span> <span class="n">DO</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="s2">&quot;incorrect&quot;</span><span class="p">)</span>
+
+<span class="n">account</span> <span class="o">=</span> <span class="n">do</span><span class="o">.</span><span class="n">account</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Result</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+  <span class="n">File</span> <span class="s2">&quot;&lt;stdin&gt;&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+  <span class="n">File</span> <span class="s2">&quot;doboto/Account.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">36</span><span class="p">,</span> <span class="ow">in</span> <span class="n">info</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span> <span class="s2">&quot;account&quot;</span><span class="p">)</span>
+  <span class="n">File</span> <span class="s2">&quot;doboto/Endpoint.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">45</span><span class="p">,</span> <span class="ow">in</span> <span class="n">request</span>
+    <span class="k">raise</span> <span class="n">DOBOTOException</span><span class="p">(</span><span class="n">result</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
+<span class="n">doboto</span><span class="o">.</span><span class="n">DOBOTOException</span><span class="o">.</span><span class="n">DOBOTOException</span><span class="p">:</span> <span class="n">DO</span> <span class="n">API</span> <span class="n">Error</span><span class="p">:</span> <span class="p">{</span><span class="sa">u</span><span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;Unable to authenticate you.&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;unauthorized&#39;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>The JSON result (second part of the string output) is accessible via the result`property.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">DOBOTO: BOTO like interface for DigitalOcean</a><ul>
+<li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#expectations-and-exceptions">Expectations and Exceptions</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="do.html"
+                        title="next chapter">DO (do)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="do.html" title="DO (do)"
+             >next</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">DOBOTO 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Digital Ocean - SWE-Data.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

@@ -21,7 +21,8 @@ class TestEndpoint(TestCase):
         """
 
         self.test_token = "abc123"
-        self.instantiate_args = (self.test_token, )
+        self.test_agent = "Unit"
+        self.instantiate_args = (self.test_token, self.test_agent)
 
         self.klass_name = "Endpoint"
         self.klass = getattr(Endpoint, self.klass_name)
@@ -55,6 +56,7 @@ class TestEndpoint(TestCase):
             endpoint.headers(),
             {
                 'Authorization': "Bearer %s" % self.test_token,
+                'User-Agent': self.test_agent,
                 'Content-Type': 'application/json'
             }
         )
@@ -77,6 +79,7 @@ class TestEndpoint(TestCase):
             data='{"b": 2}',
             headers={
                 'Authorization': "Bearer %s" % self.test_token,
+                'User-Agent': self.test_agent,
                 'Content-Type': 'application/json'
             },
             timeout=60
@@ -167,6 +170,7 @@ class TestEndpoint(TestCase):
             params=None,
             headers={
                 'Authorization': "Bearer %s" % self.test_token,
+                'User-Agent': self.test_agent,
                 'Content-Type': 'application/json'
             },
             timeout=60

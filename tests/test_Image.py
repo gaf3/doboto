@@ -20,7 +20,8 @@ class TestImage(TestCase):
         self.test_url = "http://abc.example.com"
         self.test_uri = "{}/images".format(self.test_url)
         self.test_token = "abc123"
-        self.instantiate_args = (self.test_url, self.test_token)
+        self.test_agent = "Unit"
+        self.instantiate_args = (self.test_token, self.test_url, self.test_agent)
 
         self.klass_name = "Image"
         self.klass = getattr(Image, self.klass_name)
@@ -52,7 +53,7 @@ class TestImage(TestCase):
         list works with happy path
         """
 
-        image = self.klass(self.test_url, self.test_token)
+        image = self.klass(*self.instantiate_args)
 
         result = image.list("fee", "fie")
         mock_pages.assert_called_with(
@@ -69,7 +70,7 @@ class TestImage(TestCase):
         """
 
         id_slug = 7555620
-        image = self.klass(self.test_url, self.test_token)
+        image = self.klass(*self.instantiate_args)
         result = image.info(id_slug)
 
         test_uri = "{}/{}".format(self.test_uri, id_slug)
@@ -82,7 +83,7 @@ class TestImage(TestCase):
         """
 
         id = 7555620
-        image = self.klass(self.test_url, self.test_token)
+        image = self.klass(*self.instantiate_args)
         result = image.update(id, "Nifty New Name")
 
         test_uri = "{}/{}".format(self.test_uri, id)
@@ -97,7 +98,7 @@ class TestImage(TestCase):
         """
 
         id = 7555620
-        image = self.klass(self.test_url, self.test_token)
+        image = self.klass(*self.instantiate_args)
         result = image.destroy(id)
 
         test_uri = "{}/{}".format(self.test_uri, id)
@@ -112,7 +113,7 @@ class TestImage(TestCase):
         """
 
         id = 7555620
-        image = self.klass(self.test_url, self.test_token)
+        image = self.klass(*self.instantiate_args)
         result = image.convert(id)
 
         test_uri = "{}/{}/actions".format(self.test_uri, id)
@@ -128,7 +129,7 @@ class TestImage(TestCase):
 
         id = 7555620
         region = "lon1"
-        image = self.klass(self.test_url, self.test_token)
+        image = self.klass(*self.instantiate_args)
         result = image.transfer(id, region)
 
         test_uri = "{}/{}/actions".format(self.test_uri, id)
@@ -144,7 +145,7 @@ class TestImage(TestCase):
         """
 
         id = 7555620
-        image = self.klass(self.test_url, self.test_token)
+        image = self.klass(*self.instantiate_args)
         result = image.action_list(id)
 
         mock_pages.assert_called_with(
@@ -159,7 +160,7 @@ class TestImage(TestCase):
 
         id = 12345
         action_id = 54321
-        image = self.klass(self.test_url, self.test_token)
+        image = self.klass(*self.instantiate_args)
         image.action_info(id, action_id)
         test_uri = "{}/{}/actions/{}".format(
             self.test_uri, id, action_id)

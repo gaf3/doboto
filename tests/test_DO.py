@@ -18,7 +18,8 @@ class TestDO(TestCase):
 
         self.test_url = "http://abc.example.com/"
         self.test_token = "abc123"
-        self.instantiate_args = (self.test_url, self.test_token)
+        self.test_agent = "Unit"
+        self.instantiate_args = (self.test_token, self.test_url, self.test_agent)
 
         self.klass_name = "DO"
         self.klass = getattr(DO, self.klass_name)

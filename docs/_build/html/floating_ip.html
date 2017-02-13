@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FloatingIP (do.floating_ip) &#8212; DOBOTO 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Image (do.image)" href="image.html" />
+    <link rel="prev" title="Droplet (do.droplet)" href="droplet.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="image.html" title="Image (do.image)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="droplet.html" title="Droplet (do.droplet)"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="floatingip-do-floating-ip">
+<h1>FloatingIP (do.floating_ip)<a class="headerlink" href="#floatingip-do-floating-ip" title="Permalink to this headline">¶</a></h1>
+<p>Floating IP dict&#8217;s represent a publicly-accessible static IP addresses that can be mapped to one of your Droplets. They can be used to create highly available setups or other configurations requiring movable addresses.</p>
+<p>Floating IPs are bound to a specific region.</p>
+<div class="section" id="list-all-floating-ips">
+<h2>List all Floating IPs<a class="headerlink" href="#list-all-floating-ips" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.floating_ip.list">
+<code class="descclassname">do.floating_ip.</code><code class="descname">list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#do.floating_ip.list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Returns:</p>
+<ul class="simple">
+<li>A list of Floating IP dict&#8217;s<ul>
+<li><em>ip</em> - string - The public IP address of the Floating IP. It also serves as its identifier.</li>
+<li><em>region</em> - dict - The region that the Floating IP is reserved to. When you query a Floating IP, the entire region dict will be returned.</li>
+<li><em>droplet</em> - dict - The Droplet that the Floating IP has been assigned to. When you query a Floating IP, if it is assigned to a Droplet, the entire Droplet dict will be returned. If it is not assigned, the value will be null.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-all-floating-ips">https://developers.digitalocean.com/documentation/v2/#list-all-floating-ips</a></li>
+</ul>
+</div>
+<div class="section" id="create-a-new-floating-ip-assigned-to-a-droplet-or-region">
+<h2>Create a new Floating IP assigned to a Droplet or Region<a class="headerlink" href="#create-a-new-floating-ip-assigned-to-a-droplet-or-region" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.floating_ip.create">
+<code class="descclassname">do.floating_ip.</code><code class="descname">create</code><span class="sig-paren">(</span><em>droplet_id=None</em>, <em>region=None</em><span class="sig-paren">)</span><a class="headerlink" href="#do.floating_ip.create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>droplet_id</em> - int - The ID of Droplet that the Floating IP will be assigned to.</li>
+<li><em>region</em> - string - The slug identifier for the region the Floating IP will be reserved to.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A Floating IP dict<ul>
+<li><em>ip</em> - string - The public IP address of the Floating IP. It also serves as its identifier.</li>
+<li><em>region</em> - dict - The region that the Floating IP is reserved to. When you query a Floating IP, the entire region dict will be returned.</li>
+<li><em>droplet</em> - dict - The Droplet that the Floating IP has been assigned to. When you query a Floating IP, if it is assigned to a Droplet, the entire Droplet dict will be returned. If it is not assigned, the value will be null.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#create-a-new-floating-ip-assigned-to-a-droplet">https://developers.digitalocean.com/documentation/v2/#create-a-new-floating-ip-assigned-to-a-droplet</a></li>
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#create-a-new-floating-ip-reserved-to-a-region">https://developers.digitalocean.com/documentation/v2/#create-a-new-floating-ip-reserved-to-a-region</a></li>
+</ul>
+</div>
+<div class="section" id="retrieve-an-existing-floating-ip">
+<h2>Retrieve an existing Floating IP<a class="headerlink" href="#retrieve-an-existing-floating-ip" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.floating_ip.info">
+<code class="descclassname">do.floating_ip.</code><code class="descname">info</code><span class="sig-paren">(</span><em>ip</em><span class="sig-paren">)</span><a class="headerlink" href="#do.floating_ip.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>ip</em> - string - The public IP address of the Floating IP.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A Floating IP dict<ul>
+<li><em>ip</em> - string - The public IP address of the Floating IP. It also serves as its identifier.</li>
+<li><em>region</em> - dict - The region that the Floating IP is reserved to. When you query a Floating IP, the entire region dict will be returned.</li>
+<li><em>droplet</em> - dict - The Droplet that the Floating IP has been assigned to. When you query a Floating IP, if it is assigned to a Droplet, the entire Droplet dict will be returned. If it is not assigned, the value will be null.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-floating-ip">https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-floating-ip</a></li>
+</ul>
+</div>
+<div class="section" id="delete-a-floating-ip">
+<h2>Delete a Floating IP<a class="headerlink" href="#delete-a-floating-ip" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.floating_ip.destroy">
+<code class="descclassname">do.floating_ip.</code><code class="descname">destroy</code><span class="sig-paren">(</span><em>ip</em><span class="sig-paren">)</span><a class="headerlink" href="#do.floating_ip.destroy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>ip</em> - string - The public IP address of the Floating IP.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>None. A DOBOTOException is thrown if an issue is encountered.</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#delete-a-floating-ips">https://developers.digitalocean.com/documentation/v2/#delete-a-floating-ips</a></li>
+</ul>
+</div>
+<div class="section" id="assign-a-floating-ip-to-a-droplet">
+<h2>Assign a Floating IP to a Droplet<a class="headerlink" href="#assign-a-floating-ip-to-a-droplet" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.floating_ip.assign">
+<code class="descclassname">do.floating_ip.</code><code class="descname">assign</code><span class="sig-paren">(</span><em>ip</em>, <em>droplet_id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.floating_ip.assign" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>ip</em> - string - The public IP address of the Floating IP.</li>
+<li><em>droplet_id</em> - int - The ID of Droplet that the Floating IP will be assigned to.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An Action dict<ul>
+<li><em>id</em> - number - A unique numeric ID that can be used to identify and reference an action.</li>
+<li><em>status</em> - string - The current status of the action. This can be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - This is the type of action that the dict represents. For example, this could be &#8220;assign_ip&#8221; to represent the state of a Floating IP assign action.</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#assign-a-floating-ip-to-a-droplet">https://developers.digitalocean.com/documentation/v2/#assign-a-floating-ip-to-a-droplet</a></li>
+</ul>
+</div>
+<div class="section" id="unassign-a-floating-ip">
+<h2>Unassign a Floating IP<a class="headerlink" href="#unassign-a-floating-ip" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.floating_ip.unassign">
+<code class="descclassname">do.floating_ip.</code><code class="descname">unassign</code><span class="sig-paren">(</span><em>ip</em><span class="sig-paren">)</span><a class="headerlink" href="#do.floating_ip.unassign" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>ip</em> - string - The public IP address of the Floating IP.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An Action dict<ul>
+<li><em>id</em> - number - A unique numeric ID that can be used to identify and reference an action.</li>
+<li><em>status</em> - string - The current status of the action. This can be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - This is the type of action that the dict represents. For example, this could be &#8220;assign_ip&#8221; to represent the state of a Floating IP assign action.</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#unassign-a-floating-ip">https://developers.digitalocean.com/documentation/v2/#unassign-a-floating-ip</a></li>
+</ul>
+</div>
+<div class="section" id="list-all-actions-for-a-floating-ip">
+<h2>List all actions for a Floating IP<a class="headerlink" href="#list-all-actions-for-a-floating-ip" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.floating_ip.action_list">
+<code class="descclassname">do.floating_ip.</code><code class="descname">action_list</code><span class="sig-paren">(</span><em>ip</em><span class="sig-paren">)</span><a class="headerlink" href="#do.floating_ip.action_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>ip</em> - string - The public IP address of the Floating IP.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A list of Action dict&#8217;s<ul>
+<li><em>id</em> - number - A unique numeric ID that can be used to identify and reference an action.</li>
+<li><em>status</em> - string - The current status of the action. This can be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - This is the type of action that the dict represents. For example, this could be &#8220;assign_ip&#8221; to represent the state of a Floating IP assign action.</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-all-actions-for-a-floating-ip">https://developers.digitalocean.com/documentation/v2/#list-all-actions-for-a-floating-ip</a></li>
+</ul>
+</div>
+<div class="section" id="retrieve-an-existing-floating-ip-action">
+<h2>Retrieve an existing Floating IP Action<a class="headerlink" href="#retrieve-an-existing-floating-ip-action" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.floating_ip.action_info">
+<code class="descclassname">do.floating_ip.</code><code class="descname">action_info</code><span class="sig-paren">(</span><em>ip</em>, <em>action_id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.floating_ip.action_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>ip</em> - string - The public IP address of the Floating IP.</li>
+<li><em>action_id</em> - number - The id of the Action</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An Action dict<ul>
+<li><em>id</em> - number - A unique numeric ID that can be used to identify and reference an action.</li>
+<li><em>status</em> - string - The current status of the action. This can be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - This is the type of action that the dict represents. For example, this could be &#8220;assign_ip&#8221; to represent the state of a Floating IP assign action.</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-floating-ip-action">https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-floating-ip-action</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">FloatingIP (do.floating_ip)</a><ul>
+<li><a class="reference internal" href="#list-all-floating-ips">List all Floating IPs</a></li>
+<li><a class="reference internal" href="#create-a-new-floating-ip-assigned-to-a-droplet-or-region">Create a new Floating IP assigned to a Droplet or Region</a></li>
+<li><a class="reference internal" href="#retrieve-an-existing-floating-ip">Retrieve an existing Floating IP</a></li>
+<li><a class="reference internal" href="#delete-a-floating-ip">Delete a Floating IP</a></li>
+<li><a class="reference internal" href="#assign-a-floating-ip-to-a-droplet">Assign a Floating IP to a Droplet</a></li>
+<li><a class="reference internal" href="#unassign-a-floating-ip">Unassign a Floating IP</a></li>
+<li><a class="reference internal" href="#list-all-actions-for-a-floating-ip">List all actions for a Floating IP</a></li>
+<li><a class="reference internal" href="#retrieve-an-existing-floating-ip-action">Retrieve an existing Floating IP Action</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="droplet.html"
+                        title="previous chapter">Droplet (do.droplet)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="image.html"
+                        title="next chapter">Image (do.image)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/floating_ip.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="image.html" title="Image (do.image)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="droplet.html" title="Droplet (do.droplet)"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Digital Ocean - SWE-Data.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

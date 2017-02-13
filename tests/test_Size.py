@@ -20,7 +20,8 @@ class TestSize(TestCase):
         self.test_url = "http://abc.example.com"
         self.test_uri = "{}/sizes".format(self.test_url)
         self.test_token = "abc123"
-        self.instantiate_args = (self.test_url, self.test_token)
+        self.test_agent = "Unit"
+        self.instantiate_args = (self.test_token, self.test_url, self.test_agent)
 
         self.klass_name = "Size"
         self.klass = getattr(Size, self.klass_name)
@@ -52,7 +53,7 @@ class TestSize(TestCase):
         list works with happy path
         """
 
-        size = self.klass(self.test_url, self.test_token)
+        size = self.klass(*self.instantiate_args)
         result = size.list()
 
         mock_pages.assert_called_with(self.test_uri, "sizes")

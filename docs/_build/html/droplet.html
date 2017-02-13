@@ -1,0 +1,1038 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Droplet (do.droplet) &#8212; DOBOTO 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="FloatingIP (do.floating_ip)" href="floating_ip.html" />
+    <link rel="prev" title="Domain (do.domain)" href="domain.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="floating_ip.html" title="FloatingIP (do.floating_ip)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="domain.html" title="Domain (do.domain)"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="droplet-do-droplet">
+<h1>Droplet (do.droplet)<a class="headerlink" href="#droplet-do-droplet" title="Permalink to this headline">¶</a></h1>
+<p>A Droplet is a DigitalOcean virtual machine. With this class, you can list, create, or delete Droplets.</p>
+<p>Some of the attributes will have an dict value. The region and image dict&#8217;s will all contain the standard attributes of their associated types. Find more information about each of these dict&#8217;s in their respective sections.</p>
+<div class="section" id="list-all-droplets-or-all-droplets-with-a-specific-tag">
+<h2>List all Droplets or all Droplets with a specific Tag.<a class="headerlink" href="#list-all-droplets-or-all-droplets-with-a-specific-tag" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.droplet.list">
+<code class="descclassname">do.droplet.</code><code class="descname">list</code><span class="sig-paren">(</span><em>tag_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>tag_name</em> - string - Send to retrieve Droplet with this tag.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A list of Droplet dict&#8217;s<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet instance. This is automatically generated upon Droplet creation.</li>
+<li><em>name</em> - string - The human-readable name set for the Droplet instance.</li>
+<li><em>memory</em> - number - Memory of the Droplet in megabytes.</li>
+<li><em>vcpus</em> - number - The number of virtual CPUs.</li>
+<li><em>disk</em> - number - The size of the Droplet&#8217;s disk in gigabytes.</li>
+<li><em>locked</em> - boolean - A boolean value indicating whether the Droplet has been locked, preventing actions by users.</li>
+<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Droplet was created.</li>
+<li><em>status</em> - string - A status string indicating the state of the Droplet instance. This may be &#8220;new&#8221;, &#8220;active&#8221;, &#8220;off&#8221;, or &#8220;archive&#8221;.</li>
+<li><em>backup_ids</em> - list - A list of backup IDs of any backups that have been taken of the Droplet instance. Droplet backups are enabled at the time of the instance creation.</li>
+<li><em>snapshot_ids</em> - list - A list of snapshot IDs of any snapshots created from the Droplet instance.</li>
+<li><em>features</em> - list - A list of features enabled on this Droplet.</li>
+<li><em>region</em> - dict - The region that the Droplet instance is deployed in. When setting a region, the value should be the slug identifier for the region. When you query a Droplet, the entire region dict will be returned.</li>
+<li><em>image</em> - dict - The base image used to create the Droplet instance. When setting an image, the value is set to the image id or slug. When querying the Droplet, the entire image dict will be returned.</li>
+<li><em>size</em> - dict - The current size dict describing the Droplet. When setting a size, the value is set to the size slug. When querying the Droplet, the entire size dict will be returned. Note that the disk volume of a droplet may not match the size&#8217;s disk due to Droplet resize actions. The disk attribute on the Droplet should always be referenced.</li>
+<li><em>size_slug</em> - string - The unique slug identifier for the size of this Droplet.</li>
+<li><em>networks</em> - dict - The details of the network that are configured for the Droplet instance. This is an dict that contains keys for IPv4 and IPv6. The value of each of these is a list that contains dict&#8217;s describing an individual IP resource allocated to the Droplet. These will define attributes like the IP address, netmask, and gateway of the specific network depending on the type of network it is.</li>
+<li><em>kernel</em> - nullable dict - The current kernel. This will initially be set to the kernel of the base image when the Droplet is created.</li>
+<li><em>next_backup_window</em> - nullable dict - The details of the Droplet&#8217;s backups feature, if backups are configured for the Droplet. This dict contains keys for the start and end times of the window during which the backup will start.</li>
+<li><em>tags</em> - list - A list of Tags the Droplet has been tagged with.</li>
+<li><em>volume_ids</em> - list - A flat list including the unique identifier for each Block Storage volume attached to the Droplet.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-all-droplets">https://developers.digitalocean.com/documentation/v2/#list-all-droplets</a></li>
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#listing-droplets-by-tag">https://developers.digitalocean.com/documentation/v2/#listing-droplets-by-tag</a></li>
+</ul>
+</div>
+<div class="section" id="list-neighbors-for-a-droplet-running-on-the-same-physical-server">
+<h2>List Neighbors for a Droplet running on the same physical server<a class="headerlink" href="#list-neighbors-for-a-droplet-running-on-the-same-physical-server" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.droplet.neighbor_list">
+<code class="descclassname">do.droplet.</code><code class="descname">neighbor_list</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.neighbor_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - The id of the Droplet</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A list of Droplet dict&#8217;s<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet instance. This is automatically generated upon Droplet creation.</li>
+<li><em>name</em> - string - The human-readable name set for the Droplet instance.</li>
+<li><em>memory</em> - number - Memory of the Droplet in megabytes.</li>
+<li><em>vcpus</em> - number - The number of virtual CPUs.</li>
+<li><em>disk</em> - number - The size of the Droplet&#8217;s disk in gigabytes.</li>
+<li><em>locked</em> - boolean - A boolean value indicating whether the Droplet has been locked, preventing actions by users.</li>
+<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Droplet was created.</li>
+<li><em>status</em> - string - A status string indicating the state of the Droplet instance. This may be &#8220;new&#8221;, &#8220;active&#8221;, &#8220;off&#8221;, or &#8220;archive&#8221;.</li>
+<li><em>backup_ids</em> - list - A list of backup IDs of any backups that have been taken of the Droplet instance. Droplet backups are enabled at the time of the instance creation.</li>
+<li><em>snapshot_ids</em> - list - A list of snapshot IDs of any snapshots created from the Droplet instance.</li>
+<li><em>features</em> - list - A list of features enabled on this Droplet.</li>
+<li><em>region</em> - dict - The region that the Droplet instance is deployed in. When setting a region, the value should be the slug identifier for the region. When you query a Droplet, the entire region dict will be returned.</li>
+<li><em>image</em> - dict - The base image used to create the Droplet instance. When setting an image, the value is set to the image id or slug. When querying the Droplet, the entire image dict will be returned.</li>
+<li><em>size</em> - dict - The current size dict describing the Droplet. When setting a size, the value is set to the size slug. When querying the Droplet, the entire size dict will be returned. Note that the disk volume of a droplet may not match the size&#8217;s disk due to Droplet resize actions. The disk attribute on the Droplet should always be referenced.</li>
+<li><em>size_slug</em> - string - The unique slug identifier for the size of this Droplet.</li>
+<li><em>networks</em> - dict - The details of the network that are configured for the Droplet instance. This is an dict that contains keys for IPv4 and IPv6. The value of each of these is a list that contains dict&#8217;s describing an individual IP resource allocated to the Droplet. These will define attributes like the IP address, netmask, and gateway of the specific network depending on the type of network it is.</li>
+<li><em>kernel</em> - nullable dict - The current kernel. This will initially be set to the kernel of the base image when the Droplet is created.</li>
+<li><em>next_backup_window</em> - nullable dict - The details of the Droplet&#8217;s backups feature, if backups are configured for the Droplet. This dict contains keys for the start and end times of the window during which the backup will start.</li>
+<li><em>tags</em> - list - A list of Tags the Droplet has been tagged with.</li>
+<li><em>volume_ids</em> - list - A flat list including the unique identifier for each Block Storage volume attached to the Droplet.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-neighbors-for-a-droplet">https://developers.digitalocean.com/documentation/v2/#list-neighbors-for-a-droplet</a></li>
+</ul>
+</div>
+<div class="section" id="list-all-droplet-neighbors-any-droplets-that-are-running-on-the-same-physical-hardware">
+<h2>List all Droplet Neighbors, any droplets that are running on the same physical hardware<a class="headerlink" href="#list-all-droplet-neighbors-any-droplets-that-are-running-on-the-same-physical-hardware" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.droplet.droplet_neighbor_list">
+<code class="descclassname">do.droplet.</code><code class="descname">droplet_neighbor_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.droplet_neighbor_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Returns:</p>
+<ul class="simple">
+<li>A list of neighbor lists of Droplet dict&#8217;s<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet instance. This is automatically generated upon Droplet creation.</li>
+<li><em>name</em> - string - The human-readable name set for the Droplet instance.</li>
+<li><em>memory</em> - number - Memory of the Droplet in megabytes.</li>
+<li><em>vcpus</em> - number - The number of virtual CPUs.</li>
+<li><em>disk</em> - number - The size of the Droplet&#8217;s disk in gigabytes.</li>
+<li><em>locked</em> - boolean - A boolean value indicating whether the Droplet has been locked, preventing actions by users.</li>
+<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Droplet was created.</li>
+<li><em>status</em> - string - A status string indicating the state of the Droplet instance. This may be &#8220;new&#8221;, &#8220;active&#8221;, &#8220;off&#8221;, or &#8220;archive&#8221;.</li>
+<li><em>backup_ids</em> - list - A list of backup IDs of any backups that have been taken of the Droplet instance. Droplet backups are enabled at the time of the instance creation.</li>
+<li><em>snapshot_ids</em> - list - A list of snapshot IDs of any snapshots created from the Droplet instance.</li>
+<li><em>features</em> - list - A list of features enabled on this Droplet.</li>
+<li><em>region</em> - dict - The region that the Droplet instance is deployed in. When setting a region, the value should be the slug identifier for the region. When you query a Droplet, the entire region dict will be returned.</li>
+<li><em>image</em> - dict - The base image used to create the Droplet instance. When setting an image, the value is set to the image id or slug. When querying the Droplet, the entire image dict will be returned.</li>
+<li><em>size</em> - dict - The current size dict describing the Droplet. When setting a size, the value is set to the size slug. When querying the Droplet, the entire size dict will be returned. Note that the disk volume of a droplet may not match the size&#8217;s disk due to Droplet resize actions. The disk attribute on the Droplet should always be referenced.</li>
+<li><em>size_slug</em> - string - The unique slug identifier for the size of this Droplet.</li>
+<li><em>networks</em> - dict - The details of the network that are configured for the Droplet instance. This is an dict that contains keys for IPv4 and IPv6. The value of each of these is a list that contains dict&#8217;s describing an individual IP resource allocated to the Droplet. These will define attributes like the IP address, netmask, and gateway of the specific network depending on the type of network it is.</li>
+<li><em>kernel</em> - nullable dict - The current kernel. This will initially be set to the kernel of the base image when the Droplet is created.</li>
+<li><em>next_backup_window</em> - nullable dict - The details of the Droplet&#8217;s backups feature, if backups are configured for the Droplet. This dict contains keys for the start and end times of the window during which the backup will start.</li>
+<li><em>tags</em> - list - A list of Tags the Droplet has been tagged with.</li>
+<li><em>volume_ids</em> - list - A flat list including the unique identifier for each Block Storage volume attached to the Droplet.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-all-droplet-neighbors">https://developers.digitalocean.com/documentation/v2/#list-all-droplet-neighbors</a></li>
+</ul>
+</div>
+<div class="section" id="create-a-new-droplet-or-multiple-droplets">
+<h2>Create a new Droplet or multiple Droplets<a class="headerlink" href="#create-a-new-droplet-or-multiple-droplets" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.droplet.create">
+<code class="descclassname">do.droplet.</code><code class="descname">create</code><span class="sig-paren">(</span><em>attribs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>attribs</em> - dict - The data of the Droplet<ul>
+<li><em>name</em> - string - The human-readable string you wish to use when displaying the Droplet name. The name, if set to a domain name managed in the DigitalOcean DNS management system, will configure a PTR record for the Droplet. The name set during creation will also determine the hostname for the Droplet in its internal configuration. - if single droplet</li>
+<li><em>names</em> - list - A list of human human-readable strings you wish to use when displaying the Droplet name. Each name, if set to a domain name managed in the DigitalOcean DNS management system, will configure a PTR record for the Droplet. Each name set during creation will also determine the hostname for the Droplet in its internal configuration. - if multiple droplets</li>
+<li><em>region</em> - string - The unique slug identifier for the region that you wish to deploy in. - true</li>
+<li><em>size</em> - string - The unique slug identifier for the size that you wish to select for this Droplet. - true</li>
+<li><em>image</em> - number (if using an image ID), or String (if using a public image slug) - The image ID of a public or private image, or the unique slug identifier for a public image. This image will be the base image for your Droplet. - true</li>
+<li><em>ssh_keys</em> - list - A list containing the IDs or fingerprints of the SSH keys that you wish to embed in the Droplet&#8217;s root account upon creation. -</li>
+<li><em>backups</em> - bool - A boolean indicating whether automated backups should be enabled for the Droplet. Automated backups can only be enabled when the Droplet is created. -</li>
+<li><em>ipv6</em> - bool - A boolean indicating whether IPv6 is enabled on the Droplet. -</li>
+<li><em>private_networking</em> - bool - A boolean indicating whether private networking is enabled for the Droplet. Private networking is currently only available in certain regions. -</li>
+<li><em>user_data</em> - string - A string of the desired User Data for the Droplet. User Data is currently only available in regions with metadata listed in their features. -</li>
+<li><em>monitoring</em> - bool - A boolean indicating whether to install the DigitalOcean agent for monitoring. -</li>
+<li><em>volume</em> - list - A flat list including the unique string identifier for each Block Storage volume to be attached to the Droplet. At the moment a volume can only be attached to a single Droplet. -</li>
+<li><em>tags</em> - list - A flat list of tag names as strings to apply to the Droplet after it is created. Tag names can either be existing or new tags.</li>
+</ul>
+</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A Droplet dict<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet instance. This is automatically generated upon Droplet creation.</li>
+<li><em>name</em> - string - The human-readable name set for the Droplet instance.</li>
+<li><em>memory</em> - number - Memory of the Droplet in megabytes.</li>
+<li><em>vcpus</em> - number - The number of virtual CPUs.</li>
+<li><em>disk</em> - number - The size of the Droplet&#8217;s disk in gigabytes.</li>
+<li><em>locked</em> - boolean - A boolean value indicating whether the Droplet has been locked, preventing actions by users.</li>
+<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Droplet was created.</li>
+<li><em>status</em> - string - A status string indicating the state of the Droplet instance. This may be &#8220;new&#8221;, &#8220;active&#8221;, &#8220;off&#8221;, or &#8220;archive&#8221;.</li>
+<li><em>backup_ids</em> - list - A list of backup IDs of any backups that have been taken of the Droplet instance. Droplet backups are enabled at the time of the instance creation.</li>
+<li><em>snapshot_ids</em> - list - A list of snapshot IDs of any snapshots created from the Droplet instance.</li>
+<li><em>features</em> - list - A list of features enabled on this Droplet.</li>
+<li><em>region</em> - dict - The region that the Droplet instance is deployed in. When setting a region, the value should be the slug identifier for the region. When you query a Droplet, the entire region dict will be returned.</li>
+<li><em>image</em> - dict - The base image used to create the Droplet instance. When setting an image, the value is set to the image id or slug. When querying the Droplet, the entire image dict will be returned.</li>
+<li><em>size</em> - dict - The current size dict describing the Droplet. When setting a size, the value is set to the size slug. When querying the Droplet, the entire size dict will be returned. Note that the disk volume of a droplet may not match the size&#8217;s disk due to Droplet resize actions. The disk attribute on the Droplet should always be referenced.</li>
+<li><em>size_slug</em> - string - The unique slug identifier for the size of this Droplet.</li>
+<li><em>networks</em> - dict - The details of the network that are configured for the Droplet instance. This is an dict that contains keys for IPv4 and IPv6. The value of each of these is a list that contains dict&#8217;s describing an individual IP resource allocated to the Droplet. These will define attributes like the IP address, netmask, and gateway of the specific network depending on the type of network it is.</li>
+<li><em>kernel</em> - nullable dict - The current kernel. This will initially be set to the kernel of the base image when the Droplet is created.</li>
+<li><em>next_backup_window</em> - nullable dict - The details of the Droplet&#8217;s backups feature, if backups are configured for the Droplet. This dict contains keys for the start and end times of the window during which the backup will start.</li>
+<li><em>tags</em> - list - A list of Tags the Droplet has been tagged with.</li>
+<li><em>volume_ids</em> - list - A flat list including the unique identifier for each Block Storage volume attached to the Droplet.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet">https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet</a></li>
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#create-multiple-droplets">https://developers.digitalocean.com/documentation/v2/#create-multiple-droplets</a></li>
+</ul>
+</div>
+<div class="section" id="retrieve-an-existing-droplet-by-id">
+<h2>Retrieve an existing Droplet by id<a class="headerlink" href="#retrieve-an-existing-droplet-by-id" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.droplet.info">
+<code class="descclassname">do.droplet.</code><code class="descname">info</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - The id of the Droplet to retrieve</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A Droplet dict<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet instance. This is automatically generated upon Droplet creation.</li>
+<li><em>name</em> - string - The human-readable name set for the Droplet instance.</li>
+<li><em>memory</em> - number - Memory of the Droplet in megabytes.</li>
+<li><em>vcpus</em> - number - The number of virtual CPUs.</li>
+<li><em>disk</em> - number - The size of the Droplet&#8217;s disk in gigabytes.</li>
+<li><em>locked</em> - boolean - A boolean value indicating whether the Droplet has been locked, preventing actions by users.</li>
+<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Droplet was created.</li>
+<li><em>status</em> - string - A status string indicating the state of the Droplet instance. This may be &#8220;new&#8221;, &#8220;active&#8221;, &#8220;off&#8221;, or &#8220;archive&#8221;.</li>
+<li><em>backup_ids</em> - list - A list of backup IDs of any backups that have been taken of the Droplet instance. Droplet backups are enabled at the time of the instance creation.</li>
+<li><em>snapshot_ids</em> - list - A list of snapshot IDs of any snapshots created from the Droplet instance.</li>
+<li><em>features</em> - list - A list of features enabled on this Droplet.</li>
+<li><em>region</em> - dict - The region that the Droplet instance is deployed in. When setting a region, the value should be the slug identifier for the region. When you query a Droplet, the entire region dict will be returned.</li>
+<li><em>image</em> - dict - The base image used to create the Droplet instance. When setting an image, the value is set to the image id or slug. When querying the Droplet, the entire image dict will be returned.</li>
+<li><em>size</em> - dict - The current size dict describing the Droplet. When setting a size, the value is set to the size slug. When querying the Droplet, the entire size dict will be returned. Note that the disk volume of a droplet may not match the size&#8217;s disk due to Droplet resize actions. The disk attribute on the Droplet should always be referenced.</li>
+<li><em>size_slug</em> - string - The unique slug identifier for the size of this Droplet.</li>
+<li><em>networks</em> - dict - The details of the network that are configured for the Droplet instance. This is an dict that contains keys for IPv4 and IPv6. The value of each of these is a list that contains dict&#8217;s describing an individual IP resource allocated to the Droplet. These will define attributes like the IP address, netmask, and gateway of the specific network depending on the type of network it is.</li>
+<li><em>kernel</em> - nullable dict - The current kernel. This will initially be set to the kernel of the base image when the Droplet is created.</li>
+<li><em>next_backup_window</em> - nullable dict - The details of the Droplet&#8217;s backups feature, if backups are configured for the Droplet. This dict contains keys for the start and end times of the window during which the backup will start.</li>
+<li><em>tags</em> - list - A list of Tags the Droplet has been tagged with.</li>
+<li><em>volume_ids</em> - list - A flat list including the unique identifier for each Block Storage volume attached to the Droplet.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-droplet-by-id">https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-droplet-by-id</a></li>
+</ul>
+</div>
+<div class="section" id="delete-a-droplet-by-id-or-droplets-by-tag">
+<h2>Delete a Droplet by id or Droplets by tag<a class="headerlink" href="#delete-a-droplet-by-id-or-droplets-by-tag" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.droplet.destroy">
+<code class="descclassname">do.droplet.</code><code class="descname">destroy</code><span class="sig-paren">(</span><em>id=None</em>, <em>tag_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.destroy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - Send only to destroy a single Droplet by id</li>
+<li><em>tag_name</em> - string - Send only to destroy all Droplets with this tag.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>None. A DOBOTOException is thrown if an issue is encountered.</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#delete-a-droplet">https://developers.digitalocean.com/documentation/v2/#delete-a-droplet</a></li>
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#deleting-droplets-by-tag">https://developers.digitalocean.com/documentation/v2/#deleting-droplets-by-tag</a></li>
+</ul>
+</div>
+<div class="section" id="list-backups-for-a-droplet">
+<h2>List backups for a Droplet<a class="headerlink" href="#list-backups-for-a-droplet" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.droplet.backup_list">
+<code class="descclassname">do.droplet.</code><code class="descname">backup_list</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.backup_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - The id of the Droplet</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A list of Backup dict&#8217;s<ul>
+<li><em>id</em> - number - A unique number used to identify and reference a specific image.</li>
+<li><em>name</em> - string - The display name of the image. This is shown in the web UI and is generally a descriptive title for the image in question.</li>
+<li><em>type</em> - string - The kind of image, describing the duration of how long the image is stored. This is either &#8220;snapshot&#8221; or &#8220;backup&#8221;.</li>
+<li><em>distribution</em> - string - The base distribution used for this image.</li>
+<li><em>slug</em> - nullable string - A uniquely identifying string that is associated with each of the DigitalOcean-provided public images. These can be used to reference a public image as an alternative to the numeric id.</li>
+<li><em>public</em> - boolean - A boolean value that indicates whether the image in question is public. An image that is public is available to all accounts. A non-public image is only accessible from your account.</li>
+<li><em>regions</em> - list - A list of the regions that the image is available in. The regions are represented by their identifying slug values.</li>
+<li><em>min_disk_size</em> - number - The minimum &#8216;disk&#8217; required for a size to use this image.</li>
+<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-backups-for-a-droplet">https://developers.digitalocean.com/documentation/v2/#list-backups-for-a-droplet</a></li>
+</ul>
+</div>
+<div class="section" id="enable-backups">
+<h2>Enable Backups<a class="headerlink" href="#enable-backups" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.droplet.backup_enable">
+<code class="descclassname">do.droplet.</code><code class="descname">backup_enable</code><span class="sig-paren">(</span><em>id=None</em>, <em>tag_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.backup_enable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - Send only to reference a single Droplet by id</li>
+<li><em>tag_name</em> - string - Send only to reference all Droplets with this tag.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>If by id, an Action dict. If by tag, a list of Action dict&#8217;s<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet action event. This is used to reference a specific action that was requested.</li>
+<li><em>status</em> - string - The current status of the action. The value of this attribute will be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - The type of action that the event is executing (reboot, power_off, etc.).</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#enable-backups">https://developers.digitalocean.com/documentation/v2/#enable-backups</a></li>
+</ul>
+</div>
+<div class="section" id="disable-backups">
+<h2>Disable Backups<a class="headerlink" href="#disable-backups" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.droplet.backup_disable">
+<code class="descclassname">do.droplet.</code><code class="descname">backup_disable</code><span class="sig-paren">(</span><em>id=None</em>, <em>tag_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.backup_disable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - Send only to reference a single Droplet by id</li>
+<li><em>tag_name</em> - string - Send only to reference all Droplets with this tag.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>If by id, an Action dict. If by tag, a list of Action dict&#8217;s<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet action event. This is used to reference a specific action that was requested.</li>
+<li><em>status</em> - string - The current status of the action. The value of this attribute will be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - The type of action that the event is executing (reboot, power_off, etc.).</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#disable-backups">https://developers.digitalocean.com/documentation/v2/#disable-backups</a></li>
+</ul>
+</div>
+<div class="section" id="reboot-a-droplet">
+<h2>Reboot a Droplet<a class="headerlink" href="#reboot-a-droplet" title="Permalink to this headline">¶</a></h2>
+<p>A reboot action is an attempt to reboot the Droplet in a graceful way, similar to using the reboot command from the console.</p>
+<dl class="method">
+<dt id="do.droplet.reboot">
+<code class="descclassname">do.droplet.</code><code class="descname">reboot</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.reboot" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - The id of the Droplet</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An Action dict<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet action event. This is used to reference a specific action that was requested.</li>
+<li><em>status</em> - string - The current status of the action. The value of this attribute will be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - The type of action that the event is executing (reboot, power_off, etc.).</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#reboot-a-droplet">https://developers.digitalocean.com/documentation/v2/#reboot-a-droplet</a></li>
+</ul>
+</div>
+<div class="section" id="shutdown-a-droplet">
+<h2>Shutdown a Droplet<a class="headerlink" href="#shutdown-a-droplet" title="Permalink to this headline">¶</a></h2>
+<p>A shutdown action is an attempt to shutdown the Droplet in a graceful way, similar to using the shutdown command from the console. Since a shutdown command can fail, this action guarantees that the command is issued, not that it succeeds. The preferred way to turn off a Droplet is to attempt a shutdown, with a reasonable timeout, followed by a power off action to ensure the Droplet is off.</p>
+<dl class="method">
+<dt id="do.droplet.shutdown">
+<code class="descclassname">do.droplet.</code><code class="descname">shutdown</code><span class="sig-paren">(</span><em>id=None</em>, <em>tag_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.shutdown" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - Send only to reference a single Droplet by id</li>
+<li><em>tag_name</em> - string - Send only to reference all Droplets with this tag.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>If by id, an Action dict. If by tag, a list of Action dict&#8217;s<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet action event. This is used to reference a specific action that was requested.</li>
+<li><em>status</em> - string - The current status of the action. The value of this attribute will be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - The type of action that the event is executing (reboot, power_off, etc.).</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#reboot-a-droplet">https://developers.digitalocean.com/documentation/v2/#reboot-a-droplet</a></li>
+</ul>
+</div>
+<div class="section" id="power-on-a-droplet">
+<h2>Power On a Droplet<a class="headerlink" href="#power-on-a-droplet" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.droplet.power_on">
+<code class="descclassname">do.droplet.</code><code class="descname">power_on</code><span class="sig-paren">(</span><em>id=None</em>, <em>tag_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.power_on" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - Send only to reference a single Droplet by id</li>
+<li><em>tag_name</em> - string - Send only to reference all Droplets with this tag.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>If by id, an Action dict. If by tag, a list of Action dict&#8217;s<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet action event. This is used to reference a specific action that was requested.</li>
+<li><em>status</em> - string - The current status of the action. The value of this attribute will be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - The type of action that the event is executing (reboot, power_off, etc.).</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#power-on-a-droplet">https://developers.digitalocean.com/documentation/v2/#power-on-a-droplet</a></li>
+</ul>
+</div>
+<div class="section" id="power-off-a-droplet">
+<h2>Power Off a Droplet<a class="headerlink" href="#power-off-a-droplet" title="Permalink to this headline">¶</a></h2>
+<p>A power_off event is a hard shutdown and should only be used if the shutdown action is not successful. It is similar to cutting the power on a server and could lead to complications.</p>
+<dl class="method">
+<dt id="do.droplet.power_off">
+<code class="descclassname">do.droplet.</code><code class="descname">power_off</code><span class="sig-paren">(</span><em>id=None</em>, <em>tag_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.power_off" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - Send only to reference a single Droplet by id</li>
+<li><em>tag_name</em> - string - Send only to reference all Droplets with this tag.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>If by id, an Action dict. If by tag, a list of Action dict&#8217;s<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet action event. This is used to reference a specific action that was requested.</li>
+<li><em>status</em> - string - The current status of the action. The value of this attribute will be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - The type of action that the event is executing (reboot, power_off, etc.).</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#power-off-a-droplet">https://developers.digitalocean.com/documentation/v2/#power-off-a-droplet</a></li>
+</ul>
+</div>
+<div class="section" id="power-cycle-a-droplet">
+<h2>Power Cycle a Droplet<a class="headerlink" href="#power-cycle-a-droplet" title="Permalink to this headline">¶</a></h2>
+<p>A powercycle action is similar to pushing the reset button on a physical machine, it&#8217;s similar to booting from scratch.</p>
+<dl class="method">
+<dt id="do.droplet.power_cycle">
+<code class="descclassname">do.droplet.</code><code class="descname">power_cycle</code><span class="sig-paren">(</span><em>id=None</em>, <em>tag_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.power_cycle" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - Send only to reference a single Droplet by id</li>
+<li><em>tag_name</em> - string - Send only to reference all Droplets with this tag.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>If by id, an Action dict. If by tag, a list of Action dict&#8217;s<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet action event. This is used to reference a specific action that was requested.</li>
+<li><em>status</em> - string - The current status of the action. The value of this attribute will be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - The type of action that the event is executing (reboot, power_off, etc.).</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#power-cycle-a-droplet">https://developers.digitalocean.com/documentation/v2/#power-cycle-a-droplet</a></li>
+</ul>
+</div>
+<div class="section" id="restore-a-droplet">
+<h2>Restore a Droplet<a class="headerlink" href="#restore-a-droplet" title="Permalink to this headline">¶</a></h2>
+<p>A Droplet restoration will rebuild an image using a backup image. The image ID that is passed in must be a backup of the current Droplet instance. The operation will leave any embedded SSH keys intact.</p>
+<dl class="method">
+<dt id="do.droplet.restore">
+<code class="descclassname">do.droplet.</code><code class="descname">restore</code><span class="sig-paren">(</span><em>id</em>, <em>image</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.restore" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - The id of the Droplet</li>
+<li><em>image</em> - string if an image slug. number if an image ID. - An image slug or ID. This represents the image that the Droplet will use as a base.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An Action dict<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet action event. This is used to reference a specific action that was requested.</li>
+<li><em>status</em> - string - The current status of the action. The value of this attribute will be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - The type of action that the event is executing (reboot, power_off, etc.).</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#restore-a-droplet">https://developers.digitalocean.com/documentation/v2/#restore-a-droplet</a></li>
+</ul>
+</div>
+<div class="section" id="password-reset-a-droplet">
+<h2>Password Reset a Droplet<a class="headerlink" href="#password-reset-a-droplet" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.droplet.password_reset">
+<code class="descclassname">do.droplet.</code><code class="descname">password_reset</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.password_reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - The id of the Droplet</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An Action dict<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet action event. This is used to reference a specific action that was requested.</li>
+<li><em>status</em> - string - The current status of the action. The value of this attribute will be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - The type of action that the event is executing (reboot, power_off, etc.).</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#password-reset-a-droplet">https://developers.digitalocean.com/documentation/v2/#password-reset-a-droplet</a></li>
+</ul>
+</div>
+<div class="section" id="resize-a-droplet">
+<h2>Resize a Droplet<a class="headerlink" href="#resize-a-droplet" title="Permalink to this headline">¶</a></h2>
+<p>If a permanent resize, with disk changes included, is desired, set the &#8220;disk&#8221; attribute to True. The Droplet must be powered off prior to resizing.</p>
+<dl class="method">
+<dt id="do.droplet.resize">
+<code class="descclassname">do.droplet.</code><code class="descname">resize</code><span class="sig-paren">(</span><em>id</em>, <em>size</em>, <em>disk=False</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.resize" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - The id of the Droplet</li>
+<li><em>disk</em> - bool - Whether to increase disk size</li>
+<li><em>size</em> - string - The size slug that you want to resize to. - true</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An Action dict<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet action event. This is used to reference a specific action that was requested.</li>
+<li><em>status</em> - string - The current status of the action. The value of this attribute will be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - The type of action that the event is executing (reboot, power_off, etc.).</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#resize-a-droplet">https://developers.digitalocean.com/documentation/v2/#resize-a-droplet</a></li>
+</ul>
+</div>
+<div class="section" id="rebuild-a-droplet">
+<h2>Rebuild a Droplet<a class="headerlink" href="#rebuild-a-droplet" title="Permalink to this headline">¶</a></h2>
+<p>A rebuild action functions just like a new create.</p>
+<dl class="method">
+<dt id="do.droplet.rebuild">
+<code class="descclassname">do.droplet.</code><code class="descname">rebuild</code><span class="sig-paren">(</span><em>id</em>, <em>image</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.rebuild" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - The id of the Droplet</li>
+<li><em>image</em> - string if an image slug. number if an image ID. - An image slug or ID. This represents the image that the Droplet will use as a base.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An Action dict<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet action event. This is used to reference a specific action that was requested.</li>
+<li><em>status</em> - string - The current status of the action. The value of this attribute will be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - The type of action that the event is executing (reboot, power_off, etc.).</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#rebuild-a-droplet">https://developers.digitalocean.com/documentation/v2/#rebuild-a-droplet</a></li>
+</ul>
+</div>
+<div class="section" id="rename-a-droplet">
+<h2>Rename a Droplet<a class="headerlink" href="#rename-a-droplet" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.droplet.rename">
+<code class="descclassname">do.droplet.</code><code class="descname">rename</code><span class="sig-paren">(</span><em>id</em>, <em>name</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.rename" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - The id of the Droplet</li>
+<li><em>name</em> - string - The new name for the Droplet.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An Action dict<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet action event. This is used to reference a specific action that was requested.</li>
+<li><em>status</em> - string - The current status of the action. The value of this attribute will be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - The type of action that the event is executing (reboot, power_off, etc.).</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#rename-a-droplet">https://developers.digitalocean.com/documentation/v2/#rename-a-droplet</a></li>
+</ul>
+</div>
+<div class="section" id="list-all-available-kernels-for-a-droplet">
+<h2>List all available Kernels for a Droplet<a class="headerlink" href="#list-all-available-kernels-for-a-droplet" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.droplet.kernel_list">
+<code class="descclassname">do.droplet.</code><code class="descname">kernel_list</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.kernel_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - The id of the Droplet</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A list of Kernel dict&#8217;s<ul>
+<li><em>id</em> - number - A unique number used to identify and reference a specific kernel.</li>
+<li><em>name</em> - string - The display name of the kernel. This is shown in the web UI and is generally a descriptive title for the kernel in question.</li>
+<li><em>version</em> - string - A standard kernel version string representing the version, patch, and release information.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-all-available-kernels-for-a-droplet">https://developers.digitalocean.com/documentation/v2/#list-all-available-kernels-for-a-droplet</a></li>
+</ul>
+</div>
+<div class="section" id="change-the-kernel">
+<h2>Change the Kernel<a class="headerlink" href="#change-the-kernel" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.droplet.kernel_update">
+<code class="descclassname">do.droplet.</code><code class="descname">kernel_update</code><span class="sig-paren">(</span><em>id</em>, <em>kernel_id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.kernel_update" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - The id of the Droplet</li>
+<li><em>kernel</em> - number - A unique number used to identify and reference a specific kernel. - true</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An Action dict<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet action event. This is used to reference a specific action that was requested.</li>
+<li><em>status</em> - string - The current status of the action. The value of this attribute will be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - The type of action that the event is executing (reboot, power_off, etc.).</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#change-the-kernel">https://developers.digitalocean.com/documentation/v2/#change-the-kernel</a></li>
+</ul>
+</div>
+<div class="section" id="enable-ipv6">
+<h2>Enable IPv6<a class="headerlink" href="#enable-ipv6" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.droplet.ipv6_enable">
+<code class="descclassname">do.droplet.</code><code class="descname">ipv6_enable</code><span class="sig-paren">(</span><em>id=None</em>, <em>tag_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.ipv6_enable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - Send only to reference a single Droplet by id</li>
+<li><em>tag_name</em> - string - Send only to reference all Droplets with this tag.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>If by id, an Action dict. If by tag, a list of Action dict&#8217;s<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet action event. This is used to reference a specific action that was requested.</li>
+<li><em>status</em> - string - The current status of the action. The value of this attribute will be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - The type of action that the event is executing (reboot, power_off, etc.).</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#enable-ipv6">https://developers.digitalocean.com/documentation/v2/#enable-ipv6</a></li>
+</ul>
+</div>
+<div class="section" id="enable-private-networking">
+<h2>Enable Private Networking<a class="headerlink" href="#enable-private-networking" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.droplet.private_networking_enable">
+<code class="descclassname">do.droplet.</code><code class="descname">private_networking_enable</code><span class="sig-paren">(</span><em>id=None</em>, <em>tag_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.private_networking_enable" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - Send only to reference a single Droplet by id</li>
+<li><em>tag_name</em> - string - Send only to reference all Droplets with this tag.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>If by id, an Action dict. If by tag, a list of Action dict&#8217;s<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet action event. This is used to reference a specific action that was requested.</li>
+<li><em>status</em> - string - The current status of the action. The value of this attribute will be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - The type of action that the event is executing (reboot, power_off, etc.).</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#enable-private-networking">https://developers.digitalocean.com/documentation/v2/#enable-private-networking</a></li>
+</ul>
+</div>
+<div class="section" id="list-snapshots-for-a-droplet">
+<h2>List snapshots for a Droplet<a class="headerlink" href="#list-snapshots-for-a-droplet" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.droplet.snapshot_list">
+<code class="descclassname">do.droplet.</code><code class="descname">snapshot_list</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.snapshot_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - The id of the Droplet</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A list of Image dict&#8217;s<ul>
+<li><em>id</em> - number - A unique number used to identify and reference a specific image.</li>
+<li><em>name</em> - string - The display name of the image. This is shown in the web UI and is generally a descriptive title for the image in question.</li>
+<li><em>type</em> - string - The kind of image, describing the duration of how long the image is stored. This is either &#8220;snapshot&#8221; or &#8220;backup&#8221;.</li>
+<li><em>distribution</em> - string - The base distribution used for this image.</li>
+<li><em>slug</em> - nullable string - A uniquely identifying string that is associated with each of the DigitalOcean-provided public images. These can be used to reference a public image as an alternative to the numeric id.</li>
+<li><em>public</em> - boolean - A boolean value that indicates whether the image in question is public. An image that is public is available to all accounts. A non-public image is only accessible from your account.</li>
+<li><em>regions</em> - list - A list of the regions that the image is available in. The regions are represented by their identifying slug values.</li>
+<li><em>min_disk_size</em> - number - The minimum &#8216;disk&#8217; required for a size to use this image.</li>
+<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-snapshots-for-a-droplet">https://developers.digitalocean.com/documentation/v2/#list-snapshots-for-a-droplet</a></li>
+</ul>
+</div>
+<div class="section" id="snapshot-a-droplet">
+<h2>Snapshot a Droplet<a class="headerlink" href="#snapshot-a-droplet" title="Permalink to this headline">¶</a></h2>
+<p>At the time of this writing, snapshotting by tag is not working properly and is not recommended.</p>
+<dl class="method">
+<dt id="do.droplet.snapshot_create">
+<code class="descclassname">do.droplet.</code><code class="descname">snapshot_create</code><span class="sig-paren">(</span><em>id=None</em>, <em>tag_name=None</em>, <em>snapshot_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.snapshot_create" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - Send only to reference a single Droplet by id</li>
+<li><em>tag_name</em> - string - Send only to reference all Droplets with this tag.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>If by id, an Action dict. If by tag, a list of Action dict&#8217;s<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet action event. This is used to reference a specific action that was requested.</li>
+<li><em>status</em> - string - The current status of the action. The value of this attribute will be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - The type of action that the event is executing (reboot, power_off, etc.).</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#snapshot-a-droplet">https://developers.digitalocean.com/documentation/v2/#snapshot-a-droplet</a></li>
+</ul>
+</div>
+<div class="section" id="list-all-droplet-actions">
+<h2>List all Droplet Actions<a class="headerlink" href="#list-all-droplet-actions" title="Permalink to this headline">¶</a></h2>
+<p>Droplet actions are tasks that can be executed on a Droplet. These can be things like rebooting, resizing, snapshotting, etc.</p>
+<p>Droplet action requests are generally targeted at one of the &#8220;actions&#8221; endpoints for a specific Droplet. The specific actions are usually initiated by sending a POST request with the action and arguments as parameters.</p>
+<p>Droplet action requests create a Droplet actions dict, which can be used to get information about the status of an action. Creating a Droplet action is asynchronous. The HTTP call will return the action dict before the action has finished processing on the Droplet. The current status of an action can be retrieved from either the Droplet actions endpoint or the global actions endpoint. If a Droplet action is uncompleted it may block the creation of a subsequent action for that Droplet, the locked attribute of the Droplet will be true and attempts to create a Droplet action will fail with a status of 422.</p>
+<dl class="method">
+<dt id="do.droplet.action_list">
+<code class="descclassname">do.droplet.</code><code class="descname">action_list</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.action_list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - The id of the Droplet</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A list of Action dict&#8217;s<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet action event. This is used to reference a specific action that was requested.</li>
+<li><em>status</em> - string - The current status of the action. The value of this attribute will be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - The type of action that the event is executing (reboot, power_off, etc.).</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#droplet-actions">https://developers.digitalocean.com/documentation/v2/#droplet-actions</a></li>
+</ul>
+</div>
+<div class="section" id="retrieve-a-droplet-action">
+<h2>Retrieve a Droplet Action<a class="headerlink" href="#retrieve-a-droplet-action" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.droplet.action_info">
+<code class="descclassname">do.droplet.</code><code class="descname">action_info</code><span class="sig-paren">(</span><em>id</em>, <em>action_id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.droplet.action_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - The id of the Droplet</li>
+<li><em>action_id</em> - number - The id of the Action</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An Action dict<ul>
+<li><em>id</em> - number - A unique identifier for each Droplet action event. This is used to reference a specific action that was requested.</li>
+<li><em>status</em> - string - The current status of the action. The value of this attribute will be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - The type of action that the event is executing (reboot, power_off, etc.).</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#retrieve-a-droplet-action">https://developers.digitalocean.com/documentation/v2/#retrieve-a-droplet-action</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Droplet (do.droplet)</a><ul>
+<li><a class="reference internal" href="#list-all-droplets-or-all-droplets-with-a-specific-tag">List all Droplets or all Droplets with a specific Tag.</a></li>
+<li><a class="reference internal" href="#list-neighbors-for-a-droplet-running-on-the-same-physical-server">List Neighbors for a Droplet running on the same physical server</a></li>
+<li><a class="reference internal" href="#list-all-droplet-neighbors-any-droplets-that-are-running-on-the-same-physical-hardware">List all Droplet Neighbors, any droplets that are running on the same physical hardware</a></li>
+<li><a class="reference internal" href="#create-a-new-droplet-or-multiple-droplets">Create a new Droplet or multiple Droplets</a></li>
+<li><a class="reference internal" href="#retrieve-an-existing-droplet-by-id">Retrieve an existing Droplet by id</a></li>
+<li><a class="reference internal" href="#delete-a-droplet-by-id-or-droplets-by-tag">Delete a Droplet by id or Droplets by tag</a></li>
+<li><a class="reference internal" href="#list-backups-for-a-droplet">List backups for a Droplet</a></li>
+<li><a class="reference internal" href="#enable-backups">Enable Backups</a></li>
+<li><a class="reference internal" href="#disable-backups">Disable Backups</a></li>
+<li><a class="reference internal" href="#reboot-a-droplet">Reboot a Droplet</a></li>
+<li><a class="reference internal" href="#shutdown-a-droplet">Shutdown a Droplet</a></li>
+<li><a class="reference internal" href="#power-on-a-droplet">Power On a Droplet</a></li>
+<li><a class="reference internal" href="#power-off-a-droplet">Power Off a Droplet</a></li>
+<li><a class="reference internal" href="#power-cycle-a-droplet">Power Cycle a Droplet</a></li>
+<li><a class="reference internal" href="#restore-a-droplet">Restore a Droplet</a></li>
+<li><a class="reference internal" href="#password-reset-a-droplet">Password Reset a Droplet</a></li>
+<li><a class="reference internal" href="#resize-a-droplet">Resize a Droplet</a></li>
+<li><a class="reference internal" href="#rebuild-a-droplet">Rebuild a Droplet</a></li>
+<li><a class="reference internal" href="#rename-a-droplet">Rename a Droplet</a></li>
+<li><a class="reference internal" href="#list-all-available-kernels-for-a-droplet">List all available Kernels for a Droplet</a></li>
+<li><a class="reference internal" href="#change-the-kernel">Change the Kernel</a></li>
+<li><a class="reference internal" href="#enable-ipv6">Enable IPv6</a></li>
+<li><a class="reference internal" href="#enable-private-networking">Enable Private Networking</a></li>
+<li><a class="reference internal" href="#list-snapshots-for-a-droplet">List snapshots for a Droplet</a></li>
+<li><a class="reference internal" href="#snapshot-a-droplet">Snapshot a Droplet</a></li>
+<li><a class="reference internal" href="#list-all-droplet-actions">List all Droplet Actions</a></li>
+<li><a class="reference internal" href="#retrieve-a-droplet-action">Retrieve a Droplet Action</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="domain.html"
+                        title="previous chapter">Domain (do.domain)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="floating_ip.html"
+                        title="next chapter">FloatingIP (do.floating_ip)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/droplet.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="floating_ip.html" title="FloatingIP (do.floating_ip)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="domain.html" title="Domain (do.domain)"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Digital Ocean - SWE-Data.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>

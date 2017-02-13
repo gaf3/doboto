@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Snapshot (do.snapshot) &#8212; DOBOTO 0.3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="SSHKey (do.ssh_key)" href="ssh_key.html" />
+    <link rel="prev" title="Size (do.size)" href="size.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ssh_key.html" title="SSHKey (do.ssh_key)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="size.html" title="Size (do.size)"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="snapshot-do-snapshot">
+<h1>Snapshot (do.snapshot)<a class="headerlink" href="#snapshot-do-snapshot" title="Permalink to this headline">¶</a></h1>
+<p>Snapshots are saved instances of a Droplet or a volume, which is reflected in the resource_type attribute. In order to avoid problems with compressing filesystems, each defines a min_disk_size attribute which is the minimum size of the Droplet or volume disk when creating a new resource from the saved snapshot.</p>
+<div class="section" id="list-all-droplet-or-volume-snapshots">
+<h2>List all, droplet, or volume snapshots<a class="headerlink" href="#list-all-droplet-or-volume-snapshots" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.snapshot.list">
+<code class="descclassname">do.snapshot.</code><code class="descname">list</code><span class="sig-paren">(</span><em>resource_type=None</em><span class="sig-paren">)</span><a class="headerlink" href="#do.snapshot.list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>resource_type</em> - string - Can be &#8220;droplet&#8221; or &#8220;volume&#8221; for snapshots thereof.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A list of Snapshot dict&#8217;s<ul>
+<li><em>id</em> - string - The unique identifier for the snapshot.</li>
+<li><em>name</em> - string - A human-readable name for the snapshot.</li>
+<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the snapshot was created.</li>
+<li><em>regions</em> - list - A list of the regions that the image is available in. The regions are represented by their identifying slug values.</li>
+<li><em>resource_id</em> - string - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>min_disk_size</em> - number - The minimum size in GB required for a volume or Droplet to use this snapshot.</li>
+<li><em>size_gigabytes</em> - number - The billable size of the snapshot in gigabytes.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-all-snapshots">https://developers.digitalocean.com/documentation/v2/#list-all-snapshots</a></li>
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-all-droplet-snapshots">https://developers.digitalocean.com/documentation/v2/#list-all-droplet-snapshots</a></li>
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-all-volume-snapshots">https://developers.digitalocean.com/documentation/v2/#list-all-volume-snapshots</a></li>
+</ul>
+</div>
+<div class="section" id="retrieve-an-existing-snapshot-by-id">
+<h2>Retrieve an existing snapshot by id<a class="headerlink" href="#retrieve-an-existing-snapshot-by-id" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.snapshot.info">
+<code class="descclassname">do.snapshot.</code><code class="descname">info</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.snapshot.info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - id of the Snapshot</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A Snapshot dict<ul>
+<li><em>id</em> - string - The unique identifier for the snapshot.</li>
+<li><em>name</em> - string - A human-readable name for the snapshot.</li>
+<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the snapshot was created.</li>
+<li><em>regions</em> - list - A list of the regions that the image is available in. The regions are represented by their identifying slug values.</li>
+<li><em>resource_id</em> - string - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>min_disk_size</em> - number - The minimum size in GB required for a volume or Droplet to use this snapshot.</li>
+<li><em>size_gigabytes</em> - number - The billable size of the snapshot in gigabytes.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-snapshot-by-id">https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-snapshot-by-id</a></li>
+</ul>
+</div>
+<div class="section" id="delete-a-snapshot">
+<h2>Delete a snapshot<a class="headerlink" href="#delete-a-snapshot" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.snapshot.destroy">
+<code class="descclassname">do.snapshot.</code><code class="descname">destroy</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.snapshot.destroy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - id of the Snapshot</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>None. A DOBOTOException is thrown if an issue is encountered.</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#delete-an-snapshot">https://developers.digitalocean.com/documentation/v2/#delete-an-snapshot</a></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Snapshot (do.snapshot)</a><ul>
+<li><a class="reference internal" href="#list-all-droplet-or-volume-snapshots">List all, droplet, or volume snapshots</a></li>
+<li><a class="reference internal" href="#retrieve-an-existing-snapshot-by-id">Retrieve an existing snapshot by id</a></li>
+<li><a class="reference internal" href="#delete-a-snapshot">Delete a snapshot</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="size.html"
+                        title="previous chapter">Size (do.size)</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ssh_key.html"
+                        title="next chapter">SSHKey (do.ssh_key)</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/snapshot.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="ssh_key.html" title="SSHKey (do.ssh_key)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="size.html" title="Size (do.size)"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Digital Ocean - SWE-Data.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.2.
+    </div>
+  </body>
+</html>
