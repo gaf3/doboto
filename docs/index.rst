@@ -4,6 +4,13 @@
 DOBOTO: BOTO like interface for DigitalOcean
 ============================================
 
+DOBOTO was created to be a feature complete Python API to the DigitalOcean RESTful API.
+
+While there are several existing projects along these lines, we at DigitalOcean felt they weren't
+feature complete and weren't being updated as the DigitalOcean API grew.
+
+With DOBOTO, we aim to fix that. 
+
 **Simple straight forward API**::
 
     from doboto.DO import DO
@@ -17,7 +24,7 @@ DOBOTO: BOTO like interface for DigitalOcean
         "size": "512mb",
         "image": "ubuntu-14-04-x64",
         "ssh_keys": [ssh_key["id"] for ssh_key in ssh_keys]
-    )
+    })
 
     do.droplet.destroy(droplet['id'])
 
