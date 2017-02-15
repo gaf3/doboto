@@ -87,4 +87,4 @@ expectations aren't met:
         raise DOBOTOException(result=response.json())
     doboto.DOBOTOException.DOBOTOException: DO API Error: {u'message': u'Unable to authenticate you.', u'id': u'unauthorized'}
 
-The JSON result (second part of the string output) is accessible via the result`\ property.
+The JSON result (second part of the string output) is accessible via the result property.
