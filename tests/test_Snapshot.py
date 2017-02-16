@@ -19,9 +19,10 @@ class TestSnapshot(TestCase):
 
         self.test_url = "http://abc.example.com"
         self.test_uri = "{}/snapshots".format(self.test_url)
+        self.test_do = "do"
         self.test_token = "abc123"
         self.test_agent = "Unit"
-        self.instantiate_args = (self.test_token, self.test_url, self.test_agent)
+        self.instantiate_args = (self.test_do, self.test_token, self.test_url, self.test_agent)
 
         self.klass_name = "Snapshot"
         self.klass = getattr(Snapshot, self.klass_name)

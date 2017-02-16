@@ -62,6 +62,36 @@ Related:
 
 
 
+Create a new Key if name not already present
+----------------------------------------------------------------------------------------------------
+
+.. method:: do.ssh_key.present(name, public_key)
+
+- *name* - string - The name to give the new SSH key in your account.
+
+- *public_key* - string - A string containing the entire public key.
+
+
+Returns:
+
+- A tuple of of SSH Key dict, the intended and created (None if already exists)
+
+  - *id* - number - This is a unique identification number for the key. This can be used to reference a specific SSH key when you wish to embed a key into a Droplet.
+
+  - *fingerprint* - string - This attribute contains the fingerprint value that is generated from the public key. This is a unique identifier that will differentiate it from other keys using a format that SSH recognizes.
+
+  - *public_key* - string - This attribute contains the entire public key string that was uploaded. This is what is embedded into the root user's authorized_keys file if you choose to include this SSH key during Droplet creation.
+
+  - *name* - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.
+
+
+
+Related:
+
+* `<https://developers.digitalocean.com/documentation/v2/#create-a-new-key>`_
+
+
+
 Retrieve an existing Key
 ----------------------------------------------------------------------------------------------------
 

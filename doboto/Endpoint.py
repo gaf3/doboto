@@ -1,8 +1,8 @@
 """This holds the Endpoint class."""
 
+import time
 import json
 import requests
-from six import wraps
 from .DOBOTOException import DOBOTOException
 
 class Endpoint(object):
@@ -80,3 +80,51 @@ class Endpoint(object):
                 next_url = None
 
         return items
+
+    def action_result(self, action, wait, poll, timeout):
+        """
+        General action result processor for waiting
+        """
+
+        start_time = time.time()
+
+        while wait and action["status"] == "in-progress":
+
+            time.sleep(poll)
+            try:
+                action = self.do.action.info(action["id"])
+            except:
+                pass
+
+            if time.time() - start_time > timeout:
+                raise DOBOTOException("Timeout on polling", action)
+
+        return action
+
+    def actions_result(self, actions, wait, poll, timeout):
+        """
+        General actions result processor for waiting
+        """
+
+        start_time = time.time()
+
+        info = [index for index, action in enumerate(actions)
+                if action["status"] == "in-progress"]
+
+        while wait and len(info) > 0:
+
+            time.sleep(poll)
+
+            for index in info:
+                try:
+                    actions[index] = self.do.action.info(actions[index]["id"])
+                except:
+                    pass
+
+            if time.time() - start_time > timeout:
+                raise DOBOTOException("Timeout on polling", actions)
+
+            info = [index for index, action in enumerate(actions)
+                    if action["status"] == "in-progress"]
+
+        return actions

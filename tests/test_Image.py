@@ -19,9 +19,10 @@ class TestImage(TestCase):
 
         self.test_url = "http://abc.example.com"
         self.test_uri = "{}/images".format(self.test_url)
+        self.test_do = "do"
         self.test_token = "abc123"
         self.test_agent = "Unit"
-        self.instantiate_args = (self.test_token, self.test_url, self.test_agent)
+        self.instantiate_args = (self.test_do, self.test_token, self.test_url, self.test_agent)
 
         self.klass_name = "Image"
         self.klass = getattr(Image, self.klass_name)
@@ -106,23 +107,27 @@ class TestImage(TestCase):
             test_uri, request_method="DELETE"
         )
 
+    @patch('doboto.Image.Image.action_result')
     @patch('doboto.Image.Image.request')
-    def test_convert(self, mock_request):
+    def test_convert(self, mock_request, mock_action_result):
         """
         convert works with image id
         """
 
         id = 7555620
         image = self.klass(*self.instantiate_args)
-        result = image.convert(id)
+        mock_request.return_value = {}
+        result = image.convert(id, True, 2, 3)
 
         test_uri = "{}/{}/actions".format(self.test_uri, id)
         mock_request.assert_called_with(
             test_uri, "action", attribs={"type": "convert"}, request_method="POST"
         )
+        mock_action_result.assert_called_with({}, True, 2, 3)
 
+    @patch('doboto.Image.Image.action_result')
     @patch('doboto.Image.Image.request')
-    def test_transfer(self, mock_request):
+    def test_transfer(self, mock_request, mock_action_result):
         """
         transfer works with image id and region
         """
@@ -130,13 +135,15 @@ class TestImage(TestCase):
         id = 7555620
         region = "lon1"
         image = self.klass(*self.instantiate_args)
-        result = image.transfer(id, region)
+        mock_request.return_value = {}
+        result = image.transfer(id, region, True, 2, 3)
 
         test_uri = "{}/{}/actions".format(self.test_uri, id)
         mock_request.assert_called_with(
             test_uri, "action", attribs={"type": "transfer", "region": region},
             request_method="POST"
         )
+        mock_action_result.assert_called_with({}, True, 2, 3)
 
     @patch('doboto.Image.Image.pages')
     def test_action_list(self, mock_pages):

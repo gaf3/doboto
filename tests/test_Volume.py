@@ -3,8 +3,9 @@ This module contains tests for the main DO class
 """
 
 from unittest import TestCase
-from mock import MagicMock, patch
+from mock import MagicMock, patch, call
 from doboto import Volume
+from doboto.DOBOTOException import DOBOTOException
 
 
 class TestVolume(TestCase):
@@ -20,9 +21,10 @@ class TestVolume(TestCase):
 
         self.test_url = "http://abc.example.com"
         self.test_uri = "{}/volumes".format(self.test_url)
+        self.test_do = "do"
         self.test_token = "abc123"
         self.test_agent = "Unit"
-        self.instantiate_args = (self.test_token, self.test_url, self.test_agent)
+        self.instantiate_args = (self.test_do, self.test_token, self.test_url, self.test_agent)
 
         self.klass_name = "Volume"
         self.klass = getattr(Volume, self.klass_name)
@@ -67,26 +69,66 @@ class TestVolume(TestCase):
         volume.list(region)
         mock_pages.assert_called_with(self.test_uri, "volumes", params={"region": region})
 
+    @patch('time.sleep')
     @patch('doboto.Volume.Volume.request')
-    def test_create(self, mock_request):
+    def test_create(self, mock_request, mock_sleep):
         """
         create works with volume id
         """
 
         volume = self.klass(*self.instantiate_args)
+        volume.info = MagicMock(side_effect=[Exception("Not yet"), {"stuff": "things"}])
+        mock_request.return_value = {"id": 1, "people": "stuff"}
         datas = {"name": "test.com", "region": "nyc3",
                  "size": "512mb", "image": "ubuntu-14-04-x64"}
-        volume.create(datas)
+        self.assertEqual(volume.create(datas, wait=True, poll=2), {"stuff": "things"})
 
         mock_request.assert_called_with(
-            self.test_uri, "volume", 'POST', attribs=datas)
+            self.test_uri, "volume", 'POST', attribs=datas
+        )
+        mock_sleep.assert_has_calls([call(2), call(2)])
+        volume.info.assert_has_calls([call(1), call(1)])
 
-        # Check empty
+        mock_request.return_value = {"id": 2, "people": "stuff"}
 
-        volume.create()
+        with self.assertRaises(DOBOTOException):
+            volume.create(datas, wait=True, poll=4, timeout=-1)
 
-        mock_request.assert_called_with(
-            self.test_uri,  "volume", 'POST', attribs={})
+        mock_request.assert_called_with(self.test_uri, "volume", 'POST', attribs=datas)
+        mock_sleep.assert_has_calls([call(4)])
+        volume.info.assert_has_calls([call(2)])
+
+        # Make sure straight works
+
+        self.assertEqual(volume.create(datas), {"id": 2, "people": "stuff"})
+
+    def test_present(self):
+        """
+        present works against the name
+        """
+
+        volume = self.klass(*self.instantiate_args)
+        volume.list = MagicMock(return_value=[{"name": "people"}])
+        volume.create = MagicMock(return_value={"name": "things"})
+
+        self.assertEqual(
+            volume.present({"name": "people"}),
+            (
+                {"name": "people"},
+                None
+            )
+        )
+
+        self.assertEqual(
+            volume.present({"name": "stuff"}, True, 2, 3),
+            (
+                 {"name": "things"},
+                 {"name": "things"}
+            )
+        )
+        volume.create.assert_has_calls([
+            call({"name": "stuff"}, True, 2, 3),
+        ])
 
     @patch('doboto.Volume.Volume.request')
     def test_info(self, mock_request):

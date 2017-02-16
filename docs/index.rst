@@ -9,7 +9,7 @@ DOBOTO was created to be a feature complete Python API to the DigitalOcean RESTf
 While there are several existing projects along these lines, we at DigitalOcean felt they weren't
 feature complete and weren't being updated as the DigitalOcean API grew.
 
-With DOBOTO, we aim to fix that. 
+With DOBOTO, we aim to fix that.
 
 **Simple straight forward API**::
 

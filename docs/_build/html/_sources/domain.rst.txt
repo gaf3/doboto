@@ -60,6 +60,34 @@ Related:
 
 
 
+Create a new Domain if name doesn't already exist
+----------------------------------------------------------------------------------------------------
+
+.. method:: do.domain.present(name, ip_address)
+
+- *name* - string - The domain name to add to the DigitalOcean DNS management interface. The name must be unique in DigitalOcean's DNS system. The request will fail if the name has already been taken.
+
+- *ip_address* - string - This attribute contains the IP address you want the domain to point to.
+
+
+Returns:
+
+- A tuple of Domain dict's, the intended, and created (None if already exists)
+
+  - *name* - string - The name of the domain itself. This should follow the standard domain format of domain.TLD. For instance, example.com is a valid domain name.
+
+  - *ttl* - number - This value is the time to live for the records on this domain, in seconds. This defines the time frame that clients can cache queried information before a refresh should be requested.
+
+  - *zone_file* - string - This attribute contains the complete contents of the zone file for the selected domain. Individual domain record resources should be used to get more granular control over records. However, this attribute can also be used to get information about the SOA record, which is created automatically and is not accessible as an individual record resource.
+
+
+
+Related:
+
+* `<https://developers.digitalocean.com/documentation/v2/#create-a-new-domain>`_
+
+
+
 Retrieve an existing Domain
 ----------------------------------------------------------------------------------------------------
 

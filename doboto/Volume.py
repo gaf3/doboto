@@ -1,6 +1,8 @@
 """This holds the Volume class."""
 
+import time
 from .Endpoint import Endpoint
+from .DOBOTOException import DOBOTOException
 
 
 class Volume(Endpoint):
@@ -15,11 +17,12 @@ class Volume(Endpoint):
     related: https://developers.digitalocean.com/documentation/v2/#block-storage
     """
 
-    def __init__(self, token, url, agent):
+    def __init__(self, do, token, url, agent):
         """
-        Takes token and agent and sets its URI for volume interaction.
+        Takes token and agent and sets its DO for reference and URI for volume interaction.
         """
         super(Volume, self).__init__(token, agent)
+        self.do = do
         self.uri = "{}/volumes".format(url)
 
     def list(self, region=None):
@@ -47,17 +50,20 @@ class Volume(Endpoint):
         else:
             return self.pages(self.uri, "volumes")
 
-    def create(self, attribs=None):
+    def create(self, attribs, wait=False, poll=5, timeout=300):
         """
         description: Create a new volume
 
         in:
-            attribs - dict - Volume information to create by:
+            - attribs - dict - Volume information to create by:
                 - size_gigabytes - number - The size of the Block Storage volume in GiB (1024^3). - required
                 - name - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and "-", up to a limit of 64 characters. - required
                 - description - string - An optional free-form text field to describe a Block Storage volume. -
                 - region - string - The region where the Block Storage volume will be created. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned. Should not be specified with a snapshot_id. -
                 - snapshot_id - string - The unique identifier for the volume snapshot from which to create the volume. Should not be specified with a region_id. -
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             A Volume dict:
@@ -73,10 +79,67 @@ class Volume(Endpoint):
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-block-storage-volume
         """
 
-        if attribs is None:
-            attribs = {}
+        volume = self.request(self.uri, "volume", 'POST', attribs=attribs)
 
-        return self.request(self.uri, "volume", 'POST', attribs=attribs)
+        start_time = time.time()
+
+        while wait:
+
+            time.sleep(poll)
+
+            try:
+                volume = self.info(volume["id"])
+                break
+            except:
+                pass
+
+            if time.time() - start_time > timeout:
+                raise DOBOTOException("Timeout on polling", volume)
+
+        return volume
+
+    def present(self, attribs, wait=False, poll=5, timeout=300):
+        """
+        description: Create a new volume if name not already present
+
+        in:
+            - attribs - dict - Volume information to create by:
+                - size_gigabytes - number - The size of the Block Storage volume in GiB (1024^3). - required
+                - name - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and "-", up to a limit of 64 characters. - required
+                - description - string - An optional free-form text field to describe a Block Storage volume. -
+                - region - string - The region where the Block Storage volume will be created. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned. Should not be specified with a snapshot_id. -
+                - snapshot_id - string - The unique identifier for the volume snapshot from which to create the volume. Should not be specified with a region_id. -
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
+
+        out:
+            A tuple of Volume dict's, the intended and created (None if already exists):
+                - id - string - The unique identifier for the Block Storage volume.
+                - region - dict - The region that the Block Storage volume is located in. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned.
+                - droplet_ids - list - A list containing the IDs of the Droplets the volume is attached to. Note that at this time, a volume can only be attached to a single Droplet.
+                - name - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and "-", up to a limit of 64 characters.
+                - description - string - An optional free-form text field to describe a Block Storage volume.
+                - size_gigabytes - number - The size of the Block Storage volume in GiB (1024^3).
+                - created_at - string - A time value given in ISO8601 combined date and time format that represents when the Block Storage volume was created.
+                - droplet_ids - list - This attribute is a list of the Droplets that the volume is attached to.
+
+        related: https://developers.digitalocean.com/documentation/v2/#create-a-new-block-storage-volume
+        """
+
+        volumes = self.list()
+
+        existing = None
+        for volume in volumes:
+            if attribs["name"] == volume["name"]:
+                existing = volume
+                break
+
+        if existing is not None:
+            return (existing, None)
+
+        created = self.create(attribs, wait, poll, timeout)
+        return (created, created)
 
     def info(self, id=None, name=None, region=None):
         """
@@ -157,13 +220,16 @@ class Volume(Endpoint):
         uri = "{}/{}/snapshots".format(self.uri, id)
         return self.pages(uri, "snapshots")
 
-    def snapshot_create(self, id, snapshot_name):
+    def snapshot_create(self, id, snapshot_name, wait=False, poll=5, timeout=300):
         """
         description: Create a snpahot for a volume
 
         in:
             - id - number - The id of the volume
             - snapshot_name - string - The name of the snapshot
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             An Image dict:
@@ -184,7 +250,7 @@ class Volume(Endpoint):
         attribs = {"name": snapshot_name}
         return self.request(uri, "snapshot", 'POST', attribs=attribs)
 
-    def attach(self, id=None, name=None, region=None, droplet_id=None):
+    def attach(self, id=None, name=None, region=None, droplet_id=None, wait=False, poll=5, timeout=300):
         """
         description: Attach a volume by id or name to a droplet
 
@@ -193,6 +259,9 @@ class Volume(Endpoint):
             - name - string - The name of the volume if no id
             - region - string - The region slug of the volume if no id
             - droplet_id - number - The id of the droplet
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             An Action dict:
@@ -231,7 +300,7 @@ class Volume(Endpoint):
         else:
             raise ValueError("Must supply an id or name")
 
-    def detach(self, id=None, name=None, region=None, droplet_id=None):
+    def detach(self, id=None, name=None, region=None, droplet_id=None, wait=False, poll=5, timeout=300):
         """
         description: Remove a volume by id or name from a droplet
 
@@ -240,6 +309,9 @@ class Volume(Endpoint):
             - name - string - The name of the volume if no id
             - region - string - The region slug of the volume if no id
             - droplet_id - number - The id of the droplet
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             An Action dict:
@@ -278,7 +350,7 @@ class Volume(Endpoint):
         else:
             raise ValueError("Must supply an id or name")
 
-    def resize(self, id, size, region=None):
+    def resize(self, id, size, region=None, wait=False, poll=5, timeout=300):
         """
         description: Resize a volume
 

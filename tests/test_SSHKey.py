@@ -3,7 +3,7 @@ This module contains tests for the SSHKey class
 """
 
 from unittest import TestCase
-from mock import MagicMock, patch
+from mock import MagicMock, patch, call
 from doboto import SSHKey
 
 
@@ -19,9 +19,10 @@ class TestSSHKey(TestCase):
 
         self.test_url = "http://abc.example.com"
         self.test_uri = "{}/account/keys".format(self.test_url)
+        self.test_do = "do"
         self.test_token = "abc123"
         self.test_agent = "Unit"
-        self.instantiate_args = (self.test_token, self.test_url, self.test_agent)
+        self.instantiate_args = (self.test_do, self.test_token, self.test_url, self.test_agent)
 
         self.klass_name = "SSHKey"
         self.klass = getattr(SSHKey, self.klass_name)
@@ -79,6 +80,33 @@ class TestSSHKey(TestCase):
             self.test_uri, "ssh_key", 'POST', attribs=datas
         )
 
+    def test_present(self):
+        """
+        test present method
+        """
+        ssh_key = self.klass(*self.instantiate_args)
+
+        ssh_key.list = MagicMock(return_value=[{"name": "people"}])
+        ssh_key.create = MagicMock(return_value={"name": "things"})
+
+        self.assertEqual(
+            ssh_key.present("people", "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAQQD example"),
+            (
+                {"name": "people"},
+                None
+            )
+        )
+
+        self.assertEqual(
+            ssh_key.present("stuff", "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAQQD example"),
+            (
+                 {"name": "things"},
+                 {"name": "things"}
+            )
+        )
+        ssh_key.create.assert_has_calls([
+            call("stuff", "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAQQD example"),
+        ])
 
     @patch('doboto.SSHKey.SSHKey.request')
     def test_info(self, mock_request):

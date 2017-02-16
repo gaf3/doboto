@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>FloatingIP (do.floating_ip) &#8212; DOBOTO 0.3.1 documentation</title>
+    <title>FloatingIP (do.floating_ip) &#8212; DOBOTO 0.4.0 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.3.1',
+        VERSION:     '0.4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="droplet.html" title="Droplet (do.droplet)"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.4.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -149,12 +149,15 @@
 <h2>Assign a Floating IP to a Droplet<a class="headerlink" href="#assign-a-floating-ip-to-a-droplet" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="do.floating_ip.assign">
-<code class="descclassname">do.floating_ip.</code><code class="descname">assign</code><span class="sig-paren">(</span><em>ip</em>, <em>droplet_id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.floating_ip.assign" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">do.floating_ip.</code><code class="descname">assign</code><span class="sig-paren">(</span><em>ip</em>, <em>droplet_id</em>, <em>wait=False</em>, <em>poll=5</em>, <em>timeout=300</em><span class="sig-paren">)</span><a class="headerlink" href="#do.floating_ip.assign" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <ul class="simple">
 <li><em>ip</em> - string - The public IP address of the Floating IP.</li>
 <li><em>droplet_id</em> - int - The ID of Droplet that the Floating IP will be assigned to.</li>
+<li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
+<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
 <ul class="simple">
@@ -180,11 +183,14 @@
 <h2>Unassign a Floating IP<a class="headerlink" href="#unassign-a-floating-ip" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="do.floating_ip.unassign">
-<code class="descclassname">do.floating_ip.</code><code class="descname">unassign</code><span class="sig-paren">(</span><em>ip</em><span class="sig-paren">)</span><a class="headerlink" href="#do.floating_ip.unassign" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">do.floating_ip.</code><code class="descname">unassign</code><span class="sig-paren">(</span><em>ip</em>, <em>wait=False</em>, <em>poll=5</em>, <em>timeout=300</em><span class="sig-paren">)</span><a class="headerlink" href="#do.floating_ip.unassign" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <ul class="simple">
 <li><em>ip</em> - string - The public IP address of the Floating IP.</li>
+<li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
+<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
 <ul class="simple">
@@ -215,6 +221,9 @@
 
 <ul class="simple">
 <li><em>ip</em> - string - The public IP address of the Floating IP.</li>
+<li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
+<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
 <ul class="simple">
@@ -329,7 +338,7 @@
         <li class="right" >
           <a href="droplet.html" title="Droplet (do.droplet)"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.4.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

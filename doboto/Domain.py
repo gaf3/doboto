@@ -15,11 +15,12 @@ class Domain(Endpoint):
     related: https://developers.digitalocean.com/documentation/v2/#domains
     """
 
-    def __init__(self, token, url, agent):
+    def __init__(self, do, token, url, agent):
         """
-        Takes token and agent and sets its URI for domain interaction.
+        Takes token and agent and sets its DO for reference and URI for domain interaction.
         """
         super(Domain, self).__init__(token, agent)
+        self.do = do
         self.uri = "{}/domains".format(url)
 
     def list(self):
@@ -59,6 +60,37 @@ class Domain(Endpoint):
         }
 
         return self.request(self.uri, "domain", 'POST', attribs=attribs)
+
+    def present(self, name, ip_address):
+        """
+        description: Create a new Domain if name doesn't already exist
+
+        in:
+            - name - string - The domain name to add to the DigitalOcean DNS management interface. The name must be unique in DigitalOcean's DNS system. The request will fail if the name has already been taken.
+            - ip_address - string - This attribute contains the IP address you want the domain to point to.
+
+        out:
+            A tuple of Domain dict's, the intended, and created (None if already exists):
+                - name - string - The name of the domain itself. This should follow the standard domain format of domain.TLD. For instance, example.com is a valid domain name.
+                - ttl - number - This value is the time to live for the records on this domain, in seconds. This defines the time frame that clients can cache queried information before a refresh should be requested.
+                - zone_file - string - This attribute contains the complete contents of the zone file for the selected domain. Individual domain record resources should be used to get more granular control over records. However, this attribute can also be used to get information about the SOA record, which is created automatically and is not accessible as an individual record resource.
+
+        related: https://developers.digitalocean.com/documentation/v2/#create-a-new-domain
+        """
+
+        domains = self.list()
+
+        existing = None
+        for domain in domains:
+            if name == domain["name"]:
+                existing = domain
+                break
+
+        if existing is not None:
+            return (existing, None)
+
+        created = self.create(name, ip_address)
+        return (created, created)
 
     def info(self, name):
         """

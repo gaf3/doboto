@@ -9,7 +9,7 @@ DOBOTO was created to be a feature complete Python API to the DigitalOcean RESTf
 While there are several existing projects along these lines, we at DigitalOcean felt they weren't
 feature complete and weren't being updated as the DigitalOcean API grew.
 
-With DOBOTO, we aim to fix that. 
+With DOBOTO, we aim to fix that.
 
 **Simple straight forward API**::
 
@@ -47,7 +47,9 @@ For more information, see the documentation for each class:
 
 .. toctree::
    :maxdepth: 1
-
+   :name: mastertoc
+   :caption: Table of Contents
+  
    do
    account
    action
@@ -87,4 +89,4 @@ expectations aren't met:
         raise DOBOTOException(result=response.json())
     doboto.DOBOTOException.DOBOTOException: DO API Error: {u'message': u'Unable to authenticate you.', u'id': u'unauthorized'}
 
-The JSON result (second part of the string output) is accessible via the result`\ property.
+The JSON result (second part of the string output) is accessible via the result property.

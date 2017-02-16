@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Domain (do.domain) &#8212; DOBOTO 0.3.1 documentation</title>
+    <title>Domain (do.domain) &#8212; DOBOTO 0.4.0 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.3.1',
+        VERSION:     '0.4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="action.html" title="Action (do.action)"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.4.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -90,6 +90,31 @@
 <p>Returns:</p>
 <ul class="simple">
 <li>A Domain dict<ul>
+<li><em>name</em> - string - The name of the domain itself. This should follow the standard domain format of domain.TLD. For instance, example.com is a valid domain name.</li>
+<li><em>ttl</em> - number - This value is the time to live for the records on this domain, in seconds. This defines the time frame that clients can cache queried information before a refresh should be requested.</li>
+<li><em>zone_file</em> - string - This attribute contains the complete contents of the zone file for the selected domain. Individual domain record resources should be used to get more granular control over records. However, this attribute can also be used to get information about the SOA record, which is created automatically and is not accessible as an individual record resource.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#create-a-new-domain">https://developers.digitalocean.com/documentation/v2/#create-a-new-domain</a></li>
+</ul>
+</div>
+<div class="section" id="create-a-new-domain-if-name-doesn-t-already-exist">
+<h2>Create a new Domain if name doesn&#8217;t already exist<a class="headerlink" href="#create-a-new-domain-if-name-doesn-t-already-exist" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.domain.present">
+<code class="descclassname">do.domain.</code><code class="descname">present</code><span class="sig-paren">(</span><em>name</em>, <em>ip_address</em><span class="sig-paren">)</span><a class="headerlink" href="#do.domain.present" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>name</em> - string - The domain name to add to the DigitalOcean DNS management interface. The name must be unique in DigitalOcean&#8217;s DNS system. The request will fail if the name has already been taken.</li>
+<li><em>ip_address</em> - string - This attribute contains the IP address you want the domain to point to.</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A tuple of Domain dict&#8217;s, the intended, and created (None if already exists)<ul>
 <li><em>name</em> - string - The name of the domain itself. This should follow the standard domain format of domain.TLD. For instance, example.com is a valid domain name.</li>
 <li><em>ttl</em> - number - This value is the time to live for the records on this domain, in seconds. This defines the time frame that clients can cache queried information before a refresh should be requested.</li>
 <li><em>zone_file</em> - string - This attribute contains the complete contents of the zone file for the selected domain. Individual domain record resources should be used to get more granular control over records. However, this attribute can also be used to get information about the SOA record, which is created automatically and is not accessible as an individual record resource.</li>
@@ -309,6 +334,7 @@
 <li><a class="reference internal" href="#">Domain (do.domain)</a><ul>
 <li><a class="reference internal" href="#list-all-domains">List all Domains</a></li>
 <li><a class="reference internal" href="#create-a-new-domain">Create a new Domain</a></li>
+<li><a class="reference internal" href="#create-a-new-domain-if-name-doesn-t-already-exist">Create a new Domain if name doesn&#8217;t already exist</a></li>
 <li><a class="reference internal" href="#retrieve-an-existing-domain">Retrieve an existing Domain</a></li>
 <li><a class="reference internal" href="#delete-a-domain">Delete a Domain</a></li>
 <li><a class="reference internal" href="#list-all-domain-records">List all Domain Records</a></li>
@@ -359,7 +385,7 @@
         <li class="right" >
           <a href="action.html" title="Action (do.action)"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.4.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

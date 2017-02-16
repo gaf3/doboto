@@ -19,11 +19,12 @@ class Action(Endpoint):
     related: https://developers.digitalocean.com/documentation/v2/#actions
     """
 
-    def __init__(self, token, url, agent):
+    def __init__(self, do, token, url, agent):
         """
-        Takes token and agent and sets its URI for action interaction.
+        Takes token and agent and sets its DO for reference and URI for action interaction.
         """
         super(Action, self).__init__(token, agent)
+        self.do = do
         self.uri = "%s/actions" % url
 
     def list(self):

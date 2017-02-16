@@ -16,11 +16,12 @@ class Region(Endpoint):
     related: https://developers.digitalocean.com/documentation/v2/#regions
     """
 
-    def __init__(self, token, url, agent):
+    def __init__(self, do, token, url, agent):
         """
-        Takes token and agent and sets its URI for floating ip interaction.
+        Takes token and agent and sets its DO for reference and URI for floating ip interaction.
         """
         super(Region, self).__init__(token, agent)
+        self.do = do
         self.uri = "%s/regions" % url
 
     def list(self):

@@ -45,7 +45,7 @@ Related:
 Create a new volume
 ----------------------------------------------------------------------------------------------------
 
-.. method:: do.volume.create(attribs=None)
+.. method:: do.volume.create(attribs, wait=False, poll=5, timeout=300)
 
 - *attribs* - dict - Volume information to create by
 
@@ -59,10 +59,68 @@ Create a new volume
 
   - *snapshot_id* - string - The unique identifier for the volume snapshot from which to create the volume. Should not be specified with a region_id. -
 
+- *wait* - boolean - Whether to wait until the droplet is ready
+
+- *poll* - number - Number of seconds between checks
+
+- *timeout* - number - How many seconds before giving up
+
 
 Returns:
 
 - A Volume dict
+
+  - *id* - string - The unique identifier for the Block Storage volume.
+
+  - *region* - dict - The region that the Block Storage volume is located in. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned.
+
+  - *droplet_ids* - list - A list containing the IDs of the Droplets the volume is attached to. Note that at this time, a volume can only be attached to a single Droplet.
+
+  - *name* - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and "-", up to a limit of 64 characters.
+
+  - *description* - string - An optional free-form text field to describe a Block Storage volume.
+
+  - *size_gigabytes* - number - The size of the Block Storage volume in GiB (1024^3).
+
+  - *created_at* - string - A time value given in ISO8601 combined date and time format that represents when the Block Storage volume was created.
+
+  - *droplet_ids* - list - This attribute is a list of the Droplets that the volume is attached to.
+
+
+
+Related:
+
+* `<https://developers.digitalocean.com/documentation/v2/#create-a-new-block-storage-volume>`_
+
+
+
+Create a new volume if name not already present
+----------------------------------------------------------------------------------------------------
+
+.. method:: do.volume.present(attribs, wait=False, poll=5, timeout=300)
+
+- *attribs* - dict - Volume information to create by
+
+  - *size_gigabytes* - number - The size of the Block Storage volume in GiB (1024^3). - required
+
+  - *name* - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and "-", up to a limit of 64 characters. - required
+
+  - *description* - string - An optional free-form text field to describe a Block Storage volume. -
+
+  - *region* - string - The region where the Block Storage volume will be created. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned. Should not be specified with a snapshot_id. -
+
+  - *snapshot_id* - string - The unique identifier for the volume snapshot from which to create the volume. Should not be specified with a region_id. -
+
+- *wait* - boolean - Whether to wait until the droplet is ready
+
+- *poll* - number - Number of seconds between checks
+
+- *timeout* - number - How many seconds before giving up
+
+
+Returns:
+
+- A tuple of Volume dict's, the intended and created (None if already exists)
 
   - *id* - string - The unique identifier for the Block Storage volume.
 
@@ -195,11 +253,17 @@ Related:
 Create a snpahot for a volume
 ----------------------------------------------------------------------------------------------------
 
-.. method:: do.volume.snapshot_create(id, snapshot_name)
+.. method:: do.volume.snapshot_create(id, snapshot_name, wait=False, poll=5, timeout=300)
 
 - *id* - number - The id of the volume
 
 - *snapshot_name* - string - The name of the snapshot
+
+- *wait* - boolean - Whether to wait until the droplet is ready
+
+- *poll* - number - Number of seconds between checks
+
+- *timeout* - number - How many seconds before giving up
 
 
 Returns:
@@ -233,7 +297,7 @@ Related:
 Attach a volume by id or name to a droplet
 ----------------------------------------------------------------------------------------------------
 
-.. method:: do.volume.attach(id=None, name=None, region=None, droplet_id=None)
+.. method:: do.volume.attach(id=None, name=None, region=None, droplet_id=None, wait=False, poll=5, timeout=300)
 
 - *id* - number - The id of the volume
 
@@ -242,6 +306,12 @@ Attach a volume by id or name to a droplet
 - *region* - string - The region slug of the volume if no id
 
 - *droplet_id* - number - The id of the droplet
+
+- *wait* - boolean - Whether to wait until the droplet is ready
+
+- *poll* - number - Number of seconds between checks
+
+- *timeout* - number - How many seconds before giving up
 
 
 Returns:
@@ -279,7 +349,7 @@ Related:
 Remove a volume by id or name from a droplet
 ----------------------------------------------------------------------------------------------------
 
-.. method:: do.volume.detach(id=None, name=None, region=None, droplet_id=None)
+.. method:: do.volume.detach(id=None, name=None, region=None, droplet_id=None, wait=False, poll=5, timeout=300)
 
 - *id* - number - The id of the volume
 
@@ -288,6 +358,12 @@ Remove a volume by id or name from a droplet
 - *region* - string - The region slug of the volume if no id
 
 - *droplet_id* - number - The id of the droplet
+
+- *wait* - boolean - Whether to wait until the droplet is ready
+
+- *poll* - number - Number of seconds between checks
+
+- *timeout* - number - How many seconds before giving up
 
 
 Returns:
@@ -325,7 +401,7 @@ Related:
 Resize a volume
 ----------------------------------------------------------------------------------------------------
 
-.. method:: do.volume.resize(id, size, region=None)
+.. method:: do.volume.resize(id, size, region=None, wait=False, poll=5, timeout=300)
 
 - *id* - number - The id of the volume
 

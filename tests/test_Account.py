@@ -19,9 +19,10 @@ class TestAccount(TestCase):
 
         self.test_url = "http://abc.example.com"
         self.test_uri = "{}/account".format(self.test_url)
+        self.test_do = "do"
         self.test_token = "abc123"
         self.test_agent = "Unit"
-        self.instantiate_args = (self.test_token, self.test_url, self.test_agent)
+        self.instantiate_args = (self.test_do, self.test_token, self.test_url, self.test_agent)
 
         self.klass_name = "Account"
         self.klass = getattr(Account, self.klass_name)

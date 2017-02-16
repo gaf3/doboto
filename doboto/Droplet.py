@@ -1,7 +1,9 @@
 """This holds the Droplet class."""
 
+import time
+import copy
 from .Endpoint import Endpoint
-
+from .DOBOTOException import DOBOTOException
 
 class Droplet(Endpoint):
     """
@@ -16,11 +18,12 @@ class Droplet(Endpoint):
     related: https://developers.digitalocean.com/documentation/v2/#droplets
     """
 
-    def __init__(self, token, url, agent):
+    def __init__(self, do, token, url, agent):
         """
-        Takes token and agent and sets its URI for droplet interaction.
+        Takes token and agent and sets its DO for reference and URI for droplet interaction.
         """
         super(Droplet, self).__init__(token, agent)
+        self.do = do
         self.uri = "%s/droplets" % url
         self.reports = "%s/reports" % url
 
@@ -135,12 +138,36 @@ class Droplet(Endpoint):
 
         return self.pages(uri, "neighbors")
 
-    def create(self, attribs=None):
+    def ready(self, droplet, attribs):
+        """
+        Determine if a droplet is ready
+        """
+
+        if droplet["status"] == "new":
+            return False
+
+        if "private_networking" in attribs and attribs["private_networking"]:
+            found = False
+            for v4 in droplet["networks"]["v4"]:
+                if v4["type"] == "private":
+                    found = True
+            if not found:
+                return False
+
+        if "ipv6" in attribs and attribs["ipv6"] and "v6" not in droplet["networks"]:
+            return False
+
+        if "tags" in attribs and attribs["tags"] and len(attribs["tags"]) != len(droplet["tags"]):
+            return False
+
+        return True
+
+    def create(self, attribs, wait=False, poll=5, timeout=300):
         """
         description: Create a new Droplet or multiple Droplets
 
         in:
-            attribs - dict - The data of the Droplet:
+            - attribs - dict - The data of the Droplet:
                 - name - string - The human-readable string you wish to use when displaying the Droplet name. The name, if set to a domain name managed in the DigitalOcean DNS management system, will configure a PTR record for the Droplet. The name set during creation will also determine the hostname for the Droplet in its internal configuration. - if single droplet
                 - names - list - A list of human human-readable strings you wish to use when displaying the Droplet name. Each name, if set to a domain name managed in the DigitalOcean DNS management system, will configure a PTR record for the Droplet. Each name set during creation will also determine the hostname for the Droplet in its internal configuration. - if multiple droplets
                 - region - string - The unique slug identifier for the region that you wish to deploy in. - true
@@ -154,9 +181,12 @@ class Droplet(Endpoint):
                 - monitoring - bool - A boolean indicating whether to install the DigitalOcean agent for monitoring. -
                 - volume - list - A flat list including the unique string identifier for each Block Storage volume to be attached to the Droplet. At the moment a volume can only be attached to a single Droplet. -
                 - tags - list - A flat list of tag names as strings to apply to the Droplet after it is created. Tag names can either be existing or new tags.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
-            A Droplet dict:
+            A Droplet dict if name is sent, or a list of Droplet dict's in names is sent:
                 - id - number - A unique identifier for each Droplet instance. This is automatically generated upon Droplet creation.
                 - name - string - The human-readable name set for the Droplet instance.
                 - memory - number - Memory of the Droplet in megabytes.
@@ -183,13 +213,160 @@ class Droplet(Endpoint):
             - https://developers.digitalocean.com/documentation/v2/#create-multiple-droplets
         """
 
-        if attribs is None:
-            attribs = {}
+        if "name" in attribs:
 
-        if "names" in attribs:
-            return self.request(self.uri, "droplets", 'POST', attribs=attribs)
+            droplet = self.request(self.uri, "droplet", 'POST', attribs=attribs)
+
+            start_time = time.time()
+
+            while wait and not self.ready(droplet):
+
+                time.sleep(poll)
+                try:
+                    droplet = self.info(droplet["id"])
+                except:
+                    pass
+
+                if time.time() - start_time > timeout:
+                    raise DOBOTOException("Timeout on polling", droplet)
+
+            return droplet
+
+        elif "names" in attribs:
+
+            droplets = self.request(self.uri, "droplets", 'POST', attribs=attribs)
+
+            start_time = time.time()
+
+            info = [index for index, droplet in enumerate(droplets) if not self.ready(droplet)]
+
+            while wait and len(info) > 0:
+
+                time.sleep(poll)
+
+                for index in info:
+                    try:
+                        droplets[index] = self.info(droplets[index]["id"])
+                    except:
+                        pass
+
+                if time.time() - start_time > timeout:
+                    raise DOBOTOException("Timeout on polling", droplets)
+
+                info = [index for index, droplet in enumerate(droplets) if not self.ready(droplet)]
+
+            return droplets
+
         else:
-            return self.request(self.uri, "droplet", 'POST', attribs=attribs)
+
+            raise ValueError("name or names must be specified")
+
+    def present(self, attribs, wait=False, poll=5, timeout=300):
+        """
+        description: Create a new Droplet or multiple Droplets if not already existing
+
+        in:
+            - attribs - dict - The data of the Droplet:
+                - name - string - The human-readable string you wish to use when displaying the Droplet name. The name, if set to a domain name managed in the DigitalOcean DNS management system, will configure a PTR record for the Droplet. The name set during creation will also determine the hostname for the Droplet in its internal configuration. - if single droplet
+                - names - list - A list of human human-readable strings you wish to use when displaying the Droplet name. Each name, if set to a domain name managed in the DigitalOcean DNS management system, will configure a PTR record for the Droplet. Each name set during creation will also determine the hostname for the Droplet in its internal configuration. - if multiple droplets
+                - region - string - The unique slug identifier for the region that you wish to deploy in. - true
+                - size - string - The unique slug identifier for the size that you wish to select for this Droplet. - true
+                - image - number (if using an image ID), or String (if using a public image slug) - The image ID of a public or private image, or the unique slug identifier for a public image. This image will be the base image for your Droplet. - true
+                - ssh_keys - list - A list containing the IDs or fingerprints of the SSH keys that you wish to embed in the Droplet's root account upon creation. -
+                - backups - bool - A boolean indicating whether automated backups should be enabled for the Droplet. Automated backups can only be enabled when the Droplet is created. -
+                - ipv6 - bool - A boolean indicating whether IPv6 is enabled on the Droplet. -
+                - private_networking - bool - A boolean indicating whether private networking is enabled for the Droplet. Private networking is currently only available in certain regions. -
+                - user_data - string - A string of the desired User Data for the Droplet. User Data is currently only available in regions with metadata listed in their features. -
+                - monitoring - bool - A boolean indicating whether to install the DigitalOcean agent for monitoring. -
+                - volume - list - A flat list including the unique string identifier for each Block Storage volume to be attached to the Droplet. At the moment a volume can only be attached to a single Droplet. -
+                - tags - list - A flat list of tag names as strings to apply to the Droplet after it is created. Tag names can either be existing or new tags.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
+
+        out:
+            A tuple of two Droplet dict's if name is sent (second is None if already present), or a tuple of two lists of Droplet dict's if names is sent, the first being all, the second being those created, (empty if all are present):
+                - id - number - A unique identifier for each Droplet instance. This is automatically generated upon Droplet creation.
+                - name - string - The human-readable name set for the Droplet instance.
+                - memory - number - Memory of the Droplet in megabytes.
+                - vcpus - number - The number of virtual CPUs.
+                - disk - number - The size of the Droplet's disk in gigabytes.
+                - locked - boolean - A boolean value indicating whether the Droplet has been locked, preventing actions by users.
+                - created_at - string - A time value given in ISO8601 combined date and time format that represents when the Droplet was created.
+                - status - string - A status string indicating the state of the Droplet instance. This may be "new", "active", "off", or "archive".
+                - backup_ids - list - A list of backup IDs of any backups that have been taken of the Droplet instance. Droplet backups are enabled at the time of the instance creation.
+                - snapshot_ids - list - A list of snapshot IDs of any snapshots created from the Droplet instance.
+                - features - list - A list of features enabled on this Droplet.
+                - region - dict - The region that the Droplet instance is deployed in. When setting a region, the value should be the slug identifier for the region. When you query a Droplet, the entire region dict will be returned.
+                - image - dict - The base image used to create the Droplet instance. When setting an image, the value is set to the image id or slug. When querying the Droplet, the entire image dict will be returned.
+                - size - dict - The current size dict describing the Droplet. When setting a size, the value is set to the size slug. When querying the Droplet, the entire size dict will be returned. Note that the disk volume of a droplet may not match the size's disk due to Droplet resize actions. The disk attribute on the Droplet should always be referenced.
+                - size_slug - string - The unique slug identifier for the size of this Droplet.
+                - networks - dict - The details of the network that are configured for the Droplet instance. This is an dict that contains keys for IPv4 and IPv6. The value of each of these is a list that contains dict's describing an individual IP resource allocated to the Droplet. These will define attributes like the IP address, netmask, and gateway of the specific network depending on the type of network it is.
+                - kernel - nullable dict - The current kernel. This will initially be set to the kernel of the base image when the Droplet is created.
+                - next_backup_window - nullable dict - The details of the Droplet's backups feature, if backups are configured for the Droplet. This dict contains keys for the start and end times of the window during which the backup will start.
+                - tags - list - A list of Tags the Droplet has been tagged with.
+                - volume_ids - list - A flat list including the unique identifier for each Block Storage volume attached to the Droplet.
+
+        related:
+            - https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet
+            - https://developers.digitalocean.com/documentation/v2/#create-multiple-droplets
+        """
+
+        droplets = self.list()
+
+        if "name" in attribs:
+
+            existing = None
+            for droplet in droplets:
+                if attribs["name"] == droplet["name"]:
+                    existing = droplet
+                    break
+
+            if existing is not None:
+                return (existing, None)
+
+            created = self.create(attribs, wait, poll, timeout)
+            return (created, created)
+
+        elif "names" in attribs:
+
+            existing = []
+            existing_lookup = {}
+            create = copy.deepcopy(attribs)
+            create["names"] = []
+
+            for name in attribs["names"]:
+                exists = False
+                for droplet in droplets:
+                    if name == droplet["name"]:
+                        exists = True
+                        existing.append(droplet)
+                        existing_lookup[name] = droplet
+                        break
+                if not exists:
+                    create["names"].append(name)
+
+            if not create["names"]:
+                return (existing, [])
+
+            created = self.create(create, wait, poll, timeout)
+            created_lookup = {droplet["name"]: droplet for droplet in created}
+
+            merged = []
+
+            for name in attribs["names"]:
+                if name in existing_lookup:
+                    merged.append(existing_lookup[name])
+                elif name in created_lookup:
+                    merged.append(created_lookup[name])
+                else:
+                    raise DOBOTOException("Requested droplet '%s' not found" % name, created)
+
+            return (merged, created)
+
+        else:
+
+            raise ValueError("name or names must be specified")
 
     def info(self, id):
         """
@@ -248,7 +425,10 @@ class Droplet(Endpoint):
             raise ValueError("id or tag_name must be specified")
         return self.request(uri, request_method='DELETE')
 
-    def action(self, id=None, tag_name=None, type=None, attribs=None):
+    def action(
+        self, id=None, tag_name=None, type=None, attribs=None,
+        wait=False, poll=5, timeout=300
+    ):
         """
         Generic action to reduce code elsewhere
         """
@@ -261,12 +441,18 @@ class Droplet(Endpoint):
 
         attribs["type"] = type
 
-        if tag_name is not None:
-            uri = "%s/actions?tag_name=%s" % (self.uri, tag_name)
-            return self.request(uri, "actions", 'POST', attribs=attribs)
-        elif id is not None:
+        if id is not None:
             uri = "%s/%s/actions" % (self.uri, id)
-            return self.request(uri, "action", 'POST', attribs=attribs)
+            return self.action_result(
+                self.request(uri, "action", 'POST', attribs=attribs),
+                wait, poll, timeout
+            )
+        elif tag_name is not None:
+            uri = "%s/actions?tag_name=%s" % (self.uri, tag_name)
+            return self.actions_result(
+                self.request(uri, "actions", 'POST', attribs=attribs),
+                wait, poll, timeout
+            )
         else:
             raise ValueError("id or tag_name must be specified")
 
@@ -294,13 +480,16 @@ class Droplet(Endpoint):
         uri = "%s/%s/backups" % (self.uri, id)
         return self.pages(uri, "backups")
 
-    def backup_enable(self, id=None, tag_name=None):
+    def backup_enable(self, id=None, tag_name=None, wait=False, poll=5, timeout=300):
         """
         description: Enable Backups
 
         in:
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             If by id, an Action dict. If by tag, a list of Action dict's:
@@ -317,15 +506,21 @@ class Droplet(Endpoint):
         related: https://developers.digitalocean.com/documentation/v2/#enable-backups
         """
 
-        return self.action(id=id, tag_name=tag_name, type="enable_backups")
+        return self.action(
+            id=id, tag_name=tag_name, type="enable_backups",
+            wait=wait, poll=poll, timeout=timeout
+        )
 
-    def backup_disable(self, id=None, tag_name=None):
+    def backup_disable(self, id=None, tag_name=None, wait=False, poll=5, timeout=300):
         """
         description: Disable Backups
 
         in:
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             If by id, an Action dict. If by tag, a list of Action dict's:
@@ -342,9 +537,12 @@ class Droplet(Endpoint):
         related: https://developers.digitalocean.com/documentation/v2/#disable-backups
         """
 
-        return self.action(id=id, tag_name=tag_name, type="disable_backups")
+        return self.action(
+            id=id, tag_name=tag_name, type="disable_backups",
+            wait=wait, poll=poll, timeout=timeout
+        )
 
-    def reboot(self, id):
+    def reboot(self, id, wait=False, poll=5, timeout=300):
         """
         description: Reboot a Droplet
 
@@ -352,6 +550,9 @@ class Droplet(Endpoint):
 
         in:
             - id - number - The id of the Droplet
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             An Action dict:
@@ -369,9 +570,12 @@ class Droplet(Endpoint):
         """
         uri = "%s/%s/actions" % (self.uri, id)
         attribs = {"type": "reboot"}
-        return self.request(uri, "action", 'POST', attribs=attribs)
+        return self.action_result(
+            self.request(uri, "action", 'POST', attribs=attribs),
+            wait, poll, timeout
+        )
 
-    def shutdown(self, id=None, tag_name=None):
+    def shutdown(self, id=None, tag_name=None, wait=False, poll=5, timeout=300):
         """
         description: Shutdown a Droplet
 
@@ -384,6 +588,9 @@ class Droplet(Endpoint):
         in:
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             If by id, an Action dict. If by tag, a list of Action dict's:
@@ -400,15 +607,21 @@ class Droplet(Endpoint):
         related: https://developers.digitalocean.com/documentation/v2/#reboot-a-droplet
         """
 
-        return self.action(id=id, tag_name=tag_name, type="shutdown")
+        return self.action(
+            id=id, tag_name=tag_name, type="shutdown",
+            wait=wait, poll=poll, timeout=timeout
+        )
 
-    def power_on(self, id=None, tag_name=None):
+    def power_on(self, id=None, tag_name=None, wait=False, poll=5, timeout=300):
         """
         description: Power On a Droplet
 
         in:
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             If by id, an Action dict. If by tag, a list of Action dict's:
@@ -425,9 +638,12 @@ class Droplet(Endpoint):
         related: https://developers.digitalocean.com/documentation/v2/#power-on-a-droplet
         """
 
-        return self.action(id=id, tag_name=tag_name, type="power_on")
+        return self.action(
+            id=id, tag_name=tag_name, type="power_on",
+            wait=wait, poll=poll, timeout=timeout
+        )
 
-    def power_off(self, id=None, tag_name=None):
+    def power_off(self, id=None, tag_name=None, wait=False, poll=5, timeout=300):
         """
         description: Power Off a Droplet
 
@@ -438,6 +654,9 @@ class Droplet(Endpoint):
         in:
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             If by id, an Action dict. If by tag, a list of Action dict's:
@@ -454,9 +673,12 @@ class Droplet(Endpoint):
         related: https://developers.digitalocean.com/documentation/v2/#power-off-a-droplet
         """
 
-        return self.action(id=id, tag_name=tag_name, type="power_off")
+        return self.action(
+            id=id, tag_name=tag_name, type="power_off",
+            wait=wait, poll=poll, timeout=timeout
+        )
 
-    def power_cycle(self, id=None, tag_name=None):
+    def power_cycle(self, id=None, tag_name=None, wait=False, poll=5, timeout=300):
         """
         description: Power Cycle a Droplet
 
@@ -466,6 +688,9 @@ class Droplet(Endpoint):
         in:
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             If by id, an Action dict. If by tag, a list of Action dict's:
@@ -482,9 +707,12 @@ class Droplet(Endpoint):
         related: https://developers.digitalocean.com/documentation/v2/#power-cycle-a-droplet
         """
 
-        return self.action(id=id, tag_name=tag_name, type="power_cycle")
+        return self.action(
+            id=id, tag_name=tag_name, type="power_cycle",
+            wait=wait, poll=poll, timeout=timeout
+        )
 
-    def restore(self, id, image):
+    def restore(self, id, image, wait=False, poll=5, timeout=300):
         """
         description: Restore a Droplet
 
@@ -495,6 +723,9 @@ class Droplet(Endpoint):
         in:
             - id - number - The id of the Droplet
             - image - string if an image slug. number if an image ID. - An image slug or ID. This represents the image that the Droplet will use as a base.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             An Action dict:
@@ -519,14 +750,20 @@ class Droplet(Endpoint):
 
         attribs = {"type": "restore", "image": image}
 
-        return self.request(uri, "action", 'POST', attribs=attribs)
+        return self.action_result(
+            self.request(uri, "action", 'POST', attribs=attribs),
+            wait, poll, timeout
+        )
 
-    def password_reset(self, id):
+    def password_reset(self, id, wait=False, poll=5, timeout=300):
         """
         description: Password Reset a Droplet
 
         in:
             - id - number - The id of the Droplet
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             An Action dict:
@@ -544,9 +781,12 @@ class Droplet(Endpoint):
         """
         uri = "%s/%s/actions" % (self.uri, id)
         attribs = {"type": "password_reset"}
-        return self.request(uri, "action", 'POST', attribs=attribs)
+        return self.action_result(
+            self.request(uri, "action", 'POST', attribs=attribs),
+            wait, poll, timeout
+        )
 
-    def resize(self, id, size, disk=False):
+    def resize(self, id, size, disk=False, wait=False, poll=5, timeout=300):
         """
         description: Resize a Droplet
 
@@ -557,6 +797,9 @@ class Droplet(Endpoint):
             - id - number - The id of the Droplet
             - disk - bool - Whether to increase disk size
             - size - string - The size slug that you want to resize to. - true
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             An Action dict:
@@ -575,9 +818,12 @@ class Droplet(Endpoint):
         uri = "%s/%s/actions" % (self.uri, id)
         disk = str(disk).lower()
         attribs = {"type": "resize", "size": "%s" % size, "disk": disk}
-        return self.request(uri, "action", 'POST', attribs=attribs)
+        return self.action_result(
+            self.request(uri, "action", 'POST', attribs=attribs),
+            wait, poll, timeout
+        )
 
-    def rebuild(self, id, image):
+    def rebuild(self, id, image, wait=False, poll=5, timeout=300):
         """
         description: Rebuild a Droplet
 
@@ -586,6 +832,9 @@ class Droplet(Endpoint):
         in:
             - id - number - The id of the Droplet
             - image - string if an image slug. number if an image ID. - An image slug or ID. This represents the image that the Droplet will use as a base.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             An Action dict:
@@ -609,15 +858,21 @@ class Droplet(Endpoint):
             pass
 
         attribs = {"type": "rebuild", "image": image}
-        return self.request(uri, "action", 'POST', attribs=attribs)
+        return self.action_result(
+            self.request(uri, "action", 'POST', attribs=attribs),
+            wait, poll, timeout
+        )
 
-    def rename(self, id, name):
+    def rename(self, id, name, wait=False, poll=5, timeout=300):
         """
         description: Rename a Droplet
 
         in:
             - id - number - The id of the Droplet
             - name - string - The new name for the Droplet.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             An Action dict:
@@ -635,7 +890,10 @@ class Droplet(Endpoint):
         """
         uri = "%s/%s/actions" % (self.uri, id)
         attribs = {"type": "rename", "name": "%s" % name}
-        return self.request(uri, "action", 'POST', attribs=attribs)
+        return self.action_result(
+            self.request(uri, "action", 'POST', attribs=attribs),
+            wait, poll, timeout
+        )
 
     def kernel_list(self, id):
         """
@@ -655,13 +913,16 @@ class Droplet(Endpoint):
         uri = "%s/%s/kernels" % (self.uri, id)
         return self.pages(uri, "kernels")
 
-    def kernel_update(self, id, kernel_id):
+    def kernel_update(self, id, kernel_id, wait=False, poll=5, timeout=300):
         """
         description: Change the Kernel
 
         in:
             - id - number - The id of the Droplet
             - kernel - number - A unique number used to identify and reference a specific kernel. - true
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             An Action dict:
@@ -679,15 +940,21 @@ class Droplet(Endpoint):
         """
         uri = "%s/%s/actions" % (self.uri, id)
         attribs = {"type": "change_kernel", "kernel": kernel_id}
-        return self.request(uri, "action", 'POST', attribs=attribs)
+        return self.action_result(
+            self.request(uri, "action", 'POST', attribs=attribs),
+            wait, poll, timeout
+        )
 
-    def ipv6_enable(self, id=None, tag_name=None):
+    def ipv6_enable(self, id=None, tag_name=None, wait=False, poll=5, timeout=300):
         """
         description: Enable IPv6
 
         in:
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             If by id, an Action dict. If by tag, a list of Action dict's:
@@ -703,15 +970,21 @@ class Droplet(Endpoint):
 
         related: https://developers.digitalocean.com/documentation/v2/#enable-ipv6
         """
-        return self.action(id=id, tag_name=tag_name, type="enable_ipv6")
+        return self.action(
+            id=id, tag_name=tag_name, type="enable_ipv6",
+            wait=wait, poll=poll, timeout=timeout
+        )
 
-    def private_networking_enable(self, id=None, tag_name=None):
+    def private_networking_enable(self, id=None, tag_name=None, wait=False, poll=5, timeout=300):
         """
         description: Enable Private Networking
 
         in:
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             If by id, an Action dict. If by tag, a list of Action dict's:
@@ -727,7 +1000,10 @@ class Droplet(Endpoint):
 
         related: https://developers.digitalocean.com/documentation/v2/#enable-private-networking
         """
-        return self.action(id=id, tag_name=tag_name, type="enable_private_networking")
+        return self.action(
+            id=id, tag_name=tag_name, type="enable_private_networking",
+            wait=wait, poll=poll, timeout=timeout
+        )
 
     def snapshot_list(self, id):
         """
@@ -753,7 +1029,10 @@ class Droplet(Endpoint):
         uri = "%s/%s/snapshots" % (self.uri, id)
         return self.pages(uri, "snapshots")
 
-    def snapshot_create(self, id=None, tag_name=None, snapshot_name=None):
+    def snapshot_create(
+        self, id=None, tag_name=None, snapshot_name=None,
+        wait=False, poll=5, timeout=300
+    ):
         """
         description: Snapshot a Droplet
 
@@ -763,6 +1042,9 @@ class Droplet(Endpoint):
         in:
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             If by id, an Action dict. If by tag, a list of Action dict's:
@@ -782,7 +1064,8 @@ class Droplet(Endpoint):
             raise ValueError("snapshot_name must be specified")
 
         return self.action(
-            id=id, tag_name=tag_name, type="snapshot", attribs={"name": snapshot_name}
+            id=id, tag_name=tag_name, type="snapshot", attribs={"name": snapshot_name},
+            wait=wait, poll=poll, timeout=timeout
         )
 
     def action_list(self, id):

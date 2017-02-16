@@ -111,11 +111,17 @@ Related:
 Assign a Floating IP to a Droplet
 ----------------------------------------------------------------------------------------------------
 
-.. method:: do.floating_ip.assign(ip, droplet_id)
+.. method:: do.floating_ip.assign(ip, droplet_id, wait=False, poll=5, timeout=300)
 
 - *ip* - string - The public IP address of the Floating IP.
 
 - *droplet_id* - int - The ID of Droplet that the Floating IP will be assigned to.
+
+- *wait* - boolean - Whether to wait until the droplet is ready
+
+- *poll* - number - Number of seconds between checks
+
+- *timeout* - number - How many seconds before giving up
 
 
 Returns:
@@ -151,9 +157,15 @@ Related:
 Unassign a Floating IP
 ----------------------------------------------------------------------------------------------------
 
-.. method:: do.floating_ip.unassign(ip)
+.. method:: do.floating_ip.unassign(ip, wait=False, poll=5, timeout=300)
 
 - *ip* - string - The public IP address of the Floating IP.
+
+- *wait* - boolean - Whether to wait until the droplet is ready
+
+- *poll* - number - Number of seconds between checks
+
+- *timeout* - number - How many seconds before giving up
 
 
 Returns:
@@ -192,6 +204,12 @@ List all actions for a Floating IP
 .. method:: do.floating_ip.action_list(ip)
 
 - *ip* - string - The public IP address of the Floating IP.
+
+- *wait* - boolean - Whether to wait until the droplet is ready
+
+- *poll* - number - Number of seconds between checks
+
+- *timeout* - number - How many seconds before giving up
 
 
 Returns:

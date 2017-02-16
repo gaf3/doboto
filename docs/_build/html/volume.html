@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Volume (do.volume) &#8212; DOBOTO 0.3.1 documentation</title>
+    <title>Volume (do.volume) &#8212; DOBOTO 0.4.0 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.3.1',
+        VERSION:     '0.4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="tag.html" title="Tag (do.tag)"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.4.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -83,7 +83,7 @@
 <h2>Create a new volume<a class="headerlink" href="#create-a-new-volume" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="do.volume.create">
-<code class="descclassname">do.volume.</code><code class="descname">create</code><span class="sig-paren">(</span><em>attribs=None</em><span class="sig-paren">)</span><a class="headerlink" href="#do.volume.create" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">do.volume.</code><code class="descname">create</code><span class="sig-paren">(</span><em>attribs</em>, <em>wait=False</em>, <em>poll=5</em>, <em>timeout=300</em><span class="sig-paren">)</span><a class="headerlink" href="#do.volume.create" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <ul class="simple">
@@ -95,10 +95,52 @@
 <li><em>snapshot_id</em> - string - The unique identifier for the volume snapshot from which to create the volume. Should not be specified with a region_id. -</li>
 </ul>
 </li>
+<li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
+<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
 <ul class="simple">
 <li>A Volume dict<ul>
+<li><em>id</em> - string - The unique identifier for the Block Storage volume.</li>
+<li><em>region</em> - dict - The region that the Block Storage volume is located in. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned.</li>
+<li><em>droplet_ids</em> - list - A list containing the IDs of the Droplets the volume is attached to. Note that at this time, a volume can only be attached to a single Droplet.</li>
+<li><em>name</em> - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and &#8220;-&#8221;, up to a limit of 64 characters.</li>
+<li><em>description</em> - string - An optional free-form text field to describe a Block Storage volume.</li>
+<li><em>size_gigabytes</em> - number - The size of the Block Storage volume in GiB (1024^3).</li>
+<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Block Storage volume was created.</li>
+<li><em>droplet_ids</em> - list - This attribute is a list of the Droplets that the volume is attached to.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#create-a-new-block-storage-volume">https://developers.digitalocean.com/documentation/v2/#create-a-new-block-storage-volume</a></li>
+</ul>
+</div>
+<div class="section" id="create-a-new-volume-if-name-not-already-present">
+<h2>Create a new volume if name not already present<a class="headerlink" href="#create-a-new-volume-if-name-not-already-present" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.volume.present">
+<code class="descclassname">do.volume.</code><code class="descname">present</code><span class="sig-paren">(</span><em>attribs</em>, <em>wait=False</em>, <em>poll=5</em>, <em>timeout=300</em><span class="sig-paren">)</span><a class="headerlink" href="#do.volume.present" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>attribs</em> - dict - Volume information to create by<ul>
+<li><em>size_gigabytes</em> - number - The size of the Block Storage volume in GiB (1024^3). - required</li>
+<li><em>name</em> - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and &#8220;-&#8221;, up to a limit of 64 characters. - required</li>
+<li><em>description</em> - string - An optional free-form text field to describe a Block Storage volume. -</li>
+<li><em>region</em> - string - The region where the Block Storage volume will be created. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned. Should not be specified with a snapshot_id. -</li>
+<li><em>snapshot_id</em> - string - The unique identifier for the volume snapshot from which to create the volume. Should not be specified with a region_id. -</li>
+</ul>
+</li>
+<li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
+<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>timeout</em> - number - How many seconds before giving up</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>A tuple of Volume dict&#8217;s, the intended and created (None if already exists)<ul>
 <li><em>id</em> - string - The unique identifier for the Block Storage volume.</li>
 <li><em>region</em> - dict - The region that the Block Storage volume is located in. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned.</li>
 <li><em>droplet_ids</em> - list - A list containing the IDs of the Droplets the volume is attached to. Note that at this time, a volume can only be attached to a single Droplet.</li>
@@ -202,12 +244,15 @@
 <h2>Create a snpahot for a volume<a class="headerlink" href="#create-a-snpahot-for-a-volume" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="do.volume.snapshot_create">
-<code class="descclassname">do.volume.</code><code class="descname">snapshot_create</code><span class="sig-paren">(</span><em>id</em>, <em>snapshot_name</em><span class="sig-paren">)</span><a class="headerlink" href="#do.volume.snapshot_create" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">do.volume.</code><code class="descname">snapshot_create</code><span class="sig-paren">(</span><em>id</em>, <em>snapshot_name</em>, <em>wait=False</em>, <em>poll=5</em>, <em>timeout=300</em><span class="sig-paren">)</span><a class="headerlink" href="#do.volume.snapshot_create" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <ul class="simple">
 <li><em>id</em> - number - The id of the volume</li>
 <li><em>snapshot_name</em> - string - The name of the snapshot</li>
+<li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
+<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
 <ul class="simple">
@@ -232,7 +277,7 @@
 <h2>Attach a volume by id or name to a droplet<a class="headerlink" href="#attach-a-volume-by-id-or-name-to-a-droplet" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="do.volume.attach">
-<code class="descclassname">do.volume.</code><code class="descname">attach</code><span class="sig-paren">(</span><em>id=None</em>, <em>name=None</em>, <em>region=None</em>, <em>droplet_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#do.volume.attach" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">do.volume.</code><code class="descname">attach</code><span class="sig-paren">(</span><em>id=None</em>, <em>name=None</em>, <em>region=None</em>, <em>droplet_id=None</em>, <em>wait=False</em>, <em>poll=5</em>, <em>timeout=300</em><span class="sig-paren">)</span><a class="headerlink" href="#do.volume.attach" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <ul class="simple">
@@ -240,6 +285,9 @@
 <li><em>name</em> - string - The name of the volume if no id</li>
 <li><em>region</em> - string - The region slug of the volume if no id</li>
 <li><em>droplet_id</em> - number - The id of the droplet</li>
+<li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
+<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
 <ul class="simple">
@@ -266,7 +314,7 @@
 <h2>Remove a volume by id or name from a droplet<a class="headerlink" href="#remove-a-volume-by-id-or-name-from-a-droplet" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="do.volume.detach">
-<code class="descclassname">do.volume.</code><code class="descname">detach</code><span class="sig-paren">(</span><em>id=None</em>, <em>name=None</em>, <em>region=None</em>, <em>droplet_id=None</em><span class="sig-paren">)</span><a class="headerlink" href="#do.volume.detach" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">do.volume.</code><code class="descname">detach</code><span class="sig-paren">(</span><em>id=None</em>, <em>name=None</em>, <em>region=None</em>, <em>droplet_id=None</em>, <em>wait=False</em>, <em>poll=5</em>, <em>timeout=300</em><span class="sig-paren">)</span><a class="headerlink" href="#do.volume.detach" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <ul class="simple">
@@ -274,6 +322,9 @@
 <li><em>name</em> - string - The name of the volume if no id</li>
 <li><em>region</em> - string - The region slug of the volume if no id</li>
 <li><em>droplet_id</em> - number - The id of the droplet</li>
+<li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
+<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
 <ul class="simple">
@@ -300,7 +351,7 @@
 <h2>Resize a volume<a class="headerlink" href="#resize-a-volume" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="do.volume.resize">
-<code class="descclassname">do.volume.</code><code class="descname">resize</code><span class="sig-paren">(</span><em>id</em>, <em>size</em>, <em>region=None</em><span class="sig-paren">)</span><a class="headerlink" href="#do.volume.resize" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">do.volume.</code><code class="descname">resize</code><span class="sig-paren">(</span><em>id</em>, <em>size</em>, <em>region=None</em>, <em>wait=False</em>, <em>poll=5</em>, <em>timeout=300</em><span class="sig-paren">)</span><a class="headerlink" href="#do.volume.resize" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <ul class="simple">
@@ -402,6 +453,7 @@
 <li><a class="reference internal" href="#">Volume (do.volume)</a><ul>
 <li><a class="reference internal" href="#list-all-volumes">List all volumes</a></li>
 <li><a class="reference internal" href="#create-a-new-volume">Create a new volume</a></li>
+<li><a class="reference internal" href="#create-a-new-volume-if-name-not-already-present">Create a new volume if name not already present</a></li>
 <li><a class="reference internal" href="#retrieve-an-existing-volume-by-id-or-name-and-region">Retrieve an existing volume by id or name and region</a></li>
 <li><a class="reference internal" href="#delete-a-volume-by-id-or-name-and-region">Delete a volume by id or name and region</a></li>
 <li><a class="reference internal" href="#list-snapshots-for-a-volume">List snapshots for a volume</a></li>
@@ -448,7 +500,7 @@
         <li class="right" >
           <a href="tag.html" title="Tag (do.tag)"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.4.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

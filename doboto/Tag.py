@@ -18,11 +18,12 @@ class Tag(Endpoint):
     related: https://developers.digitalocean.com/documentation/v2/#tags
     """
 
-    def __init__(self, token, url, agent):
+    def __init__(self, do, token, url, agent):
         """
-        Takes token and agent and sets its URI for tag interaction.
+        Takes token and agent and sets its DO for reference and URI for tag interaction.
         """
         super(Tag, self).__init__(token, agent)
+        self.do = do
         self.uri = "{}/tags".format(url)
 
     def list(self):
@@ -77,6 +78,40 @@ class Tag(Endpoint):
         attribs = {'name': name}
 
         return self.request(self.uri, "tag", 'POST', attribs)
+
+    def present(self, name):
+        """
+        description: Create a new Tag if not already present
+
+            Currently only a resource_type of 'droplet' is supported.  Thus, resource_id is
+            droplet id.
+
+        in:
+            - name - string - name of the Tag
+
+        out:
+            A tuple of Tag dict's, the intended and created (None if already exists):
+                - name - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.
+                - resources - list - An list of Resource dict's:
+                    - resource_id - string - The identifier of a resource
+                    - resource_type - string - The type of the resource
+
+        related: https://developers.digitalocean.com/documentation/v2/#create-a-new-tag
+        """
+
+        tags = self.list()
+
+        existing = None
+        for tag in tags:
+            if name == tag["name"]:
+                existing = tag
+                break
+
+        if existing is not None:
+            return (existing, None)
+
+        created = self.create(name)
+        return (created, created)
 
     def info(self, name):
         """

@@ -17,11 +17,12 @@ class Image(Endpoint):
     related: https://developers.digitalocean.com/documentation/v2/#images
     """
 
-    def __init__(self, token, url, agent):
+    def __init__(self, do, token, url, agent):
         """
-        Takes token and agent and sets its URI for floating ip interaction.
+        Takes token and agent and sets its DO for reference and URI for floating ip interaction.
         """
         super(Image, self).__init__(token, agent)
+        self.do = do
         self.uri = "%s/images" % url
 
     def list(self, type=None, private=None):
@@ -132,13 +133,16 @@ class Image(Endpoint):
 
         return self.request(uri, request_method="DELETE")
 
-    def transfer(self, id, region):
+    def transfer(self, id, region, wait=False, poll=5, timeout=300):
         """
         description: Transfer an Image to another Region
 
         in:
             - id - number - id of the Image
             - region - string - The region slug that represents the region target.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             An Action dictt:
@@ -156,16 +160,21 @@ class Image(Endpoint):
         """
         uri = self.uri + "/%s/actions" % id
 
-        return self.request(
-            uri, "action", request_method="POST", attribs={"type": "transfer", "region": region}
+        return self.action_result(
+            self.request(
+                uri, "action", request_method="POST", attribs={"type": "transfer", "region": region}
+            ), wait, poll, timeout
         )
 
-    def convert(self, id):
+    def convert(self, id, wait=False, poll=5, timeout=300):
         """
         description: Convert an Image to a Snapshot
 
         in:
             - id - number - id of the Image
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             An Action dict:
@@ -183,7 +192,10 @@ class Image(Endpoint):
         """
         uri = self.uri + "/%s/actions" % id
 
-        return self.request(uri, "action", request_method="POST", attribs={"type": "convert"})
+        return self.action_result(
+            self.request(uri, "action", request_method="POST", attribs={"type": "convert"}),
+            wait, poll, timeout
+        )
 
     def action_list(self, id):
         """

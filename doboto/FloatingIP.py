@@ -18,11 +18,12 @@ class FloatingIP(Endpoint):
     related: https://developers.digitalocean.com/documentation/v2/#floating-ips
     """
 
-    def __init__(self, token, url, agent):
+    def __init__(self, do, token, url, agent):
         """
-        Takes token and agent and sets its URI for floating ip interaction.
+        Takes token and agent and sets its DO for reference and URI for floating ip interaction.
         """
         super(FloatingIP, self).__init__(token, agent)
+        self.do = do
         self.uri = "{}/floating_ips".format(url)
 
     def list(self):
@@ -104,13 +105,16 @@ class FloatingIP(Endpoint):
 
         return self.request(uri, request_method='DELETE')
 
-    def assign(self, ip, droplet_id):
+    def assign(self, ip, droplet_id, wait=False, poll=5, timeout=300):
         """
         description: Assign a Floating IP to a Droplet
 
         in:
             - ip - string - The public IP address of the Floating IP.
             - droplet_id - int - The ID of Droplet that the Floating IP will be assigned to.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             An Action dict:
@@ -130,14 +134,20 @@ class FloatingIP(Endpoint):
         uri = "{}/{}/actions".format(self.uri, ip)
         attribs = {'type': 'assign', 'droplet_id': droplet_id}
 
-        return self.request(uri, "action", 'POST', attribs)
+        return self.action_result(
+            self.request(uri, "action", 'POST', attribs),
+            wait, poll, timeout
+        )
 
-    def unassign(self, ip):
+    def unassign(self, ip, wait=False, poll=5, timeout=300):
         """
         description: Unassign a Floating IP
 
         in:
             - ip - string - The public IP address of the Floating IP.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             An Action dict:
@@ -157,7 +167,10 @@ class FloatingIP(Endpoint):
         uri = "{}/{}/actions".format(self.uri, ip)
         attribs = {'type': 'unassign'}
 
-        return self.request(uri, "action", 'POST', attribs)
+        return self.action_result(
+            self.request(uri, "action", 'POST', attribs),
+            wait, poll, timeout
+        )
 
     def action_list(self, ip):
         """
@@ -165,6 +178,9 @@ class FloatingIP(Endpoint):
 
         in:
             - ip - string - The public IP address of the Floating IP.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks
+            - timeout - number - How many seconds before giving up
 
         out:
             A list of Action dict's:

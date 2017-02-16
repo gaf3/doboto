@@ -3,7 +3,7 @@ This module contains tests for the Endpoint class
 """
 
 from unittest import TestCase
-from mock import Mock, MagicMock, patch
+from mock import Mock, MagicMock, patch, call
 from doboto import Endpoint
 from doboto.DOBOTOException import DOBOTOException
 
@@ -192,3 +192,72 @@ class TestEndpoint(TestCase):
         self.assertRaises(
             DOBOTOException, endpoint.pages, "people", "items"
         )
+
+    @patch('time.sleep')
+    def test_action_result(self, mock_sleep):
+        """
+        action_result polls an action until complete
+        """
+
+        endpoint = self.klass(*self.instantiate_args)
+
+        endpoint.do = MagicMock()
+        endpoint.do.action = MagicMock()
+        endpoint.do.action.info = MagicMock(
+            side_effect=[Exception("Not yet"), {"id": 1, "status": "completed"}]
+        )
+
+        self.assertEqual(
+            endpoint.action_result({"id": 1, "status": "in-progress"}, True, 2, 3),
+            {"id": 1, "status": "completed"}
+        )
+        mock_sleep.assert_has_calls([call(2), call(2)])
+        endpoint.do.action.info.assert_has_calls([call(1), call(1)])
+
+        endpoint.do.action.info.side_effect = [{"id": 1, "status": "completed"}]
+
+        with self.assertRaises(DOBOTOException):
+            endpoint.action_result(
+                {"id": 1, "status": "in-progress"}, wait=True, poll=4, timeout=-1
+            )
+
+    @patch('time.sleep')
+    def test_actions_result(self, mock_sleep):
+        """
+        action_result polls an action until complete
+        """
+
+        endpoint = self.klass(*self.instantiate_args)
+
+        endpoint.do = MagicMock()
+        endpoint.do.action = MagicMock()
+        endpoint.do.action.info = MagicMock(
+            side_effect=[
+                Exception("Not yet"),
+                Exception("Not yet"),
+                {"id": 1, "status": "completed"},
+                {"id": 2, "status": "completed"}
+            ]
+        )
+
+        self.assertEqual(
+            endpoint.actions_result([
+                {"id": 1, "status": "in-progress"},
+                {"id": 2, "status": "in-progress"}
+            ], True, 2, 3),
+            [
+                {"id": 1, "status": "completed"},
+                {"id": 2, "status": "completed"}
+            ]
+        )
+        mock_sleep.assert_has_calls([call(2), call(2)])
+        endpoint.do.action.info.assert_has_calls([call(1), call(2), call(1), call(2)])
+
+        endpoint.do.action.info.side_effect = [
+            {"id": 1, "status": "completed"}
+        ]
+
+        with self.assertRaises(DOBOTOException):
+            endpoint.actions_result(
+                [{"id": 1, "status": "in-progress"}], wait=True, poll=4, timeout=-1
+            )
