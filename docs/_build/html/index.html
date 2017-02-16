@@ -70,6 +70,13 @@ feature complete and weren&#8217;t being updated as the DigitalOcean API grew.</
 <span class="n">do</span><span class="o">.</span><span class="n">droplet</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">droplet</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p><strong>Via pip</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">doboto</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="classes">
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
 <p>DOBOTO has an interesting design, made for decent code organization and collaboration.  Rather than
@@ -84,8 +91,7 @@ sub classes.  The Account example below shows this with do.account.</p>
 </pre></div>
 </div>
 <p>For more information, see the documentation for each class:</p>
-<div class="toctree-wrapper compound" id="mastertoc">
-<p class="caption"><span class="caption-text">Table of Contents</span><a class="headerlink" href="#mastertoc" title="Permalink to this toctree">¶</a></p>
+<div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="do.html">DO (do)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="account.html">Account (do.account)</a></li>
@@ -102,6 +108,21 @@ sub classes.  The Account example below shows this with do.account.</p>
 <li class="toctree-l1"><a class="reference internal" href="volume.html">Volume (do.volume)</a></li>
 </ul>
 </div>
+</div>
+<div class="section" id="present">
+<h2>Present<a class="headerlink" href="#present" title="Permalink to this headline">¶</a></h2>
+<p>Many classes have a a preset method, which will check to see if intended resource exists,
+creating only if not.  Only the name is checked, none of the other data is verified.</p>
+<p>See the documentation for each class to see if there&#8217;s a present feature.</p>
+</div>
+<div class="section" id="waiting">
+<h2>Waiting<a class="headerlink" href="#waiting" title="Permalink to this headline">¶</a></h2>
+<p>Many methods have a wait option, complete with a polling interval and timeout value.</p>
+<p>For Droplets, DOBOTO waits for the status to no longer be &#8216;new&#8217;, whether all request
+networking interfaces are up, a that all requested tags have been applied.</p>
+<p>For Volumes, DOBOTO waits for the volume to be accessible by id.</p>
+<p>For Actions, (those that return an Action dict or dict&#8217;s), DOBOTO waits for the Action to no
+longer be &#8216;in-progress&#8217;.</p>
 </div>
 <div class="section" id="expectations-and-exceptions">
 <h2>Expectations and Exceptions<a class="headerlink" href="#expectations-and-exceptions" title="Permalink to this headline">¶</a></h2>
@@ -139,7 +160,10 @@ expectations aren&#8217;t met:</p>
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">DOBOTO: BOTO like interface for DigitalOcean</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
 <li><a class="reference internal" href="#classes">Classes</a></li>
+<li><a class="reference internal" href="#present">Present</a></li>
+<li><a class="reference internal" href="#waiting">Waiting</a></li>
 <li><a class="reference internal" href="#expectations-and-exceptions">Expectations and Exceptions</a></li>
 </ul>
 </li>

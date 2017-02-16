@@ -28,6 +28,13 @@ With DOBOTO, we aim to fix that.
 
     do.droplet.destroy(droplet['id'])
 
+Installation
+---------------
+
+**Via pip**::
+
+  pip install doboto
+
 Classes
 -----------
 
@@ -61,6 +68,27 @@ For more information, see the documentation for each class:
    ssh_key
    tag
    volume
+
+Present
+-----------
+
+Many classes have a a preset method, which will check to see if intended resource exists,
+creating only if not.  Only the name is checked, none of the other data is verified.
+
+See the documentation for each class to see if there's a present feature.
+
+Waiting
+-----------
+
+Many methods have a wait option, complete with a polling interval and timeout value.
+
+For Droplets, DOBOTO waits for the status to no longer be 'new', whether all request
+networking interfaces are up, a that all requested tags have been applied.
+
+For Volumes, DOBOTO waits for the volume to be accessible by id.
+
+For Actions, (those that return an Action dict or dict's), DOBOTO waits for the Action to no
+longer be 'in-progress'.
 
 Expectations and Exceptions
 ---------------------------
