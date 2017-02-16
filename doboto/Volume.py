@@ -289,13 +289,19 @@ class Volume(Endpoint):
             attribs["region"] = region
 
         if id is not None:
-            return self.request(
-                "{}/{}/actions".format(self.uri, id), "action", "POST", attribs=attribs
+            return self.action_result(
+                self.request(
+                    "{}/{}/actions".format(self.uri, id), "action", "POST", attribs=attribs
+                ),
+                wait, poll, timeout
             )
         elif name is not None:
             attribs["volume_name"] = name
-            return self.request(
-                "{}/actions".format(self.uri), "action", "POST", attribs=attribs
+            return self.action_result(
+                self.request(
+                    "{}/actions".format(self.uri), "action", "POST", attribs=attribs
+                ),
+                wait, poll, timeout
             )
         else:
             raise ValueError("Must supply an id or name")
@@ -339,13 +345,19 @@ class Volume(Endpoint):
             attribs["region"] = region
 
         if id is not None:
-            return self.request(
-                "{}/{}/actions".format(self.uri, id), "action", "POST", attribs=attribs
+            return self.action_result(
+                self.request(
+                    "{}/{}/actions".format(self.uri, id), "action", "POST", attribs=attribs
+                ),
+                wait, poll, timeout
             )
         elif name is not None:
             attribs["volume_name"] = name
-            return self.request(
-                "{}/actions".format(self.uri), "action", "POST", attribs=attribs
+            return self.action_result(
+                self.request(
+                    "{}/actions".format(self.uri), "action", "POST", attribs=attribs
+                ),
+                wait, poll, timeout
             )
         else:
             raise ValueError("Must supply an id or name")
@@ -382,7 +394,10 @@ class Volume(Endpoint):
             attribs["region"] = region
 
         uri = "{}/{}/actions".format(self.uri, id)
-        return self.request(uri, "action", 'POST', attribs=attribs)
+        return self.action_result(
+            self.request(uri, "action", 'POST', attribs=attribs),
+            wait, poll, timeout
+        )
 
     def action_list(self, id):
         """

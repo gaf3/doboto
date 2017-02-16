@@ -227,8 +227,9 @@ class TestVolume(TestCase):
         volume.snapshot_create(id, snap_name)
         mock_request.assert_called_with(test_uri, "snapshot", 'POST', attribs=datas)
 
+    @patch('doboto.Volume.Volume.action_result')
     @patch('doboto.Volume.Volume.request')
-    def test_attach(self, mock_request):
+    def test_attach(self, mock_request, mock_action_result):
         """
         test that attach works with id and/or name
         """
@@ -236,6 +237,7 @@ class TestVolume(TestCase):
 
         droplet_id = 123
         region = "nyc1"
+        mock_request.return_value = {}
 
         # By id
 
@@ -245,8 +247,9 @@ class TestVolume(TestCase):
             "type": "attach",
             "droplet_id": droplet_id
         }
-        volume.attach(id=id, droplet_id=droplet_id)
+        volume.attach(id=id, droplet_id=droplet_id, wait=True, poll=2, timeout=3)
         mock_request.assert_called_with(test_uri, "action", 'POST', attribs=datas)
+        mock_action_result.assert_called_with({}, True, 2, 3)
 
         datas = {
             "type": "attach",
@@ -274,8 +277,9 @@ class TestVolume(TestCase):
             ValueError, "Must supply an id or name", volume.attach, droplet_id=droplet_id
         )
 
+    @patch('doboto.Volume.Volume.action_result')
     @patch('doboto.Volume.Volume.request')
-    def test_detach(self, mock_request):
+    def test_detach(self, mock_request, mock_action_result):
         """
         test that detach works with id and/or name
         """
@@ -283,6 +287,7 @@ class TestVolume(TestCase):
 
         droplet_id = 123
         region = "nyc1"
+        mock_request.return_value = {}
 
         # By id
 
@@ -292,8 +297,9 @@ class TestVolume(TestCase):
             "type": "detach",
             "droplet_id": droplet_id
         }
-        volume.detach(id=id, droplet_id=droplet_id)
+        volume.detach(id=id, droplet_id=droplet_id, wait=True, poll=2, timeout=3)
         mock_request.assert_called_with(test_uri, "action", 'POST', attribs=datas)
+        mock_action_result.assert_called_with({}, True, 2, 3)
 
         datas = {
             "type": "detach",
@@ -321,8 +327,9 @@ class TestVolume(TestCase):
             ValueError, "Must supply an id or name", volume.detach, droplet_id=droplet_id
         )
 
+    @patch('doboto.Volume.Volume.action_result')
     @patch('doboto.Volume.Volume.request')
-    def test_resize(self, mock_request):
+    def test_resize(self, mock_request, mock_action_result):
         """
         test that resize works
         """
@@ -336,8 +343,11 @@ class TestVolume(TestCase):
             "type": "resize",
             "size_gigabytes": 2
         }
-        volume.resize(id, size)
+        mock_request.return_value = {}
+
+        volume.resize(id, size, wait=True, poll=2, timeout=3)
         mock_request.assert_called_with(test_uri, "action", 'POST', attribs=datas)
+        mock_action_result.assert_called_with({}, True, 2, 3)
 
         datas = {
             "type": "resize",
