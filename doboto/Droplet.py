@@ -219,7 +219,7 @@ class Droplet(Endpoint):
 
             start_time = time.time()
 
-            while wait and not self.ready(droplet):
+            while wait and not self.ready(droplet, attribs):
 
                 time.sleep(poll)
                 try:
@@ -238,7 +238,8 @@ class Droplet(Endpoint):
 
             start_time = time.time()
 
-            info = [index for index, droplet in enumerate(droplets) if not self.ready(droplet)]
+            info = [index for index, droplet in enumerate(droplets)
+                    if not self.ready(droplet, attribs)]
 
             while wait and len(info) > 0:
 
@@ -253,7 +254,8 @@ class Droplet(Endpoint):
                 if time.time() - start_time > timeout:
                     raise DOBOTOException("Timeout on polling", droplets)
 
-                info = [index for index, droplet in enumerate(droplets) if not self.ready(droplet)]
+                info = [index for index, droplet in enumerate(droplets)
+                        if not self.ready(droplet, attribs)]
 
             return droplets
 

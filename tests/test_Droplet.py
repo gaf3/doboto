@@ -153,9 +153,9 @@ class TestDroplet(TestCase):
         mock_request.assert_called_with(self.test_uri, "droplet", 'POST', attribs=datas)
         mock_sleep.assert_has_calls([call(2), call(2)])
         drop.ready.assert_has_calls([
-            call({"id": 1, "people": "stuff"}),
-            call({"id": 1, "people": "stuff"}),
-            call({"stuff": "things"})
+            call({"id": 1, "people": "stuff"}, datas),
+            call({"id": 1, "people": "stuff"}, datas),
+            call({"stuff": "things"}, datas)
         ])
         drop.info.assert_has_calls([call(1), call(1)])
 
@@ -168,7 +168,7 @@ class TestDroplet(TestCase):
         mock_request.assert_called_with(self.test_uri, "droplet", 'POST', attribs=datas)
         mock_sleep.assert_has_calls([call(4)])
         drop.ready.assert_has_calls([
-            call({"id": 2, "people": "stuff"})
+            call({"id": 2, "people": "stuff"}, datas)
         ])
         drop.info.assert_has_calls([call(2)])
 
@@ -184,9 +184,9 @@ class TestDroplet(TestCase):
         mock_request.assert_called_with(self.test_uri, "droplets", 'POST', attribs=datas)
         mock_sleep.assert_has_calls([call(5), call(5)])
         drop.ready.assert_has_calls([
-            call({"id": 3, "people": "stuff"}),
-            call({"id": 3, "people": "stuff"}),
-            call({"stuff": "things"})
+            call({"id": 3, "people": "stuff"}, datas),
+            call({"id": 3, "people": "stuff"}, datas),
+            call({"stuff": "things"}, datas)
         ])
         drop.info.assert_has_calls([call(3), call(3)])
 
