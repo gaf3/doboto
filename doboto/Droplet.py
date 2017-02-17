@@ -308,10 +308,6 @@ class Droplet(Endpoint):
                 - next_backup_window - nullable dict - The details of the Droplet's backups feature, if backups are configured for the Droplet. This dict contains keys for the start and end times of the window during which the backup will start.
                 - tags - list - A list of Tags the Droplet has been tagged with.
                 - volume_ids - list - A flat list including the unique identifier for each Block Storage volume attached to the Droplet.
-
-        related:
-            - https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet
-            - https://developers.digitalocean.com/documentation/v2/#create-multiple-droplets
         """
 
         droplets = self.list()

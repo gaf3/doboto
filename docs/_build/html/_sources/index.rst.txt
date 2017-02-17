@@ -58,6 +58,8 @@ For more information, see the documentation for each class:
    do
    account
    action
+   volume
+   certificate
    domain
    droplet
    floating_ip
@@ -67,7 +69,6 @@ For more information, see the documentation for each class:
    snapshot
    ssh_key
    tag
-   volume
 
 Present
 -----------

@@ -368,14 +368,6 @@ Returns:
 
 
 
-Related:
-
-* `<https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet>`_
-
-* `<https://developers.digitalocean.com/documentation/v2/#create-multiple-droplets>`_
-
-
-
 Retrieve an existing Droplet by id
 ----------------------------------------------------------------------------------------------------
 

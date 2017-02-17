@@ -3,6 +3,7 @@
 from .Account import Account
 from .Action import Action
 from .Volume import Volume
+from .Certificate import Certificate
 from .Domain import Domain
 from .Droplet import Droplet
 from .Image import Image
@@ -32,6 +33,7 @@ class DO(object):
         self.account = Account(self, token, url, agent)
         self.action = Action(self, token, url, agent)
         self.volume = Volume(self, token, url, agent)
+        self.certificate = Certificate(self, token, url, agent)
         self.domain = Domain(self, token, url, agent)
         self.droplet = Droplet(self, token, url, agent)
         self.image = Image(self, token, url, agent)
