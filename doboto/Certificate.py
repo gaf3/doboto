@@ -27,7 +27,7 @@ class Certificate(Endpoint):
         self.uri = "%s/certificates" % url
         self.reports = "%s/reports" % url
 
-    def list(self, tag_name=None):
+    def list(self):
         """
         description: List all Certificates
 
@@ -61,6 +61,7 @@ class Certificate(Endpoint):
                 - not_after - string - A time value given in ISO8601 combined date and time format that represents the certificate's expiration date.
                 - sha1_fingerprint - string - A unique identifier generated from the SHA-1 fingerprint of the certificate.
                 - created_at - string - A time value given in ISO8601 combined date and time format that represents when the certificate was created.
+
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-certificates
         """
 
@@ -126,7 +127,7 @@ class Certificate(Endpoint):
 
         return self.request("%s/%s" % (self.uri, id), "certificate")
 
-    def destroy(self, id=None, tag_name=None):
+    def destroy(self, id):
         """
         description: Delete a Certificate
 
