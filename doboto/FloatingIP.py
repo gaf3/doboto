@@ -113,7 +113,7 @@ class FloatingIP(Endpoint):
             - ip - string - The public IP address of the Floating IP.
             - droplet_id - int - The ID of Droplet that the Floating IP will be assigned to.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -146,7 +146,7 @@ class FloatingIP(Endpoint):
         in:
             - ip - string - The public IP address of the Floating IP.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -179,7 +179,7 @@ class FloatingIP(Endpoint):
         in:
             - ip - string - The public IP address of the Floating IP.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:

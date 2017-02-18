@@ -5,7 +5,7 @@ This module contains tests for the Endpoint class
 from unittest import TestCase
 from mock import Mock, MagicMock, patch, call
 from doboto import Endpoint
-from doboto.DOBOTOException import DOBOTOException
+from doboto.exception import DOBOTOException, DOBOTONotFoundException, DOBOTOPollingException
 
 import requests
 
@@ -97,6 +97,16 @@ class TestEndpoint(TestCase):
 
         response.status_code = 202
         self.assertRaises(DOBOTOException, endpoint.request, "people")
+
+        endpoint = self.klass(*self.instantiate_args)
+        response = MagicMock()
+        response.status_code = 200
+        response.json = MagicMock(return_value={"id": "not_found"})
+        mock_get.return_value = response
+
+        self.assertRaises(
+            DOBOTONotFoundException, endpoint.request, "people", "stuff"
+        )
 
     @patch('requests.get')
     def test_pages(self, mock_get):
@@ -201,6 +211,15 @@ class TestEndpoint(TestCase):
 
         endpoint = self.klass(*self.instantiate_args)
 
+        # Standard
+
+        self.assertEqual(
+            endpoint.action_result({"id": 1, "status": "in-progress"}, False, 2, 3),
+            {"id": 1, "status": "in-progress"}
+        )
+
+        # Wait
+
         endpoint.do = MagicMock()
         endpoint.do.action = MagicMock()
         endpoint.do.action.info = MagicMock(
@@ -214,20 +233,62 @@ class TestEndpoint(TestCase):
         mock_sleep.assert_has_calls([call(2), call(2)])
         endpoint.do.action.info.assert_has_calls([call(1), call(1)])
 
-        endpoint.do.action.info.side_effect = [{"id": 1, "status": "completed"}]
+        # Wait with bad poll
 
-        with self.assertRaises(DOBOTOException):
-            endpoint.action_result(
-                {"id": 1, "status": "in-progress"}, wait=True, poll=4, timeout=-1
-            )
+        endpoint.do.action.info.side_effect = [
+            Exception("Not yet"), {"id": 1, "status": "completed"}
+        ]
+
+        self.assertEqual(
+            endpoint.action_result({"id": 1, "status": "in-progress"}, True, 0, 3),
+            {"id": 1, "status": "completed"}
+        )
+        mock_sleep.assert_has_calls([call(1), call(1)])
+
+        # Wait with timeout and error
+
+        endpoint.do.action.info.side_effect = [Exception("Not yet")]
+
+        self.assertRaisesRegexp(
+            DOBOTOPollingException,
+            "DO API Timeout: Not yet while polling:.*status",
+            endpoint.action_result, {"id": 1, "status": "in-progress"},
+            wait=True, poll=4, timeout=-1
+        )
+
+        # Wait with timeout
+
+        endpoint.do.action.info.side_effect = [{"id": 1, "status": "in-progress"}]
+
+        self.assertRaisesRegexp(
+            DOBOTOPollingException,
+            "DO API Timeout while polling:.*status",
+            endpoint.action_result, {"id": 1, "status": "in-progress"},
+            wait=True, poll=4, timeout=-1
+        )
 
     @patch('time.sleep')
     def test_actions_result(self, mock_sleep):
         """
-        action_result polls an action until complete
+        actions_result polls an action until complete
         """
 
         endpoint = self.klass(*self.instantiate_args)
+
+        # Standard
+
+        self.assertEqual(
+            endpoint.actions_result([
+                {"id": 1, "status": "completed"},
+                {"id": 2, "status": "completed"}
+            ], False, 2, 3),
+            [
+                {"id": 1, "status": "completed"},
+                {"id": 2, "status": "completed"}
+            ]
+        )
+
+        # Wait
 
         endpoint.do = MagicMock()
         endpoint.do.action = MagicMock()
@@ -253,11 +314,47 @@ class TestEndpoint(TestCase):
         mock_sleep.assert_has_calls([call(2), call(2)])
         endpoint.do.action.info.assert_has_calls([call(1), call(2), call(1), call(2)])
 
+        # Wait with bad poll
+
+        endpoint.do.action.info.side_effect = [
+            Exception("Not yet"),
+            Exception("Not yet"),
+            {"id": 1, "status": "completed"},
+            {"id": 2, "status": "completed"}
+        ]
+
+        self.assertEqual(
+            endpoint.actions_result([
+                {"id": 1, "status": "in-progress"},
+                {"id": 2, "status": "in-progress"}
+            ], True, 0, 3),
+            [
+                {"id": 1, "status": "completed"},
+                {"id": 2, "status": "completed"}
+            ]
+        )
+        mock_sleep.assert_has_calls([call(1), call(1)])
+
+        # Wait with timeout and error
+
+        endpoint.do.action.info.side_effect = [Exception("Not yet")]
+
+        self.assertRaisesRegexp(
+            DOBOTOPollingException,
+            "DO API Timeout: Not yet while polling:.*status",
+            endpoint.actions_result, [{"id": 1, "status": "in-progress"}],
+            wait=True, poll=4, timeout=-1
+        )
+
+        # Wait with timeout
+
         endpoint.do.action.info.side_effect = [
             {"id": 1, "status": "completed"}
         ]
 
-        with self.assertRaises(DOBOTOException):
-            endpoint.actions_result(
-                [{"id": 1, "status": "in-progress"}], wait=True, poll=4, timeout=-1
-            )
+        self.assertRaisesRegexp(
+            DOBOTOPollingException,
+            "DO API Timeout while polling:.*status",
+            endpoint.actions_result, [{"id": 1, "status": "in-progress"}],
+            wait=True, poll=4, timeout=-1
+        )

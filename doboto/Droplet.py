@@ -3,7 +3,7 @@
 import time
 import copy
 from .Endpoint import Endpoint
-from .DOBOTOException import DOBOTOException
+from .exception import DOBOTOException, DOBOTOPollingException
 
 class Droplet(Endpoint):
     """
@@ -182,7 +182,7 @@ class Droplet(Endpoint):
                 - volume - list - A flat list including the unique string identifier for each Block Storage volume to be attached to the Droplet. At the moment a volume can only be attached to a single Droplet. -
                 - tags - list - A flat list of tag names as strings to apply to the Droplet after it is created. Tag names can either be existing or new tags.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -213,22 +213,29 @@ class Droplet(Endpoint):
             - https://developers.digitalocean.com/documentation/v2/#create-multiple-droplets
         """
 
+        if poll < 1:
+            poll = 1
+
         if "name" in attribs:
 
             droplet = self.request(self.uri, "droplet", 'POST', attribs=attribs)
 
+            if not wait:
+                return droplet
+
             start_time = time.time()
 
-            while wait and not self.ready(droplet, attribs):
+            while not self.ready(droplet, attribs):
 
                 time.sleep(poll)
                 try:
                     droplet = self.info(droplet["id"])
-                except:
-                    pass
+                except Exception as exception:
+                    if time.time() - start_time > timeout:
+                        raise DOBOTOPollingException(polling=droplet, error=exception)
 
                 if time.time() - start_time > timeout:
-                    raise DOBOTOException("Timeout on polling", droplet)
+                    raise DOBOTOPollingException(polling=droplet)
 
             return droplet
 
@@ -236,23 +243,27 @@ class Droplet(Endpoint):
 
             droplets = self.request(self.uri, "droplets", 'POST', attribs=attribs)
 
+            if not wait:
+                return droplets
+
             start_time = time.time()
 
             info = [index for index, droplet in enumerate(droplets)
                     if not self.ready(droplet, attribs)]
 
-            while wait and len(info) > 0:
+            while len(info) > 0:
 
                 time.sleep(poll)
 
                 for index in info:
                     try:
                         droplets[index] = self.info(droplets[index]["id"])
-                    except:
-                        pass
+                    except Exception as exception:
+                        if time.time() - start_time > timeout:
+                            raise DOBOTOPollingException(polling=droplets, error=exception)
 
-                if time.time() - start_time > timeout:
-                    raise DOBOTOException("Timeout on polling", droplets)
+                    if time.time() - start_time > timeout:
+                        raise DOBOTOPollingException(polling=droplets)
 
                 info = [index for index, droplet in enumerate(droplets)
                         if not self.ready(droplet, attribs)]
@@ -283,7 +294,7 @@ class Droplet(Endpoint):
                 - volume - list - A flat list including the unique string identifier for each Block Storage volume to be attached to the Droplet. At the moment a volume can only be attached to a single Droplet. -
                 - tags - list - A flat list of tag names as strings to apply to the Droplet after it is created. Tag names can either be existing or new tags.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -490,7 +501,7 @@ class Droplet(Endpoint):
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -521,7 +532,7 @@ class Droplet(Endpoint):
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -553,7 +564,7 @@ class Droplet(Endpoint):
         in:
             - id - number - The id of the Droplet
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -591,7 +602,7 @@ class Droplet(Endpoint):
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -622,7 +633,7 @@ class Droplet(Endpoint):
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -657,7 +668,7 @@ class Droplet(Endpoint):
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -691,7 +702,7 @@ class Droplet(Endpoint):
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -726,7 +737,7 @@ class Droplet(Endpoint):
             - id - number - The id of the Droplet
             - image - string if an image slug. number if an image ID. - An image slug or ID. This represents the image that the Droplet will use as a base.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -764,7 +775,7 @@ class Droplet(Endpoint):
         in:
             - id - number - The id of the Droplet
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -800,7 +811,7 @@ class Droplet(Endpoint):
             - disk - bool - Whether to increase disk size
             - size - string - The size slug that you want to resize to. - true
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -835,7 +846,7 @@ class Droplet(Endpoint):
             - id - number - The id of the Droplet
             - image - string if an image slug. number if an image ID. - An image slug or ID. This represents the image that the Droplet will use as a base.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -873,7 +884,7 @@ class Droplet(Endpoint):
             - id - number - The id of the Droplet
             - name - string - The new name for the Droplet.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -923,7 +934,7 @@ class Droplet(Endpoint):
             - id - number - The id of the Droplet
             - kernel - number - A unique number used to identify and reference a specific kernel. - true
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -955,7 +966,7 @@ class Droplet(Endpoint):
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -985,7 +996,7 @@ class Droplet(Endpoint):
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -1045,7 +1056,7 @@ class Droplet(Endpoint):
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:

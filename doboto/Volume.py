@@ -2,7 +2,7 @@
 
 import time
 from .Endpoint import Endpoint
-from .DOBOTOException import DOBOTOException
+from .exception import DOBOTOException, DOBOTONotFoundException, DOBOTOPollingException
 
 
 class Volume(Endpoint):
@@ -62,7 +62,7 @@ class Volume(Endpoint):
                 - region - string - The region where the Block Storage volume will be created. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned. Should not be specified with a snapshot_id. -
                 - snapshot_id - string - The unique identifier for the volume snapshot from which to create the volume. Should not be specified with a region_id. -
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -81,20 +81,29 @@ class Volume(Endpoint):
 
         volume = self.request(self.uri, "volume", 'POST', attribs=attribs)
 
+        if not wait:
+            return volume
+
+        if poll < 1:
+            poll = 1
+
         start_time = time.time()
 
-        while wait:
+        while True:
 
             time.sleep(poll)
 
             try:
                 volume = self.info(volume["id"])
                 break
-            except:
+            except DOBOTONotFoundException as exception:
                 pass
+            except Exception as exception:
+                if time.time() - start_time > timeout:
+                    raise DOBOTOPollingException(polling=volume, error=exception)
 
             if time.time() - start_time > timeout:
-                raise DOBOTOException("Timeout on polling", volume)
+                raise DOBOTOPollingException(polling=volume)
 
         return volume
 
@@ -110,7 +119,7 @@ class Volume(Endpoint):
                 - region - string - The region where the Block Storage volume will be created. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned. Should not be specified with a snapshot_id. -
                 - snapshot_id - string - The unique identifier for the volume snapshot from which to create the volume. Should not be specified with a region_id. -
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -228,7 +237,7 @@ class Volume(Endpoint):
             - id - number - The id of the volume
             - snapshot_name - string - The name of the snapshot
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -260,7 +269,7 @@ class Volume(Endpoint):
             - region - string - The region slug of the volume if no id
             - droplet_id - number - The id of the droplet
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -316,7 +325,7 @@ class Volume(Endpoint):
             - region - string - The region slug of the volume if no id
             - droplet_id - number - The id of the droplet
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:

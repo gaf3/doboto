@@ -141,7 +141,7 @@ class Image(Endpoint):
             - id - number - id of the Image
             - region - string - The region slug that represents the region target.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -173,7 +173,7 @@ class Image(Endpoint):
         in:
             - id - number - id of the Image
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:

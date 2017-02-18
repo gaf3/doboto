@@ -94,8 +94,14 @@ Expectations and Exceptions
 ---------------------------
 
 The DigitalOcean API sends back JSON objects with expected formats. Rather than have you check
-that format with every call, DOBOTO checks it for you, raising an DOBOTOException when its
+that format with every call, DOBOTO checks it for you, raising an exception when its
 expectations aren't met:
+
+DOBOTOException
+^^^^^^^^^^^^^^^
+
+DOBOTOException is the main exception and the parent of the others.  Raised when general
+expectations aren't met.
 
 **Bad token**::
 
@@ -108,11 +114,63 @@ expectations aren't met:
 **Result**::
 
     Traceback (most recent call last):
-      File "<stdin>", line 1, in <module>
-      File "doboto/Account.py", line 36, in info
+      File "doboto/Account.py", line 38, in info
         return self.request(self.uri, "account")
-      File "doboto/Endpoint.py", line 45, in request
+      File "doboto/Endpoint.py", line 50, in request
         raise DOBOTOException(result=response.json())
-    doboto.DOBOTOException.DOBOTOException: DO API Error: {u'message': u'Unable to authenticate you.', u'id': u'unauthorized'}
+    doboto.exception.DOBOTOException: DO API Error: {u'message': u'Unable to authenticate you.', u'id': u'unauthorized'}
 
 The JSON result (second part of the string output) is accessible via the result property.
+
+DOBOTONotFoundException
+^^^^^^^^^^^^^^^^^^^^^^^
+
+DOBOTONotFoundException is raises when a response from the API contains an "id" field with a value of "not_found"
+
+**Missing droplet**::
+
+    from doboto.DO import DO
+
+    do = DO(token="secret")
+
+    droplet = do.droplet.info(-1)
+
+**Result**::
+
+    Traceback (most recent call last):
+      File "doboto/Droplet.py", line 417, in info
+        return self.request(uri, "droplet")
+      File "doboto/Endpoint.py", line 47, in request
+        raise DOBOTONotFoundException()
+    doboto.exception.DOBOTONotFoundException
+
+
+DOBOTOPollingException
+^^^^^^^^^^^^^^^^^^^^^^^
+
+DOBOTOPollingException is raises when the timeout is reached while waiting for a resource to
+become ready.
+
+**Impatient droplet**::
+
+    from doboto.DO import DO
+
+    do = DO(token="secret")
+
+    droplet = do.droplet.create({
+        "name": "notyet",
+        "region": "nyc2",
+        "size": 2,
+        "image": "debian-7-0-x64"
+    }, wait=True, timeout=10)
+
+**Result**::
+
+    Traceback (most recent call last):
+      File "doboto/Droplet.py", line 238, in create
+        raise DOBOTOPollingException(polling=droplet)
+        doboto.exception.DOBOTOPollingException: DO API Timeout while polling: {"name": "notyet" ... }
+
+Whatever was being polled (a droplet in this case) is accessible via the polling attribute on the
+exception.  If an exception was throw prior to the timeout, that is accessible via the error
+attribute. 

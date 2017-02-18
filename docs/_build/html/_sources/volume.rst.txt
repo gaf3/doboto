@@ -61,7 +61,7 @@ Create a new volume
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -113,7 +113,7 @@ Create a new volume if name not already present
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -261,7 +261,7 @@ Create a snpahot for a volume
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -309,7 +309,7 @@ Attach a volume by id or name to a droplet
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -361,7 +361,7 @@ Remove a volume by id or name from a droplet
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 

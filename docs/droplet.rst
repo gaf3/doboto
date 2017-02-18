@@ -223,7 +223,7 @@ Create a new Droplet or multiple Droplets
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -317,7 +317,7 @@ Create a new Droplet or multiple Droplets if not already existing
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -509,7 +509,7 @@ Enable Backups
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -555,7 +555,7 @@ Disable Backups
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -603,7 +603,7 @@ A reboot action is an attempt to reboot the Droplet in a graceful way, similar t
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -653,7 +653,7 @@ A shutdown action is an attempt to shutdown the Droplet in a graceful way, simil
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -699,7 +699,7 @@ Power On a Droplet
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -749,7 +749,7 @@ A power_off event is a hard shutdown and should only be used if the shutdown act
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -799,7 +799,7 @@ A powercycle action is similar to pushing the reset button on a physical machine
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -849,7 +849,7 @@ A Droplet restoration will rebuild an image using a backup image. The image ID t
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -893,7 +893,7 @@ Password Reset a Droplet
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -945,7 +945,7 @@ If a permanent resize, with disk changes included, is desired, set the "disk" at
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -995,7 +995,7 @@ A rebuild action functions just like a new create.
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -1041,7 +1041,7 @@ Rename a Droplet
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -1113,7 +1113,7 @@ Change the Kernel
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -1159,7 +1159,7 @@ Enable IPv6
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -1205,7 +1205,7 @@ Enable Private Networking
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 

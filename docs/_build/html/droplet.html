@@ -201,7 +201,7 @@
 </ul>
 </li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -261,7 +261,7 @@
 </ul>
 </li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -399,7 +399,7 @@
 <li><em>id</em> - number - Send only to reference a single Droplet by id</li>
 <li><em>tag_name</em> - string - Send only to reference all Droplets with this tag.</li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -433,7 +433,7 @@
 <li><em>id</em> - number - Send only to reference a single Droplet by id</li>
 <li><em>tag_name</em> - string - Send only to reference all Droplets with this tag.</li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -467,7 +467,7 @@
 <ul class="simple">
 <li><em>id</em> - number - The id of the Droplet</li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -502,7 +502,7 @@
 <li><em>id</em> - number - Send only to reference a single Droplet by id</li>
 <li><em>tag_name</em> - string - Send only to reference all Droplets with this tag.</li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -536,7 +536,7 @@
 <li><em>id</em> - number - Send only to reference a single Droplet by id</li>
 <li><em>tag_name</em> - string - Send only to reference all Droplets with this tag.</li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -571,7 +571,7 @@
 <li><em>id</em> - number - Send only to reference a single Droplet by id</li>
 <li><em>tag_name</em> - string - Send only to reference all Droplets with this tag.</li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -606,7 +606,7 @@
 <li><em>id</em> - number - Send only to reference a single Droplet by id</li>
 <li><em>tag_name</em> - string - Send only to reference all Droplets with this tag.</li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -641,7 +641,7 @@
 <li><em>id</em> - number - The id of the Droplet</li>
 <li><em>image</em> - string if an image slug. number if an image ID. - An image slug or ID. This represents the image that the Droplet will use as a base.</li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -674,7 +674,7 @@
 <ul class="simple">
 <li><em>id</em> - number - The id of the Droplet</li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -710,7 +710,7 @@
 <li><em>disk</em> - bool - Whether to increase disk size</li>
 <li><em>size</em> - string - The size slug that you want to resize to. - true</li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -745,7 +745,7 @@
 <li><em>id</em> - number - The id of the Droplet</li>
 <li><em>image</em> - string if an image slug. number if an image ID. - An image slug or ID. This represents the image that the Droplet will use as a base.</li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -779,7 +779,7 @@
 <li><em>id</em> - number - The id of the Droplet</li>
 <li><em>name</em> - string - The new name for the Droplet.</li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -837,7 +837,7 @@
 <li><em>id</em> - number - The id of the Droplet</li>
 <li><em>kernel</em> - number - A unique number used to identify and reference a specific kernel. - true</li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -871,7 +871,7 @@
 <li><em>id</em> - number - Send only to reference a single Droplet by id</li>
 <li><em>tag_name</em> - string - Send only to reference all Droplets with this tag.</li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -905,7 +905,7 @@
 <li><em>id</em> - number - Send only to reference a single Droplet by id</li>
 <li><em>tag_name</em> - string - Send only to reference all Droplets with this tag.</li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
