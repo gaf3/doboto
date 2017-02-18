@@ -127,7 +127,7 @@ class Endpoint(object):
         info = [index for index, action in enumerate(actions)
                 if action["status"] == "in-progress"]
 
-        while wait and len(info) > 0:
+        while len(info) > 0:
 
             time.sleep(poll)
 
