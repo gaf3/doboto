@@ -44,7 +44,7 @@ class Action(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-actions
-        """
+        """  # nopep8
 
         return self.pages(self.uri, "actions")
 
@@ -68,7 +68,7 @@ class Action(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-action
-        """
+        """  # nopep8
 
         uri = "%s/%s" % (self.uri, id)
         return self.request(uri, "action")

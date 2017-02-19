@@ -37,7 +37,7 @@ class FloatingIP(Endpoint):
                 - droplet - dict - The Droplet that the Floating IP has been assigned to. When you query a Floating IP, if it is assigned to a Droplet, the entire Droplet dict will be returned. If it is not assigned, the value will be null.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-floating-ips
-        """
+        """  # nopep8
 
         return self.pages(self.uri, "floating_ips")
 
@@ -58,7 +58,7 @@ class FloatingIP(Endpoint):
         related:
             - https://developers.digitalocean.com/documentation/v2/#create-a-new-floating-ip-assigned-to-a-droplet
             - https://developers.digitalocean.com/documentation/v2/#create-a-new-floating-ip-reserved-to-a-region
-        """
+        """  # nopep8
         attribs = {}
 
         if droplet_id is not None:
@@ -84,7 +84,7 @@ class FloatingIP(Endpoint):
             - droplet - dict - The Droplet that the Floating IP has been assigned to. When you query a Floating IP, if it is assigned to a Droplet, the entire Droplet dict will be returned. If it is not assigned, the value will be null.
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-floating-ip
-        """
+        """  # nopep8
 
         uri = "%s/%s" % (self.uri, ip)
         return self.request(uri, "floating_ip")
@@ -99,7 +99,7 @@ class FloatingIP(Endpoint):
         out: None. A DOBOTOException is thrown if an issue is encountered.
 
         related: https://developers.digitalocean.com/documentation/v2/#delete-a-floating-ips
-        """
+        """  # nopep8
 
         uri = "{}/{}".format(self.uri, ip)
 
@@ -129,7 +129,7 @@ class FloatingIP(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#assign-a-floating-ip-to-a-droplet
-        """
+        """  # nopep8
 
         uri = "{}/{}/actions".format(self.uri, ip)
         attribs = {'type': 'assign', 'droplet_id': droplet_id}
@@ -162,7 +162,7 @@ class FloatingIP(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#unassign-a-floating-ip
-        """
+        """  # nopep8
 
         uri = "{}/{}/actions".format(self.uri, ip)
         attribs = {'type': 'unassign'}
@@ -195,7 +195,7 @@ class FloatingIP(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-actions-for-a-floating-ip
-        """
+        """  # nopep8
         uri = self.uri + "/%s/actions" % ip
 
         return self.pages(uri, "actions")
@@ -221,6 +221,6 @@ class FloatingIP(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-floating-ip-action
-        """
+        """  # nopep8
         uri = "%s/%s/actions/%s" % (self.uri, ip, action_id)
         return self.request(uri, "action")

@@ -5,6 +5,7 @@ import json
 import requests
 from .exception import DOBOTOException, DOBOTONotFoundException, DOBOTOPollingException
 
+
 class Endpoint(object):
 
     """Base class for interacting with an endpoint of the DO API."""

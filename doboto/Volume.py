@@ -44,7 +44,7 @@ class Volume(Endpoint):
                 - droplet_ids - list - This attribute is a list of the Droplets that the volume is attached to.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-block-storage-volumes
-        """
+        """  # nopep8
         if region is not None:
             return self.pages(self.uri, "volumes", params={"region": region})
         else:
@@ -77,7 +77,7 @@ class Volume(Endpoint):
                 - droplet_ids - list - This attribute is a list of the Droplets that the volume is attached to.
 
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-block-storage-volume
-        """
+        """  # nopep8
 
         volume = self.request(self.uri, "volume", 'POST', attribs=attribs)
 
@@ -134,8 +134,7 @@ class Volume(Endpoint):
                 - droplet_ids - list - This attribute is a list of the Droplets that the volume is attached to.
 
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-block-storage-volume
-        """
-
+        """  # nopep8
         volumes = self.list()
 
         existing = None
@@ -173,8 +172,7 @@ class Volume(Endpoint):
         related:
             - https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-block-storage-volume
             - https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-block-storage-volume-by-name
-        """
-
+        """  # nopep8
         if id is not None:
             return self.request("{}/{}".format(self.uri, id), "volume")
         elif name is not None and region is not None:
@@ -196,7 +194,7 @@ class Volume(Endpoint):
         related:
             - https://developers.digitalocean.com/documentation/v2/#delete-a-block-storage-volume
             - https://developers.digitalocean.com/documentation/v2/#delete-a-block-storage-volume-by-name
-        """
+        """  # nopep8
         if id is not None:
             return self.request("{}/{}".format(self.uri, id), request_method="DELETE")
         elif name is not None and region is not None:
@@ -225,7 +223,7 @@ class Volume(Endpoint):
                 - size_gigabytes - number - The billable size of the snapshot in gigabytes.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-snapshots-for-a-volume
-        """
+        """  # nopep8
         uri = "{}/{}/snapshots".format(self.uri, id)
         return self.pages(uri, "snapshots")
 
@@ -252,14 +250,16 @@ class Volume(Endpoint):
                 - size_gigabytes - number - The billable size of the snapshot in gigabytes.
 
         related: https://developers.digitalocean.com/documentation/v2/#create-snapshot-from-a-volume
-        """
+        """  # nopep8
 
         uri = "{}/{}/snapshots".format(self.uri, id)
 
         attribs = {"name": snapshot_name}
         return self.request(uri, "snapshot", 'POST', attribs=attribs)
 
-    def attach(self, id=None, name=None, region=None, droplet_id=None, wait=False, poll=5, timeout=300):
+    def attach(
+        self, id=None, name=None, region=None, droplet_id=None, wait=False, poll=5, timeout=300
+    ):
         """
         description: Attach a volume by id or name to a droplet
 
@@ -287,7 +287,7 @@ class Volume(Endpoint):
         related:
             - https://developers.digitalocean.com/documentation/v2/#attach-a-block-storage-volume-to-a-droplet
             - https://developers.digitalocean.com/documentation/v2/#attach-a-block-storage-volume-to-a-droplet-by-name
-        """
+        """  # nopep8
 
         attribs = {
             "type": "attach",
@@ -315,7 +315,9 @@ class Volume(Endpoint):
         else:
             raise ValueError("Must supply an id or name")
 
-    def detach(self, id=None, name=None, region=None, droplet_id=None, wait=False, poll=5, timeout=300):
+    def detach(
+        self, id=None, name=None, region=None, droplet_id=None, wait=False, poll=5, timeout=300
+    ):
         """
         description: Remove a volume by id or name from a droplet
 
@@ -343,7 +345,7 @@ class Volume(Endpoint):
         related:
             - https://developers.digitalocean.com/documentation/v2/#remove-a-block-storage-volume-from-a-droplet
             - https://developers.digitalocean.com/documentation/v2/#remove-a-block-storage-volume-from-a-droplet-by-name
-        """
+        """  # nopep8
 
         attribs = {
             "type": "detach",
@@ -393,7 +395,7 @@ class Volume(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#resize-a-volume
-        """
+        """  # nopep8
         attribs = {
             "type": "resize",
             "size_gigabytes": size
@@ -428,7 +430,7 @@ class Volume(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-actions-for-a-volume
-        """
+        """  # nopep8
         uri = "{}/{}/actions".format(self.uri, id)
         return self.pages(uri, "actions")
 
@@ -453,6 +455,6 @@ class Volume(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-volume-action
-        """
+        """  # nopep8
         uri = "{}/{}/actions/{}".format(self.uri, id, action_id)
         return self.request(uri, "action")

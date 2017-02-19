@@ -51,7 +51,7 @@ class Image(Endpoint):
             - https://developers.digitalocean.com/documentation/v2/#list-all-distribution-images
             - https://developers.digitalocean.com/documentation/v2/#list-all-application-images
             - https://developers.digitalocean.com/documentation/v2/#list-a-user-s-images
-        """
+        """  # nopep8
 
         params = {}
 
@@ -86,7 +86,7 @@ class Image(Endpoint):
         related:
             - https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-image-by-id
             - https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-image-by-slug
-        """
+        """  # nopep8
         uri = self.uri + "/%s" % id_slug
 
         return self.request(uri, "image")
@@ -113,7 +113,7 @@ class Image(Endpoint):
                 - created_at - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.
 
         related: https://developers.digitalocean.com/documentation/v2/#update-an-image
-        """
+        """  # nopep8
         uri = self.uri + "/%s" % id
 
         return self.request(uri, "image", request_method="PUT", attribs={"name": name})
@@ -128,7 +128,7 @@ class Image(Endpoint):
         out: None. A DOBOTOException is thrown if an issue is encountered.
 
         related: https://developers.digitalocean.com/documentation/v2/#delete-an-image
-        """
+        """  # nopep8
         uri = self.uri + "/%s" % id
 
         return self.request(uri, request_method="DELETE")
@@ -157,7 +157,7 @@ class Image(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#transfer-an-image
-        """
+        """  # nopep8
         uri = self.uri + "/%s/actions" % id
 
         return self.action_result(
@@ -189,7 +189,7 @@ class Image(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#convert-an-image-to-a-snapshot
-        """
+        """  # nopep8
         uri = self.uri + "/%s/actions" % id
 
         return self.action_result(
@@ -217,7 +217,7 @@ class Image(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-actions-for-an-image
-        """
+        """  # nopep8
         uri = self.uri + "/%s/actions" % id
 
         return self.pages(uri, "actions")
@@ -243,6 +243,6 @@ class Image(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-image-action
-        """
+        """  # nopep8
         uri = "%s/%s/actions/%s" % (self.uri, id, action_id)
         return self.request(uri, "action")

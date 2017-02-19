@@ -33,6 +33,6 @@ class Account(Endpoint):
                 - status_message - string - A human-readable message giving more details about the status of the account.
 
         related: https://developers.digitalocean.com/documentation/v2/#get-user-information
-        """
+        """  # nopep8
 
         return self.request(self.uri, "account")

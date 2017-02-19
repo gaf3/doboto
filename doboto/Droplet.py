@@ -5,6 +5,7 @@ import copy
 from .Endpoint import Endpoint
 from .exception import DOBOTOException, DOBOTOPollingException
 
+
 class Droplet(Endpoint):
     """
     description:
@@ -60,7 +61,7 @@ class Droplet(Endpoint):
         related:
             - https://developers.digitalocean.com/documentation/v2/#list-all-droplets
             - https://developers.digitalocean.com/documentation/v2/#listing-droplets-by-tag
-        """
+        """  # nopep8
         if tag_name is not None:
             uri = "%s?tag_name=%s" % (self.uri, tag_name)
         else:
@@ -99,7 +100,7 @@ class Droplet(Endpoint):
                 - volume_ids - list - A flat list including the unique identifier for each Block Storage volume attached to the Droplet.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-neighbors-for-a-droplet
-        """
+        """  # nopep8
         uri = "%s/%s/neighbors" % (self.uri, id)
 
         return self.pages(uri, "droplets")
@@ -133,7 +134,7 @@ class Droplet(Endpoint):
                 - volume_ids - list - A flat list including the unique identifier for each Block Storage volume attached to the Droplet.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-droplet-neighbors
-        """
+        """  # nopep8
         uri = "%s/droplet_neighbors" % (self.reports)
 
         return self.pages(uri, "neighbors")
@@ -211,7 +212,7 @@ class Droplet(Endpoint):
         related:
             - https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet
             - https://developers.digitalocean.com/documentation/v2/#create-multiple-droplets
-        """
+        """  # nopep8
 
         if poll < 1:
             poll = 1
@@ -323,7 +324,7 @@ class Droplet(Endpoint):
         related:
             - https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet
             - https://developers.digitalocean.com/documentation/v2/#create-multiple-droplets
-        """
+        """  # nopep8
 
         droplets = self.list()
 
@@ -412,7 +413,7 @@ class Droplet(Endpoint):
                 - volume_ids - list - A flat list including the unique identifier for each Block Storage volume attached to the Droplet.
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-droplet-by-id
-        """
+        """  # nopep8
         uri = "%s/%s" % (self.uri, id)
         return self.request(uri, "droplet")
 
@@ -489,7 +490,7 @@ class Droplet(Endpoint):
                 - created_at - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-backups-for-a-droplet
-        """
+        """  # nopep8
         uri = "%s/%s/backups" % (self.uri, id)
         return self.pages(uri, "backups")
 
@@ -517,7 +518,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#enable-backups
-        """
+        """  # nopep8
 
         return self.action(
             id=id, tag_name=tag_name, type="enable_backups",
@@ -548,7 +549,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#disable-backups
-        """
+        """  # nopep8
 
         return self.action(
             id=id, tag_name=tag_name, type="disable_backups",
@@ -580,7 +581,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#reboot-a-droplet
-        """
+        """  # nopep8
         uri = "%s/%s/actions" % (self.uri, id)
         attribs = {"type": "reboot"}
         return self.action_result(
@@ -618,7 +619,7 @@ class Droplet(Endpoint):
             - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#reboot-a-droplet
-        """
+        """  # nopep8
 
         return self.action(
             id=id, tag_name=tag_name, type="shutdown",
@@ -649,7 +650,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#power-on-a-droplet
-        """
+        """  # nopep8
 
         return self.action(
             id=id, tag_name=tag_name, type="power_on",
@@ -684,7 +685,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#power-off-a-droplet
-        """
+        """  # nopep8
 
         return self.action(
             id=id, tag_name=tag_name, type="power_off",
@@ -718,7 +719,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#power-cycle-a-droplet
-        """
+        """  # nopep8
 
         return self.action(
             id=id, tag_name=tag_name, type="power_cycle",
@@ -753,7 +754,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#restore-a-droplet
-        """
+        """  # nopep8
         uri = "%s/%s/actions" % (self.uri, id)
 
         try:
@@ -791,7 +792,7 @@ class Droplet(Endpoint):
             - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#password-reset-a-droplet
-        """
+        """  # nopep8
         uri = "%s/%s/actions" % (self.uri, id)
         attribs = {"type": "password_reset"}
         return self.action_result(
@@ -827,7 +828,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#resize-a-droplet
-        """
+        """  # nopep8
         uri = "%s/%s/actions" % (self.uri, id)
         disk = str(disk).lower()
         attribs = {"type": "resize", "size": "%s" % size, "disk": disk}
@@ -862,7 +863,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#rebuild-a-droplet
-        """
+        """  # nopep8
         uri = "%s/%s/actions" % (self.uri, id)
 
         try:
@@ -900,7 +901,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#rename-a-droplet
-        """
+        """  # nopep8
         uri = "%s/%s/actions" % (self.uri, id)
         attribs = {"type": "rename", "name": "%s" % name}
         return self.action_result(
@@ -922,7 +923,7 @@ class Droplet(Endpoint):
                 - version - string - A standard kernel version string representing the version, patch, and release information.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-available-kernels-for-a-droplet
-        """
+        """  # nopep8
         uri = "%s/%s/kernels" % (self.uri, id)
         return self.pages(uri, "kernels")
 
@@ -950,7 +951,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#change-the-kernel
-        """
+        """  # nopep8
         uri = "%s/%s/actions" % (self.uri, id)
         attribs = {"type": "change_kernel", "kernel": kernel_id}
         return self.action_result(
@@ -982,7 +983,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#enable-ipv6
-        """
+        """  # nopep8
         return self.action(
             id=id, tag_name=tag_name, type="enable_ipv6",
             wait=wait, poll=poll, timeout=timeout
@@ -1012,7 +1013,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#enable-private-networking
-        """
+        """  # nopep8
         return self.action(
             id=id, tag_name=tag_name, type="enable_private_networking",
             wait=wait, poll=poll, timeout=timeout
@@ -1038,7 +1039,7 @@ class Droplet(Endpoint):
                 - created_at - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-snapshots-for-a-droplet
-        """
+        """  # nopep8
         uri = "%s/%s/snapshots" % (self.uri, id)
         return self.pages(uri, "snapshots")
 
@@ -1072,7 +1073,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#snapshot-a-droplet
-        """
+        """  # nopep8
         if snapshot_name is None:
             raise ValueError("snapshot_name must be specified")
 
@@ -1117,7 +1118,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#droplet-actions
-        """
+        """  # nopep8
         uri = "%s/%s/actions" % (self.uri, id)
         return self.pages(uri, "actions")
 
@@ -1142,6 +1143,6 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-a-droplet-action
-        """
+        """  # nopep8
         uri = "%s/%s/actions/%s" % (self.uri, id, action_id)
         return self.request(uri, "action")

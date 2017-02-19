@@ -43,6 +43,6 @@ class Size(Endpoint):
                 - regions - list - A list containing the region slugs where this size is available for Droplet creates.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-sizes
-        """
+        """  # nopep8
 
         return self.pages(self.uri, "sizes")

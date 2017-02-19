@@ -34,7 +34,7 @@ class SSHKey(Endpoint):
                 - name - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-keys
-        """
+        """  # nopep8
 
         return self.pages(self.uri, "ssh_keys")
 
@@ -54,7 +54,7 @@ class SSHKey(Endpoint):
                 - name - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.
 
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-key
-        """
+        """  # nopep8
         attribs = {'name': name,
                    'public_key': public_key}
 
@@ -76,7 +76,7 @@ class SSHKey(Endpoint):
                 - name - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.
 
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-key
-        """
+        """  # nopep8
 
         ssh_keys = self.list()
 
@@ -91,7 +91,6 @@ class SSHKey(Endpoint):
 
         created = self.create(name, public_key)
         return (created, created)
-
 
     def info(self, id_fingerprint):
         """
@@ -108,7 +107,7 @@ class SSHKey(Endpoint):
                 - name - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-key
-        """
+        """  # nopep8
 
         uri = "%s/%s" % (self.uri, id_fingerprint)
         return self.request(uri, "ssh_key")
@@ -129,8 +128,7 @@ class SSHKey(Endpoint):
                 - name - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.
 
         related: https://developers.digitalocean.com/documentation/v2/#update-a-key
-        """
-
+        """  # nopep8
 
         uri = "%s/%s" % (self.uri, id_fingerprint)
         attribs = {'name': name}
@@ -147,7 +145,7 @@ class SSHKey(Endpoint):
         out: None. A DOBOTOException is thrown if an issue is encountered.
 
         related: https://developers.digitalocean.com/documentation/v2/#destroy-a-key
-        """
+        """  # nopep8
 
         uri = "%s/%s" % (self.uri, id_fingerprint)
 
