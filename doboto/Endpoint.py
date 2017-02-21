@@ -1,9 +1,10 @@
 """This holds the Endpoint class."""
 
+import time
 import json
 import requests
-from six import wraps
-from .DOBOTOException import DOBOTOException
+from .exception import DOBOTOException, DOBOTONotFoundException, DOBOTOPollingException
+
 
 class Endpoint(object):
 
@@ -43,6 +44,9 @@ class Endpoint(object):
 
             result = response.json()
 
+            if "id" in result and result["id"] == "not_found":
+                raise DOBOTONotFoundException()
+
             if expect not in result:
                 raise DOBOTOException(result=response.json())
 
@@ -80,3 +84,65 @@ class Endpoint(object):
                 next_url = None
 
         return items
+
+    def action_result(self, action, wait, poll, timeout):
+        """
+        General action result processor for waiting
+        """
+
+        if not wait:
+            return action
+
+        if poll < 1:
+            poll = 1
+
+        start_time = time.time()
+
+        while action["status"] == "in-progress":
+
+            time.sleep(poll)
+            try:
+                action = self.do.action.info(action["id"])
+            except Exception as exception:
+                if time.time() - start_time > timeout:
+                    raise DOBOTOPollingException(polling=action, error=exception)
+
+            if time.time() - start_time > timeout:
+                raise DOBOTOPollingException(polling=action)
+
+        return action
+
+    def actions_result(self, actions, wait, poll, timeout):
+        """
+        General actions result processor for waiting
+        """
+
+        if not wait:
+            return actions
+
+        if poll < 1:
+            poll = 1
+
+        start_time = time.time()
+
+        info = [index for index, action in enumerate(actions)
+                if action["status"] == "in-progress"]
+
+        while len(info) > 0:
+
+            time.sleep(poll)
+
+            for index in info:
+                try:
+                    actions[index] = self.do.action.info(actions[index]["id"])
+                except Exception as exception:
+                    if time.time() - start_time > timeout:
+                        raise DOBOTOPollingException(polling=actions, error=exception)
+
+            if time.time() - start_time > timeout:
+                raise DOBOTOPollingException(polling=actions)
+
+            info = [index for index, action in enumerate(actions)
+                    if action["status"] == "in-progress"]
+
+        return actions

@@ -3,7 +3,7 @@ This module contains tests for the Tag class
 """
 
 from unittest import TestCase
-from mock import MagicMock, patch
+from mock import MagicMock, patch, call
 from doboto import Tag
 
 
@@ -19,9 +19,10 @@ class TestTag(TestCase):
 
         self.test_url = "http://abc.example.com"
         self.test_uri = "{}/tags".format(self.test_url)
+        self.test_do = "do"
         self.test_token = "abc123"
         self.test_agent = "Unit"
-        self.instantiate_args = (self.test_token, self.test_url, self.test_agent)
+        self.instantiate_args = (self.test_do, self.test_token, self.test_url, self.test_agent)
 
         self.klass_name = "Tag"
         self.klass = getattr(Tag, self.klass_name)
@@ -89,6 +90,34 @@ class TestTag(TestCase):
         tag.create(test_name)
 
         mock_request.assert_called_with(self.test_uri, "tag", 'POST', {'name': test_name})
+
+    def test_present(self):
+        """
+        test present method
+        """
+        tag = self.klass(*self.instantiate_args)
+
+        tag.list = MagicMock(return_value=[{"name": "people"}])
+        tag.create = MagicMock(return_value={"name": "things"})
+
+        self.assertEqual(
+            tag.present("people"),
+            (
+                {"name": "people"},
+                None
+            )
+        )
+
+        self.assertEqual(
+            tag.present("stuff"),
+            (
+                 {"name": "things"},
+                 {"name": "things"}
+            )
+        )
+        tag.create.assert_has_calls([
+            call("stuff"),
+        ])
 
     @patch('doboto.Tag.Tag.request')
     def test_info(self, mock_request):

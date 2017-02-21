@@ -15,11 +15,12 @@ class Snapshot(Endpoint):
     related: https://developers.digitalocean.com/documentation/v2/#snapshots
     """
 
-    def __init__(self, token, url, agent):
+    def __init__(self, do, token, url, agent):
         """
-        Takes token and agent and sets its URI for floating ip interaction.
+        Takes token and agent and sets its DO for reference and URI for floating ip interaction.
         """
         super(Snapshot, self).__init__(token, agent)
+        self.do = do
         self.uri = "%s/snapshots" % url
 
     def list(self, resource_type=None):
@@ -44,7 +45,7 @@ class Snapshot(Endpoint):
             - https://developers.digitalocean.com/documentation/v2/#list-all-snapshots
             - https://developers.digitalocean.com/documentation/v2/#list-all-droplet-snapshots
             - https://developers.digitalocean.com/documentation/v2/#list-all-volume-snapshots
-        """
+        """  # nopep8
 
         params = {}
 
@@ -72,7 +73,7 @@ class Snapshot(Endpoint):
                 - size_gigabytes - number - The billable size of the snapshot in gigabytes.
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-snapshot-by-id
-        """
+        """  # nopep8
         uri = self.uri + "/%s" % id
 
         return self.request(uri, "snapshot")
@@ -87,7 +88,7 @@ class Snapshot(Endpoint):
         out: None. A DOBOTOException is thrown if an issue is encountered.
 
         related: https://developers.digitalocean.com/documentation/v2/#delete-an-snapshot
-        """
+        """  # nopep8
         uri = self.uri + "/%s" % id
 
         return self.request(uri, request_method="DELETE")

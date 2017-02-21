@@ -19,9 +19,10 @@ class TestFloatingIP(TestCase):
 
         self.test_url = "http://abc.example.com"
         self.test_uri = "{}/floating_ips".format(self.test_url)
+        self.test_do = "do"
         self.test_token = "abc123"
         self.test_agent = "Unit"
-        self.instantiate_args = (self.test_token, self.test_url, self.test_agent)
+        self.instantiate_args = (self.test_do, self.test_token, self.test_url, self.test_agent)
 
         self.klass_name = "FloatingIP"
         self.klass = getattr(FloatingIP, self.klass_name)
@@ -106,8 +107,9 @@ class TestFloatingIP(TestCase):
         test_uri = "{}/{}".format(self.test_uri, ip)
         mock_request.assert_called_with(test_uri, request_method='DELETE')
 
+    @patch('doboto.FloatingIP.FloatingIP.action_result')
     @patch('doboto.FloatingIP.FloatingIP.request')
-    def test_assign(self, mock_request):
+    def test_assign(self, mock_request, mock_action_result):
         """
         assign works with happy path
         """
@@ -115,7 +117,8 @@ class TestFloatingIP(TestCase):
         ip = "1.2.3.4"
         droplet_id = 1234
         floating_ip = self.klass(*self.instantiate_args)
-        floating_ip.assign(ip, droplet_id)
+        mock_request.return_value = {}
+        floating_ip.assign(ip, droplet_id, True, 2, 3)
         test_uri = "{}/{}/actions".format(self.test_uri, ip)
         attribs = {
             'type': 'assign',
@@ -123,22 +126,26 @@ class TestFloatingIP(TestCase):
         }
 
         mock_request.assert_called_with(test_uri, "action", 'POST', attribs)
+        mock_action_result.assert_called_with({}, True, 2, 3)
 
+    @patch('doboto.FloatingIP.FloatingIP.action_result')
     @patch('doboto.FloatingIP.FloatingIP.request')
-    def test_unassign(self, mock_request):
+    def test_unassign(self, mock_request, mock_action_result):
         """
         unassign works with happy path
         """
 
         ip = "1.2.3.4"
         floating_ip = self.klass(*self.instantiate_args)
-        floating_ip.unassign(ip)
+        mock_request.return_value = {}
+        floating_ip.unassign(ip, True, 2, 3)
         test_uri = "{}/{}/actions".format(self.test_uri, ip)
         attribs = {
             'type': 'unassign'
         }
 
         mock_request.assert_called_with(test_uri, "action", 'POST', attribs)
+        mock_action_result.assert_called_with({}, True, 2, 3)
 
     @patch('doboto.FloatingIP.FloatingIP.pages')
     def test_action_list(self, mock_pages):

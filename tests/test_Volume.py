@@ -3,8 +3,9 @@ This module contains tests for the main DO class
 """
 
 from unittest import TestCase
-from mock import MagicMock, patch
+from mock import MagicMock, patch, call
 from doboto import Volume
+from doboto.exception import DOBOTOException, DOBOTONotFoundException, DOBOTOPollingException
 
 
 class TestVolume(TestCase):
@@ -20,9 +21,10 @@ class TestVolume(TestCase):
 
         self.test_url = "http://abc.example.com"
         self.test_uri = "{}/volumes".format(self.test_url)
+        self.test_do = "do"
         self.test_token = "abc123"
         self.test_agent = "Unit"
-        self.instantiate_args = (self.test_token, self.test_url, self.test_agent)
+        self.instantiate_args = (self.test_do, self.test_token, self.test_url, self.test_agent)
 
         self.klass_name = "Volume"
         self.klass = getattr(Volume, self.klass_name)
@@ -67,26 +69,89 @@ class TestVolume(TestCase):
         volume.list(region)
         mock_pages.assert_called_with(self.test_uri, "volumes", params={"region": region})
 
+    @patch('time.sleep')
     @patch('doboto.Volume.Volume.request')
-    def test_create(self, mock_request):
+    def test_create(self, mock_request, mock_sleep):
         """
         create works with volume id
         """
 
         volume = self.klass(*self.instantiate_args)
+        mock_request.return_value = {"id": 1, "people": "stuff"}
         datas = {"name": "test.com", "region": "nyc3",
                  "size": "512mb", "image": "ubuntu-14-04-x64"}
-        volume.create(datas)
 
+        # Standard
+
+        self.assertEqual(volume.create(datas), {"id": 1, "people": "stuff"})
+
+        # Wait
+
+        volume.info = MagicMock(side_effect=[Exception("Not yet"), {"stuff": "things"}])
+        self.assertEqual(volume.create(datas, wait=True, poll=2), {"stuff": "things"})
         mock_request.assert_called_with(
-            self.test_uri, "volume", 'POST', attribs=datas)
+            self.test_uri, "volume", 'POST', attribs=datas
+        )
+        mock_sleep.assert_has_calls([call(2), call(2)])
+        volume.info.assert_has_calls([call(1), call(1)])
 
-        # Check empty
+        # Wait with bad poll
 
-        volume.create()
+        volume = self.klass(*self.instantiate_args)
+        volume.info = MagicMock(side_effect=[
+            {"stuff": "things"}
+        ])
+        self.assertEqual(volume.create(datas, wait=True, poll=0), {"stuff": "things"})
+        mock_sleep.assert_has_calls([call(1)])
 
-        mock_request.assert_called_with(
-            self.test_uri,  "volume", 'POST', attribs={})
+        # Wait with timeout and error
+
+        mock_request.return_value = {"id": 2, "people": "stuff"}
+        volume.info.side_effect = [Exception("Not yet"), {"stuff": "things"}]
+
+        self.assertRaisesRegexp(
+            DOBOTOPollingException,
+            "DO API Timeout: Not yet while polling:.*stuff",
+            volume.create, datas, wait=True, poll=5, timeout=-1
+        )
+
+        # Wait with timeout
+
+        volume.info.side_effect = [DOBOTONotFoundException()]
+
+        self.assertRaisesRegexp(
+            DOBOTOPollingException,
+            "DO API Timeout while polling:.*stuff",
+            volume.create, datas, wait=True, poll=4, timeout=-1
+        )
+
+    def test_present(self):
+        """
+        present works against the name
+        """
+
+        volume = self.klass(*self.instantiate_args)
+        volume.list = MagicMock(return_value=[{"name": "people"}])
+        volume.create = MagicMock(return_value={"name": "things"})
+
+        self.assertEqual(
+            volume.present({"name": "people"}),
+            (
+                {"name": "people"},
+                None
+            )
+        )
+
+        self.assertEqual(
+            volume.present({"name": "stuff"}, True, 2, 3),
+            (
+                 {"name": "things"},
+                 {"name": "things"}
+            )
+        )
+        volume.create.assert_has_calls([
+            call({"name": "stuff"}, True, 2, 3),
+        ])
 
     @patch('doboto.Volume.Volume.request')
     def test_info(self, mock_request):
@@ -185,8 +250,9 @@ class TestVolume(TestCase):
         volume.snapshot_create(id, snap_name)
         mock_request.assert_called_with(test_uri, "snapshot", 'POST', attribs=datas)
 
+    @patch('doboto.Volume.Volume.action_result')
     @patch('doboto.Volume.Volume.request')
-    def test_attach(self, mock_request):
+    def test_attach(self, mock_request, mock_action_result):
         """
         test that attach works with id and/or name
         """
@@ -194,6 +260,7 @@ class TestVolume(TestCase):
 
         droplet_id = 123
         region = "nyc1"
+        mock_request.return_value = {}
 
         # By id
 
@@ -203,8 +270,9 @@ class TestVolume(TestCase):
             "type": "attach",
             "droplet_id": droplet_id
         }
-        volume.attach(id=id, droplet_id=droplet_id)
+        volume.attach(id=id, droplet_id=droplet_id, wait=True, poll=2, timeout=3)
         mock_request.assert_called_with(test_uri, "action", 'POST', attribs=datas)
+        mock_action_result.assert_called_with({}, True, 2, 3)
 
         datas = {
             "type": "attach",
@@ -232,8 +300,9 @@ class TestVolume(TestCase):
             ValueError, "Must supply an id or name", volume.attach, droplet_id=droplet_id
         )
 
+    @patch('doboto.Volume.Volume.action_result')
     @patch('doboto.Volume.Volume.request')
-    def test_detach(self, mock_request):
+    def test_detach(self, mock_request, mock_action_result):
         """
         test that detach works with id and/or name
         """
@@ -241,6 +310,7 @@ class TestVolume(TestCase):
 
         droplet_id = 123
         region = "nyc1"
+        mock_request.return_value = {}
 
         # By id
 
@@ -250,8 +320,9 @@ class TestVolume(TestCase):
             "type": "detach",
             "droplet_id": droplet_id
         }
-        volume.detach(id=id, droplet_id=droplet_id)
+        volume.detach(id=id, droplet_id=droplet_id, wait=True, poll=2, timeout=3)
         mock_request.assert_called_with(test_uri, "action", 'POST', attribs=datas)
+        mock_action_result.assert_called_with({}, True, 2, 3)
 
         datas = {
             "type": "detach",
@@ -279,8 +350,9 @@ class TestVolume(TestCase):
             ValueError, "Must supply an id or name", volume.detach, droplet_id=droplet_id
         )
 
+    @patch('doboto.Volume.Volume.action_result')
     @patch('doboto.Volume.Volume.request')
-    def test_resize(self, mock_request):
+    def test_resize(self, mock_request, mock_action_result):
         """
         test that resize works
         """
@@ -294,8 +366,11 @@ class TestVolume(TestCase):
             "type": "resize",
             "size_gigabytes": 2
         }
-        volume.resize(id, size)
+        mock_request.return_value = {}
+
+        volume.resize(id, size, wait=True, poll=2, timeout=3)
         mock_request.assert_called_with(test_uri, "action", 'POST', attribs=datas)
+        mock_action_result.assert_called_with({}, True, 2, 3)
 
         datas = {
             "type": "resize",

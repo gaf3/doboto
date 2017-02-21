@@ -3,7 +3,7 @@ This module contains tests for the main Domain class
 """
 
 from unittest import TestCase
-from mock import MagicMock, patch
+from mock import MagicMock, patch, call
 from doboto import Domain
 
 
@@ -20,9 +20,10 @@ class TestDomain(TestCase):
 
         self.test_url = "http://abc.example.com"
         self.test_uri = "{}/domains".format(self.test_url)
+        self.test_do = "do"
         self.test_token = "abc123"
         self.test_agent = "Unit"
-        self.instantiate_args = (self.test_token, self.test_url, self.test_agent)
+        self.instantiate_args = (self.test_do, self.test_token, self.test_url, self.test_agent)
 
         self.klass_name = "Domain"
         self.klass = getattr(Domain, self.klass_name)
@@ -71,6 +72,34 @@ class TestDomain(TestCase):
         test_uri = "{}".format(self.test_uri)
 
         mock_request.assert_called_with(test_uri, "domain", 'POST', attribs=datas)
+
+    def test_present(self):
+        """
+        test present method
+        """
+        domain_obj = self.klass(*self.instantiate_args)
+
+        domain_obj.list = MagicMock(return_value=[{"name": "people"}])
+        domain_obj.create = MagicMock(return_value={"name": "things"})
+
+        self.assertEqual(
+            domain_obj.present("people", "1.2.3.4"),
+            (
+                {"name": "people"},
+                None
+            )
+        )
+
+        self.assertEqual(
+            domain_obj.present("stuff", "1.2.3.4"),
+            (
+                 {"name": "things"},
+                 {"name": "things"}
+            )
+        )
+        domain_obj.create.assert_has_calls([
+            call("stuff", "1.2.3.4"),
+        ])
 
     @patch('doboto.Domain.Domain.request')
     def test_info(self, mock_request):

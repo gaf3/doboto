@@ -163,11 +163,17 @@ Related:
 Transfer an Image to another Region
 ----------------------------------------------------------------------------------------------------
 
-.. method:: do.image.transfer(id, region)
+.. method:: do.image.transfer(id, region, wait=False, poll=5, timeout=300)
 
 - *id* - number - id of the Image
 
 - *region* - string - The region slug that represents the region target.
+
+- *wait* - boolean - Whether to wait until the droplet is ready
+
+- *poll* - number - Number of seconds between checks (min 1 sec)
+
+- *timeout* - number - How many seconds before giving up
 
 
 Returns:
@@ -203,9 +209,15 @@ Related:
 Convert an Image to a Snapshot
 ----------------------------------------------------------------------------------------------------
 
-.. method:: do.image.convert(id)
+.. method:: do.image.convert(id, wait=False, poll=5, timeout=300)
 
 - *id* - number - id of the Image
+
+- *wait* - boolean - Whether to wait until the droplet is ready
+
+- *poll* - number - Number of seconds between checks (min 1 sec)
+
+- *timeout* - number - How many seconds before giving up
 
 
 Returns:

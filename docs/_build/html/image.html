@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Image (do.image) &#8212; DOBOTO 0.3.1 documentation</title>
+    <title>Image (do.image) &#8212; DOBOTO 0.4.0 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.3.1',
+        VERSION:     '0.4.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="floating_ip.html" title="FloatingIP (do.floating_ip)"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.4.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -177,12 +177,15 @@
 <h2>Transfer an Image to another Region<a class="headerlink" href="#transfer-an-image-to-another-region" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="do.image.transfer">
-<code class="descclassname">do.image.</code><code class="descname">transfer</code><span class="sig-paren">(</span><em>id</em>, <em>region</em><span class="sig-paren">)</span><a class="headerlink" href="#do.image.transfer" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">do.image.</code><code class="descname">transfer</code><span class="sig-paren">(</span><em>id</em>, <em>region</em>, <em>wait=False</em>, <em>poll=5</em>, <em>timeout=300</em><span class="sig-paren">)</span><a class="headerlink" href="#do.image.transfer" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <ul class="simple">
 <li><em>id</em> - number - id of the Image</li>
 <li><em>region</em> - string - The region slug that represents the region target.</li>
+<li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
+<li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
 <ul class="simple">
@@ -208,11 +211,14 @@
 <h2>Convert an Image to a Snapshot<a class="headerlink" href="#convert-an-image-to-a-snapshot" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="do.image.convert">
-<code class="descclassname">do.image.</code><code class="descname">convert</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#do.image.convert" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">do.image.</code><code class="descname">convert</code><span class="sig-paren">(</span><em>id</em>, <em>wait=False</em>, <em>poll=5</em>, <em>timeout=300</em><span class="sig-paren">)</span><a class="headerlink" href="#do.image.convert" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <ul class="simple">
 <li><em>id</em> - number - id of the Image</li>
+<li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
+<li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
 <ul class="simple">
@@ -357,7 +363,7 @@
         <li class="right" >
           <a href="floating_ip.html" title="FloatingIP (do.floating_ip)"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.3.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.4.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

@@ -19,11 +19,12 @@ class Action(Endpoint):
     related: https://developers.digitalocean.com/documentation/v2/#actions
     """
 
-    def __init__(self, token, url, agent):
+    def __init__(self, do, token, url, agent):
         """
-        Takes token and agent and sets its URI for action interaction.
+        Takes token and agent and sets its DO for reference and URI for action interaction.
         """
         super(Action, self).__init__(token, agent)
+        self.do = do
         self.uri = "%s/actions" % url
 
     def list(self):
@@ -43,7 +44,7 @@ class Action(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-actions
-        """
+        """  # nopep8
 
         return self.pages(self.uri, "actions")
 
@@ -67,7 +68,7 @@ class Action(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-action
-        """
+        """  # nopep8
 
         uri = "%s/%s" % (self.uri, id)
         return self.request(uri, "action")

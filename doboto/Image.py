@@ -17,11 +17,12 @@ class Image(Endpoint):
     related: https://developers.digitalocean.com/documentation/v2/#images
     """
 
-    def __init__(self, token, url, agent):
+    def __init__(self, do, token, url, agent):
         """
-        Takes token and agent and sets its URI for floating ip interaction.
+        Takes token and agent and sets its DO for reference and URI for floating ip interaction.
         """
         super(Image, self).__init__(token, agent)
+        self.do = do
         self.uri = "%s/images" % url
 
     def list(self, type=None, private=None):
@@ -50,7 +51,7 @@ class Image(Endpoint):
             - https://developers.digitalocean.com/documentation/v2/#list-all-distribution-images
             - https://developers.digitalocean.com/documentation/v2/#list-all-application-images
             - https://developers.digitalocean.com/documentation/v2/#list-a-user-s-images
-        """
+        """  # nopep8
 
         params = {}
 
@@ -85,7 +86,7 @@ class Image(Endpoint):
         related:
             - https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-image-by-id
             - https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-image-by-slug
-        """
+        """  # nopep8
         uri = self.uri + "/%s" % id_slug
 
         return self.request(uri, "image")
@@ -112,7 +113,7 @@ class Image(Endpoint):
                 - created_at - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.
 
         related: https://developers.digitalocean.com/documentation/v2/#update-an-image
-        """
+        """  # nopep8
         uri = self.uri + "/%s" % id
 
         return self.request(uri, "image", request_method="PUT", attribs={"name": name})
@@ -127,18 +128,21 @@ class Image(Endpoint):
         out: None. A DOBOTOException is thrown if an issue is encountered.
 
         related: https://developers.digitalocean.com/documentation/v2/#delete-an-image
-        """
+        """  # nopep8
         uri = self.uri + "/%s" % id
 
         return self.request(uri, request_method="DELETE")
 
-    def transfer(self, id, region):
+    def transfer(self, id, region, wait=False, poll=5, timeout=300):
         """
         description: Transfer an Image to another Region
 
         in:
             - id - number - id of the Image
             - region - string - The region slug that represents the region target.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks (min 1 sec)
+            - timeout - number - How many seconds before giving up
 
         out:
             An Action dictt:
@@ -153,19 +157,24 @@ class Image(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#transfer-an-image
-        """
+        """  # nopep8
         uri = self.uri + "/%s/actions" % id
 
-        return self.request(
-            uri, "action", request_method="POST", attribs={"type": "transfer", "region": region}
+        return self.action_result(
+            self.request(
+                uri, "action", request_method="POST", attribs={"type": "transfer", "region": region}
+            ), wait, poll, timeout
         )
 
-    def convert(self, id):
+    def convert(self, id, wait=False, poll=5, timeout=300):
         """
         description: Convert an Image to a Snapshot
 
         in:
             - id - number - id of the Image
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks (min 1 sec)
+            - timeout - number - How many seconds before giving up
 
         out:
             An Action dict:
@@ -180,10 +189,13 @@ class Image(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#convert-an-image-to-a-snapshot
-        """
+        """  # nopep8
         uri = self.uri + "/%s/actions" % id
 
-        return self.request(uri, "action", request_method="POST", attribs={"type": "convert"})
+        return self.action_result(
+            self.request(uri, "action", request_method="POST", attribs={"type": "convert"}),
+            wait, poll, timeout
+        )
 
     def action_list(self, id):
         """
@@ -205,7 +217,7 @@ class Image(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-actions-for-an-image
-        """
+        """  # nopep8
         uri = self.uri + "/%s/actions" % id
 
         return self.pages(uri, "actions")
@@ -231,6 +243,6 @@ class Image(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-image-action
-        """
+        """  # nopep8
         uri = "%s/%s/actions/%s" % (self.uri, id, action_id)
         return self.request(uri, "action")

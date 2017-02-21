@@ -10,11 +10,12 @@ class Account(Endpoint):
     related: https://developers.digitalocean.com/documentation/v2/#account
     """
 
-    def __init__(self, token, url, agent):
+    def __init__(self, do, token, url, agent):
         """
-        Takes token and agent and sets its URI for account interaction.
+        Takes token and agent and sets its DO for reference and URI for account interaction.
         """
         super(Account, self).__init__(token, agent)
+        self.do = do
         self.uri = "%s/account" % url
 
     def info(self):
@@ -32,6 +33,6 @@ class Account(Endpoint):
                 - status_message - string - A human-readable message giving more details about the status of the account.
 
         related: https://developers.digitalocean.com/documentation/v2/#get-user-information
-        """
+        """  # nopep8
 
         return self.request(self.uri, "account")

@@ -18,11 +18,12 @@ class Size(Endpoint):
     related: https://developers.digitalocean.com/documentation/v2/#sizes
     """
 
-    def __init__(self, token, url, agent):
+    def __init__(self, do, token, url, agent):
         """
-        Takes token and agent and sets its URI for floating ip interaction.
+        Takes token and agent and sets its DO for reference and URI for floating ip interaction.
         """
         super(Size, self).__init__(token, agent)
+        self.do = do
         self.uri = "%s/sizes" % url
 
     def list(self):
@@ -42,6 +43,6 @@ class Size(Endpoint):
                 - regions - list - A list containing the region slugs where this size is available for Droplet creates.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-sizes
-        """
+        """  # nopep8
 
         return self.pages(self.uri, "sizes")
