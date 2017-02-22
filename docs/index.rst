@@ -35,6 +35,21 @@ Installation
 
   pip install doboto
 
+Ubuntu
+^^^^^^
+
+**If installation issues, try this before pip install**::
+
+    apt-get install python-dev libffi-dev
+
+Fedora
+^^^^^^
+
+**If installation issues, try this before pip install**::
+
+    dnf install redhat-rpm-config
+    yum install libffi-devel python-devel openssl-devel
+
 Classes
 -----------
 
