@@ -45,7 +45,7 @@ class Snapshot(Endpoint):
             - https://developers.digitalocean.com/documentation/v2/#list-all-snapshots
             - https://developers.digitalocean.com/documentation/v2/#list-all-droplet-snapshots
             - https://developers.digitalocean.com/documentation/v2/#list-all-volume-snapshots
-        """
+        """  # nopep8
 
         params = {}
 
@@ -73,7 +73,7 @@ class Snapshot(Endpoint):
                 - size_gigabytes - number - The billable size of the snapshot in gigabytes.
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-snapshot-by-id
-        """
+        """  # nopep8
         uri = self.uri + "/%s" % id
 
         return self.request(uri, "snapshot")
@@ -88,7 +88,7 @@ class Snapshot(Endpoint):
         out: None. A DOBOTOException is thrown if an issue is encountered.
 
         related: https://developers.digitalocean.com/documentation/v2/#delete-an-snapshot
-        """
+        """  # nopep8
         uri = self.uri + "/%s" % id
 
         return self.request(uri, request_method="DELETE")

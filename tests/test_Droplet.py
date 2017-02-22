@@ -5,7 +5,7 @@ This module contains tests for the main DO class
 from unittest import TestCase
 from mock import MagicMock, patch, call
 from doboto import Droplet
-from doboto.DOBOTOException import DOBOTOException
+from doboto.exception import DOBOTOException, DOBOTOPollingException
 
 
 class TestDroplet(TestCase):
@@ -141,16 +141,23 @@ class TestDroplet(TestCase):
 
         drop = self.klass(*self.instantiate_args)
 
-        drop.ready = MagicMock(side_effect=[False, False, True])
-        drop.info = MagicMock(side_effect=[Exception("Not yet"), {"stuff": "things"}])
+        # Standard
 
         mock_request.return_value = {"id": 1, "people": "stuff"}
 
         datas = {"name": "test.com", "region": "nyc3",
                  "size": "512mb", "image": "ubuntu-14-04-x64"}
-        self.assertEqual(drop.create(datas, wait=True, poll=2), {"stuff": "things"})
+        self.assertEqual(drop.create(datas), {"id": 1, "people": "stuff"})
 
         mock_request.assert_called_with(self.test_uri, "droplet", 'POST', attribs=datas)
+
+        # Wait
+
+        drop.ready = MagicMock(side_effect=[False, False, True])
+        drop.info = MagicMock(side_effect=[Exception("Not yet"), {"stuff": "things"}])
+
+        self.assertEqual(drop.create(datas, wait=True, poll=2), {"stuff": "things"})
+
         mock_sleep.assert_has_calls([call(2), call(2)])
         drop.ready.assert_has_calls([
             call({"id": 1, "people": "stuff"}, datas),
@@ -159,42 +166,87 @@ class TestDroplet(TestCase):
         ])
         drop.info.assert_has_calls([call(1), call(1)])
 
-        mock_request.return_value = {"id": 2, "people": "stuff"}
-        drop.ready.side_effect = [False]
-
-        with self.assertRaises(DOBOTOException):
-            drop.create(datas, wait=True, poll=4, timeout=-1)
-
-        mock_request.assert_called_with(self.test_uri, "droplet", 'POST', attribs=datas)
-        mock_sleep.assert_has_calls([call(4)])
-        drop.ready.assert_has_calls([
-            call({"id": 2, "people": "stuff"}, datas)
-        ])
-        drop.info.assert_has_calls([call(2)])
+        # Wait with bad poll
 
         drop.ready.side_effect = [False, False, True]
         drop.info.side_effect = [Exception("Not yet"), {"stuff": "things"}]
+
+        self.assertEqual(drop.create(datas, wait=True, poll=0), {"stuff": "things"})
+
+        mock_sleep.assert_has_calls([call(1), call(1)])
+
+        # Wait with timeout and error
+
+        mock_request.return_value = {"id": 2, "people": "stuff"}
+        drop.ready.side_effect = [False]
+        drop.info.side_effect = [Exception("Not yet")]
+
+        self.assertRaisesRegexp(
+            DOBOTOPollingException,
+            "DO API Timeout: Not yet while polling:.*stuff",
+            drop.create, datas, wait=True, poll=4, timeout=-1
+        )
+
+        # Wait with timeout
+
+        drop.ready.side_effect = [False]
+        drop.info.side_effect = [{"stuff": "things"}]
+
+        self.assertRaisesRegexp(
+            DOBOTOPollingException,
+            "DO API Timeout while polling:.*stuff",
+            drop.create, datas, wait=True, poll=4, timeout=-1
+        )
+
+        # Standard
 
         mock_request.return_value = [{"id": 3, "people": "stuff"}]
 
         datas = {"names": ["test.com", "pass.com", "fail.com"], "region": "nyc3",
                  "size": "512mb", "image": "ubuntu-14-04-x64"}
-        self.assertEqual(drop.create(datas, wait=True, poll=5), [{"stuff": "things"}])
+        self.assertEqual(drop.create(datas), [{"id": 3, "people": "stuff"}])
+
+        mock_request.assert_called_with(self.test_uri, "droplets", 'POST', attribs=datas)
+
+        # Wait
+
+        drop.ready.side_effect = [False, False, True]
+        drop.info.side_effect = [Exception("Not yet"), {"id": 3, "stuff": "things"}]
+
+        self.assertEqual(drop.create(datas, wait=True, poll=5), [{"id": 3, "stuff": "things"}])
 
         mock_request.assert_called_with(self.test_uri, "droplets", 'POST', attribs=datas)
         mock_sleep.assert_has_calls([call(5), call(5)])
         drop.ready.assert_has_calls([
             call({"id": 3, "people": "stuff"}, datas),
             call({"id": 3, "people": "stuff"}, datas),
-            call({"stuff": "things"}, datas)
+            call({"id": 3, "stuff": "things"}, datas)
         ])
         drop.info.assert_has_calls([call(3), call(3)])
+
+        # Wait with timeout and error
 
         drop.ready.side_effect = [False, False, False, False, True]
         drop.info.side_effect = [Exception("Not yet"), {"stuff": "things"}]
 
-        with self.assertRaises(DOBOTOException):
-            drop.create(datas, wait=True, timeout=-1)
+        self.assertRaisesRegexp(
+            DOBOTOPollingException,
+            "DO API Timeout: Not yet while polling:.*stuff",
+            drop.create, datas, wait=True, poll=5, timeout=-1
+        )
+
+        # Wait with timeout
+
+        drop.ready.side_effect = [False]
+        drop.info.side_effect = [{"stuff": "things"}]
+
+        self.assertRaisesRegexp(
+            DOBOTOPollingException,
+            "DO API Timeout while polling:.*stuff",
+            drop.create, datas, wait=True, poll=4, timeout=-1
+        )
+
+        # No name
 
         with self.assertRaises(ValueError):
             drop.create({})

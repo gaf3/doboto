@@ -3,8 +3,6 @@
 import time
 import copy
 from .Endpoint import Endpoint
-from .DOBOTOException import DOBOTOException
-
 
 
 class Certificate(Endpoint):

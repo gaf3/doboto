@@ -5,7 +5,6 @@ This module contains tests for the main DO class
 from unittest import TestCase
 from mock import MagicMock, patch, call
 from doboto import Certificate
-from doboto.DOBOTOException import DOBOTOException
 
 
 class TestCertificate(TestCase):

@@ -76,6 +76,21 @@ feature complete and weren&#8217;t being updated as the DigitalOcean API grew.</
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">doboto</span>
 </pre></div>
 </div>
+<div class="section" id="ubuntu">
+<h3>Ubuntu<a class="headerlink" href="#ubuntu" title="Permalink to this headline">¶</a></h3>
+<p><strong>If installation issues, try this before pip install</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">python</span><span class="o">-</span><span class="n">dev</span> <span class="n">libffi</span><span class="o">-</span><span class="n">dev</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fedora">
+<h3>Fedora<a class="headerlink" href="#fedora" title="Permalink to this headline">¶</a></h3>
+<p><strong>If installation issues, try this before pip install</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dnf</span> <span class="n">install</span> <span class="n">redhat</span><span class="o">-</span><span class="n">rpm</span><span class="o">-</span><span class="n">config</span>
+<span class="n">yum</span> <span class="n">install</span> <span class="n">libffi</span><span class="o">-</span><span class="n">devel</span> <span class="n">python</span><span class="o">-</span><span class="n">devel</span> <span class="n">openssl</span><span class="o">-</span><span class="n">devel</span>
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="classes">
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
@@ -128,8 +143,12 @@ longer be &#8216;in-progress&#8217;.</p>
 <div class="section" id="expectations-and-exceptions">
 <h2>Expectations and Exceptions<a class="headerlink" href="#expectations-and-exceptions" title="Permalink to this headline">¶</a></h2>
 <p>The DigitalOcean API sends back JSON objects with expected formats. Rather than have you check
-that format with every call, DOBOTO checks it for you, raising an DOBOTOException when its
+that format with every call, DOBOTO checks it for you, raising an exception when its
 expectations aren&#8217;t met:</p>
+<div class="section" id="dobotoexception">
+<h3>DOBOTOException<a class="headerlink" href="#dobotoexception" title="Permalink to this headline">¶</a></h3>
+<p>DOBOTOException is the main exception and the parent of the others.  Raised when general
+expectations aren&#8217;t met.</p>
 <p><strong>Bad token</strong>:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">doboto.DO</span> <span class="k">import</span> <span class="n">DO</span>
 
@@ -140,15 +159,64 @@ expectations aren&#8217;t met:</p>
 </div>
 <p><strong>Result</strong>:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
-  <span class="n">File</span> <span class="s2">&quot;&lt;stdin&gt;&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">1</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-  <span class="n">File</span> <span class="s2">&quot;doboto/Account.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">36</span><span class="p">,</span> <span class="ow">in</span> <span class="n">info</span>
+  <span class="n">File</span> <span class="s2">&quot;doboto/Account.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">38</span><span class="p">,</span> <span class="ow">in</span> <span class="n">info</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span> <span class="s2">&quot;account&quot;</span><span class="p">)</span>
-  <span class="n">File</span> <span class="s2">&quot;doboto/Endpoint.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">45</span><span class="p">,</span> <span class="ow">in</span> <span class="n">request</span>
+  <span class="n">File</span> <span class="s2">&quot;doboto/Endpoint.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">50</span><span class="p">,</span> <span class="ow">in</span> <span class="n">request</span>
     <span class="k">raise</span> <span class="n">DOBOTOException</span><span class="p">(</span><span class="n">result</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
-<span class="n">doboto</span><span class="o">.</span><span class="n">DOBOTOException</span><span class="o">.</span><span class="n">DOBOTOException</span><span class="p">:</span> <span class="n">DO</span> <span class="n">API</span> <span class="n">Error</span><span class="p">:</span> <span class="p">{</span><span class="sa">u</span><span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;Unable to authenticate you.&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;unauthorized&#39;</span><span class="p">}</span>
+<span class="n">doboto</span><span class="o">.</span><span class="n">exception</span><span class="o">.</span><span class="n">DOBOTOException</span><span class="p">:</span> <span class="n">DO</span> <span class="n">API</span> <span class="n">Error</span><span class="p">:</span> <span class="p">{</span><span class="sa">u</span><span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;Unable to authenticate you.&#39;</span><span class="p">,</span> <span class="sa">u</span><span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="sa">u</span><span class="s1">&#39;unauthorized&#39;</span><span class="p">}</span>
 </pre></div>
 </div>
 <p>The JSON result (second part of the string output) is accessible via the result property.</p>
+</div>
+<div class="section" id="dobotonotfoundexception">
+<h3>DOBOTONotFoundException<a class="headerlink" href="#dobotonotfoundexception" title="Permalink to this headline">¶</a></h3>
+<p>DOBOTONotFoundException is raised when a response from the API contains an &#8220;id&#8221; field with a value of &#8220;not_found&#8221;</p>
+<p><strong>Missing droplet</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">doboto.DO</span> <span class="k">import</span> <span class="n">DO</span>
+
+<span class="n">do</span> <span class="o">=</span> <span class="n">DO</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="s2">&quot;secret&quot;</span><span class="p">)</span>
+
+<span class="n">droplet</span> <span class="o">=</span> <span class="n">do</span><span class="o">.</span><span class="n">droplet</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Result</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+  <span class="n">File</span> <span class="s2">&quot;doboto/Droplet.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">417</span><span class="p">,</span> <span class="ow">in</span> <span class="n">info</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="p">(</span><span class="n">uri</span><span class="p">,</span> <span class="s2">&quot;droplet&quot;</span><span class="p">)</span>
+  <span class="n">File</span> <span class="s2">&quot;doboto/Endpoint.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">47</span><span class="p">,</span> <span class="ow">in</span> <span class="n">request</span>
+    <span class="k">raise</span> <span class="n">DOBOTONotFoundException</span><span class="p">()</span>
+<span class="n">doboto</span><span class="o">.</span><span class="n">exception</span><span class="o">.</span><span class="n">DOBOTONotFoundException</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="dobotopollingexception">
+<h3>DOBOTOPollingException<a class="headerlink" href="#dobotopollingexception" title="Permalink to this headline">¶</a></h3>
+<p>DOBOTOPollingException is raised when the timeout is exceeded while waiting for a resource to
+become ready.</p>
+<p><strong>Impatient droplet</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">doboto.DO</span> <span class="k">import</span> <span class="n">DO</span>
+
+<span class="n">do</span> <span class="o">=</span> <span class="n">DO</span><span class="p">(</span><span class="n">token</span><span class="o">=</span><span class="s2">&quot;secret&quot;</span><span class="p">)</span>
+
+<span class="n">droplet</span> <span class="o">=</span> <span class="n">do</span><span class="o">.</span><span class="n">droplet</span><span class="o">.</span><span class="n">create</span><span class="p">({</span>
+    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;notyet&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;region&quot;</span><span class="p">:</span> <span class="s2">&quot;nyc2&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="s2">&quot;image&quot;</span><span class="p">:</span> <span class="s2">&quot;debian-7-0-x64&quot;</span>
+<span class="p">},</span> <span class="n">wait</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Result</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+  <span class="n">File</span> <span class="s2">&quot;doboto/Droplet.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">238</span><span class="p">,</span> <span class="ow">in</span> <span class="n">create</span>
+    <span class="k">raise</span> <span class="n">DOBOTOPollingException</span><span class="p">(</span><span class="n">polling</span><span class="o">=</span><span class="n">droplet</span><span class="p">)</span>
+    <span class="n">doboto</span><span class="o">.</span><span class="n">exception</span><span class="o">.</span><span class="n">DOBOTOPollingException</span><span class="p">:</span> <span class="n">DO</span> <span class="n">API</span> <span class="n">Timeout</span> <span class="k">while</span> <span class="n">polling</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;notyet&quot;</span> <span class="o">...</span> <span class="p">}</span>
+</pre></div>
+</div>
+<p>Whatever was being polled (a droplet in this case) is accessible via the polling attribute on the
+exception.  If an exception was throw prior to the timeout, that is accessible via the error
+attribute.</p>
+</div>
 </div>
 </div>
 
@@ -161,11 +229,20 @@ expectations aren&#8217;t met:</p>
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">DOBOTO: BOTO like interface for DigitalOcean</a><ul>
-<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#ubuntu">Ubuntu</a></li>
+<li><a class="reference internal" href="#fedora">Fedora</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#classes">Classes</a></li>
 <li><a class="reference internal" href="#present">Present</a></li>
 <li><a class="reference internal" href="#waiting">Waiting</a></li>
-<li><a class="reference internal" href="#expectations-and-exceptions">Expectations and Exceptions</a></li>
+<li><a class="reference internal" href="#expectations-and-exceptions">Expectations and Exceptions</a><ul>
+<li><a class="reference internal" href="#dobotoexception">DOBOTOException</a></li>
+<li><a class="reference internal" href="#dobotonotfoundexception">DOBOTONotFoundException</a></li>
+<li><a class="reference internal" href="#dobotopollingexception">DOBOTOPollingException</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

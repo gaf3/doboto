@@ -3,7 +3,8 @@
 import time
 import copy
 from .Endpoint import Endpoint
-from .DOBOTOException import DOBOTOException
+from .exception import DOBOTOException, DOBOTOPollingException
+
 
 class Droplet(Endpoint):
     """
@@ -60,7 +61,7 @@ class Droplet(Endpoint):
         related:
             - https://developers.digitalocean.com/documentation/v2/#list-all-droplets
             - https://developers.digitalocean.com/documentation/v2/#listing-droplets-by-tag
-        """
+        """  # nopep8
         if tag_name is not None:
             uri = "%s?tag_name=%s" % (self.uri, tag_name)
         else:
@@ -99,7 +100,7 @@ class Droplet(Endpoint):
                 - volume_ids - list - A flat list including the unique identifier for each Block Storage volume attached to the Droplet.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-neighbors-for-a-droplet
-        """
+        """  # nopep8
         uri = "%s/%s/neighbors" % (self.uri, id)
 
         return self.pages(uri, "droplets")
@@ -133,7 +134,7 @@ class Droplet(Endpoint):
                 - volume_ids - list - A flat list including the unique identifier for each Block Storage volume attached to the Droplet.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-droplet-neighbors
-        """
+        """  # nopep8
         uri = "%s/droplet_neighbors" % (self.reports)
 
         return self.pages(uri, "neighbors")
@@ -182,7 +183,7 @@ class Droplet(Endpoint):
                 - volume - list - A flat list including the unique string identifier for each Block Storage volume to be attached to the Droplet. At the moment a volume can only be attached to a single Droplet. -
                 - tags - list - A flat list of tag names as strings to apply to the Droplet after it is created. Tag names can either be existing or new tags.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -211,24 +212,31 @@ class Droplet(Endpoint):
         related:
             - https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet
             - https://developers.digitalocean.com/documentation/v2/#create-multiple-droplets
-        """
+        """  # nopep8
+
+        if poll < 1:
+            poll = 1
 
         if "name" in attribs:
 
             droplet = self.request(self.uri, "droplet", 'POST', attribs=attribs)
 
+            if not wait:
+                return droplet
+
             start_time = time.time()
 
-            while wait and not self.ready(droplet, attribs):
+            while not self.ready(droplet, attribs):
 
                 time.sleep(poll)
                 try:
                     droplet = self.info(droplet["id"])
-                except:
-                    pass
+                except Exception as exception:
+                    if time.time() - start_time > timeout:
+                        raise DOBOTOPollingException(polling=droplet, error=exception)
 
                 if time.time() - start_time > timeout:
-                    raise DOBOTOException("Timeout on polling", droplet)
+                    raise DOBOTOPollingException(polling=droplet)
 
             return droplet
 
@@ -236,23 +244,27 @@ class Droplet(Endpoint):
 
             droplets = self.request(self.uri, "droplets", 'POST', attribs=attribs)
 
+            if not wait:
+                return droplets
+
             start_time = time.time()
 
             info = [index for index, droplet in enumerate(droplets)
                     if not self.ready(droplet, attribs)]
 
-            while wait and len(info) > 0:
+            while len(info) > 0:
 
                 time.sleep(poll)
 
                 for index in info:
                     try:
                         droplets[index] = self.info(droplets[index]["id"])
-                    except:
-                        pass
+                    except Exception as exception:
+                        if time.time() - start_time > timeout:
+                            raise DOBOTOPollingException(polling=droplets, error=exception)
 
-                if time.time() - start_time > timeout:
-                    raise DOBOTOException("Timeout on polling", droplets)
+                    if time.time() - start_time > timeout:
+                        raise DOBOTOPollingException(polling=droplets)
 
                 info = [index for index, droplet in enumerate(droplets)
                         if not self.ready(droplet, attribs)]
@@ -283,7 +295,7 @@ class Droplet(Endpoint):
                 - volume - list - A flat list including the unique string identifier for each Block Storage volume to be attached to the Droplet. At the moment a volume can only be attached to a single Droplet. -
                 - tags - list - A flat list of tag names as strings to apply to the Droplet after it is created. Tag names can either be existing or new tags.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -308,7 +320,11 @@ class Droplet(Endpoint):
                 - next_backup_window - nullable dict - The details of the Droplet's backups feature, if backups are configured for the Droplet. This dict contains keys for the start and end times of the window during which the backup will start.
                 - tags - list - A list of Tags the Droplet has been tagged with.
                 - volume_ids - list - A flat list including the unique identifier for each Block Storage volume attached to the Droplet.
-        """
+
+        related:
+            - https://developers.digitalocean.com/documentation/v2/#create-a-new-droplet
+            - https://developers.digitalocean.com/documentation/v2/#create-multiple-droplets
+        """  # nopep8
 
         droplets = self.list()
 
@@ -397,7 +413,7 @@ class Droplet(Endpoint):
                 - volume_ids - list - A flat list including the unique identifier for each Block Storage volume attached to the Droplet.
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-droplet-by-id
-        """
+        """  # nopep8
         uri = "%s/%s" % (self.uri, id)
         return self.request(uri, "droplet")
 
@@ -474,7 +490,7 @@ class Droplet(Endpoint):
                 - created_at - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-backups-for-a-droplet
-        """
+        """  # nopep8
         uri = "%s/%s/backups" % (self.uri, id)
         return self.pages(uri, "backups")
 
@@ -486,7 +502,7 @@ class Droplet(Endpoint):
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -502,7 +518,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#enable-backups
-        """
+        """  # nopep8
 
         return self.action(
             id=id, tag_name=tag_name, type="enable_backups",
@@ -517,7 +533,7 @@ class Droplet(Endpoint):
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -533,7 +549,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#disable-backups
-        """
+        """  # nopep8
 
         return self.action(
             id=id, tag_name=tag_name, type="disable_backups",
@@ -549,7 +565,7 @@ class Droplet(Endpoint):
         in:
             - id - number - The id of the Droplet
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -565,7 +581,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#reboot-a-droplet
-        """
+        """  # nopep8
         uri = "%s/%s/actions" % (self.uri, id)
         attribs = {"type": "reboot"}
         return self.action_result(
@@ -587,7 +603,7 @@ class Droplet(Endpoint):
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -603,7 +619,7 @@ class Droplet(Endpoint):
             - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#reboot-a-droplet
-        """
+        """  # nopep8
 
         return self.action(
             id=id, tag_name=tag_name, type="shutdown",
@@ -618,7 +634,7 @@ class Droplet(Endpoint):
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -634,7 +650,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#power-on-a-droplet
-        """
+        """  # nopep8
 
         return self.action(
             id=id, tag_name=tag_name, type="power_on",
@@ -653,7 +669,7 @@ class Droplet(Endpoint):
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -669,7 +685,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#power-off-a-droplet
-        """
+        """  # nopep8
 
         return self.action(
             id=id, tag_name=tag_name, type="power_off",
@@ -687,7 +703,7 @@ class Droplet(Endpoint):
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -703,7 +719,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#power-cycle-a-droplet
-        """
+        """  # nopep8
 
         return self.action(
             id=id, tag_name=tag_name, type="power_cycle",
@@ -722,7 +738,7 @@ class Droplet(Endpoint):
             - id - number - The id of the Droplet
             - image - string if an image slug. number if an image ID. - An image slug or ID. This represents the image that the Droplet will use as a base.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -738,7 +754,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#restore-a-droplet
-        """
+        """  # nopep8
         uri = "%s/%s/actions" % (self.uri, id)
 
         try:
@@ -760,7 +776,7 @@ class Droplet(Endpoint):
         in:
             - id - number - The id of the Droplet
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -776,7 +792,7 @@ class Droplet(Endpoint):
             - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#password-reset-a-droplet
-        """
+        """  # nopep8
         uri = "%s/%s/actions" % (self.uri, id)
         attribs = {"type": "password_reset"}
         return self.action_result(
@@ -796,7 +812,7 @@ class Droplet(Endpoint):
             - disk - bool - Whether to increase disk size
             - size - string - The size slug that you want to resize to. - true
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -812,7 +828,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#resize-a-droplet
-        """
+        """  # nopep8
         uri = "%s/%s/actions" % (self.uri, id)
         disk = str(disk).lower()
         attribs = {"type": "resize", "size": "%s" % size, "disk": disk}
@@ -831,7 +847,7 @@ class Droplet(Endpoint):
             - id - number - The id of the Droplet
             - image - string if an image slug. number if an image ID. - An image slug or ID. This represents the image that the Droplet will use as a base.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -847,7 +863,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#rebuild-a-droplet
-        """
+        """  # nopep8
         uri = "%s/%s/actions" % (self.uri, id)
 
         try:
@@ -869,7 +885,7 @@ class Droplet(Endpoint):
             - id - number - The id of the Droplet
             - name - string - The new name for the Droplet.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -885,7 +901,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#rename-a-droplet
-        """
+        """  # nopep8
         uri = "%s/%s/actions" % (self.uri, id)
         attribs = {"type": "rename", "name": "%s" % name}
         return self.action_result(
@@ -907,7 +923,7 @@ class Droplet(Endpoint):
                 - version - string - A standard kernel version string representing the version, patch, and release information.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-available-kernels-for-a-droplet
-        """
+        """  # nopep8
         uri = "%s/%s/kernels" % (self.uri, id)
         return self.pages(uri, "kernels")
 
@@ -919,7 +935,7 @@ class Droplet(Endpoint):
             - id - number - The id of the Droplet
             - kernel - number - A unique number used to identify and reference a specific kernel. - true
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -935,7 +951,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#change-the-kernel
-        """
+        """  # nopep8
         uri = "%s/%s/actions" % (self.uri, id)
         attribs = {"type": "change_kernel", "kernel": kernel_id}
         return self.action_result(
@@ -951,7 +967,7 @@ class Droplet(Endpoint):
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -967,7 +983,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#enable-ipv6
-        """
+        """  # nopep8
         return self.action(
             id=id, tag_name=tag_name, type="enable_ipv6",
             wait=wait, poll=poll, timeout=timeout
@@ -981,7 +997,7 @@ class Droplet(Endpoint):
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -997,7 +1013,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#enable-private-networking
-        """
+        """  # nopep8
         return self.action(
             id=id, tag_name=tag_name, type="enable_private_networking",
             wait=wait, poll=poll, timeout=timeout
@@ -1023,7 +1039,7 @@ class Droplet(Endpoint):
                 - created_at - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-snapshots-for-a-droplet
-        """
+        """  # nopep8
         uri = "%s/%s/snapshots" % (self.uri, id)
         return self.pages(uri, "snapshots")
 
@@ -1041,7 +1057,7 @@ class Droplet(Endpoint):
             - id - number - Send only to reference a single Droplet by id
             - tag_name - string - Send only to reference all Droplets with this tag.
             - wait - boolean - Whether to wait until the droplet is ready
-            - poll - number - Number of seconds between checks
+            - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
         out:
@@ -1057,7 +1073,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#snapshot-a-droplet
-        """
+        """  # nopep8
         if snapshot_name is None:
             raise ValueError("snapshot_name must be specified")
 
@@ -1102,7 +1118,7 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#droplet-actions
-        """
+        """  # nopep8
         uri = "%s/%s/actions" % (self.uri, id)
         return self.pages(uri, "actions")
 
@@ -1127,6 +1143,6 @@ class Droplet(Endpoint):
                 - region_slug - nullable string - A slug representing the region where the action occurred.
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-a-droplet-action
-        """
+        """  # nopep8
         uri = "%s/%s/actions/%s" % (self.uri, id, action_id)
         return self.request(uri, "action")

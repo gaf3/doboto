@@ -119,7 +119,7 @@ Assign a Floating IP to a Droplet
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -163,7 +163,7 @@ Unassign a Floating IP
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -207,7 +207,7 @@ List all actions for a Floating IP
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 

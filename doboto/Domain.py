@@ -34,7 +34,7 @@ class Domain(Endpoint):
                 - zone_file - string - This attribute contains the complete contents of the zone file for the selected domain. Individual domain record resources should be used to get more granular control over records. However, this attribute can also be used to get information about the SOA record, which is created automatically and is not accessible as an individual record resource.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-domains
-        """
+        """  # nopep8
         return self.pages(self.uri, "domains")
 
     def create(self, name, ip_address):
@@ -52,7 +52,7 @@ class Domain(Endpoint):
                 - zone_file - string - This attribute contains the complete contents of the zone file for the selected domain. Individual domain record resources should be used to get more granular control over records. However, this attribute can also be used to get information about the SOA record, which is created automatically and is not accessible as an individual record resource.
 
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-domain
-        """
+        """  # nopep8
 
         attribs = {
             "name": name,
@@ -76,7 +76,7 @@ class Domain(Endpoint):
                 - zone_file - string - This attribute contains the complete contents of the zone file for the selected domain. Individual domain record resources should be used to get more granular control over records. However, this attribute can also be used to get information about the SOA record, which is created automatically and is not accessible as an individual record resource.
 
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-domain
-        """
+        """  # nopep8
 
         domains = self.list()
 
@@ -106,7 +106,7 @@ class Domain(Endpoint):
                 - zone_file - string - This attribute contains the complete contents of the zone file for the selected domain. Individual domain record resources should be used to get more granular control over records. However, this attribute can also be used to get information about the SOA record, which is created automatically and is not accessible as an individual record resource.
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-domain
-        """
+        """  # nopep8
         uri = "{}/{}".format(self.uri, name)
         return self.request(uri, "domain")
 
@@ -120,7 +120,7 @@ class Domain(Endpoint):
         out: None. A DOBOTOException is thrown if an issue is encountered.
 
         related: https://developers.digitalocean.com/documentation/v2/#delete-a-domain
-        """
+        """  # nopep8
 
         uri = "{}/{}".format(self.uri, name)
         return self.request(uri, request_method='DELETE')
@@ -143,7 +143,7 @@ class Domain(Endpoint):
                 - weight - nullable number - The weight for SRV records.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-domain-records
-        """
+        """  # nopep8
         uri = "{}/{}/records".format(self.uri, name)
         return self.pages(uri, "domain_records")
 
@@ -172,7 +172,7 @@ class Domain(Endpoint):
                 - weight - nullable number - The weight for SRV records.
 
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-domain-record
-        """
+        """  # nopep8
         uri = "{}/{}/records".format(self.uri, name)
         return self.request(uri, "domain_record", 'POST', attribs=attribs)
 
@@ -195,7 +195,7 @@ class Domain(Endpoint):
                 - weight - nullable number - The weight for SRV records.
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-domain-record
-        """
+        """  # nopep8
         uri = "{}/{}/records/{}".format(self.uri, name, record_id)
         return self.request(uri, "domain_record")
 
@@ -225,7 +225,7 @@ class Domain(Endpoint):
                 - weight - nullable number - The weight for SRV records.
 
         related: https://developers.digitalocean.com/documentation/v2/#update-a-domain-record
-        """
+        """  # nopep8
 
         uri = "{}/{}/records/{}".format(self.uri, name, record_id)
         return self.request(uri, "domain_record", 'PUT', attribs=attribs)
@@ -241,7 +241,7 @@ class Domain(Endpoint):
         out: None. A DOBOTOException is thrown if an issue is encountered.
 
         related: https://developers.digitalocean.com/documentation/v2/#delete-a-domain-record
-        """
+        """  # nopep8
 
         uri = "{}/{}/records/{}".format(self.uri, name, record_id)
         return self.request(uri, request_method='DELETE')
