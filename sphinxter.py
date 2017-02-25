@@ -5,7 +5,7 @@ from doboto.DO import DO
 
 do = DO(token="secret")
 
-DEFINITIONS = re.compile('def (\w+)\((.+)\)')
+DEFINITIONS = re.compile('def (\w+)\(\s*?(.+)\s*?\)')
 
 
 def write_data(doc_file, args, indent=""):

@@ -244,8 +244,8 @@
 <li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-snapshots-for-a-volume">https://developers.digitalocean.com/documentation/v2/#list-snapshots-for-a-volume</a></li>
 </ul>
 </div>
-<div class="section" id="create-a-snpahot-for-a-volume">
-<h2>Create a snpahot for a volume<a class="headerlink" href="#create-a-snpahot-for-a-volume" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="create-a-snapshot-for-a-volume">
+<h2>Create a snapshot for a volume<a class="headerlink" href="#create-a-snapshot-for-a-volume" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="do.volume.snapshot_create">
 <code class="descclassname">do.volume.</code><code class="descname">snapshot_create</code><span class="sig-paren">(</span><em>id</em>, <em>snapshot_name</em>, <em>wait=False</em>, <em>poll=5</em>, <em>timeout=300</em><span class="sig-paren">)</span><a class="headerlink" href="#do.volume.snapshot_create" title="Permalink to this definition">¶</a></dt>
@@ -275,6 +275,80 @@
 <p>Related:</p>
 <ul class="simple">
 <li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#create-snapshot-from-a-volume">https://developers.digitalocean.com/documentation/v2/#create-snapshot-from-a-volume</a></li>
+</ul>
+</div>
+<div class="section" id="attach-a-volume-by-id-or-name-to-a-droplet">
+<h2>Attach a volume by id or name to a droplet<a class="headerlink" href="#attach-a-volume-by-id-or-name-to-a-droplet" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.volume.attach">
+<code class="descclassname">do.volume.</code><code class="descname">attach</code><span class="sig-paren">(</span><em>id=None</em>, <em>name=None</em>, <em>region=None</em>, <em>droplet_id=None</em>, <em>wait=False</em>, <em>poll=5</em>, <em>timeout=300</em><span class="sig-paren">)</span><a class="headerlink" href="#do.volume.attach" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - The id of the volume</li>
+<li><em>name</em> - string - The name of the volume if no id</li>
+<li><em>region</em> - string - The region slug of the volume if no id</li>
+<li><em>droplet_id</em> - number - The id of the droplet</li>
+<li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
+<li><em>timeout</em> - number - How many seconds before giving up</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An Action dict<ul>
+<li><em>id</em> - int - A unique numeric ID that can be used to identify and reference an action.</li>
+<li><em>status</em> - string - The current status of the action. This can be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - This is the type of action that the dict represents. For example, this could be &#8220;attach_volume&#8221; to represent the state of a volume attach action.</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - nullable int - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - dict - The region where the resources acted upon are located.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#attach-a-block-storage-volume-to-a-droplet">https://developers.digitalocean.com/documentation/v2/#attach-a-block-storage-volume-to-a-droplet</a></li>
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#attach-a-block-storage-volume-to-a-droplet-by-name">https://developers.digitalocean.com/documentation/v2/#attach-a-block-storage-volume-to-a-droplet-by-name</a></li>
+</ul>
+</div>
+<div class="section" id="remove-a-volume-by-id-or-name-from-a-droplet">
+<h2>Remove a volume by id or name from a droplet<a class="headerlink" href="#remove-a-volume-by-id-or-name-from-a-droplet" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.volume.detach">
+<code class="descclassname">do.volume.</code><code class="descname">detach</code><span class="sig-paren">(</span><em>id=None</em>, <em>name=None</em>, <em>region=None</em>, <em>droplet_id=None</em>, <em>wait=False</em>, <em>poll=5</em>, <em>timeout=300</em><span class="sig-paren">)</span><a class="headerlink" href="#do.volume.detach" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<ul class="simple">
+<li><em>id</em> - number - The id of the volume</li>
+<li><em>name</em> - string - The name of the volume if no id</li>
+<li><em>region</em> - string - The region slug of the volume if no id</li>
+<li><em>droplet_id</em> - number - The id of the droplet</li>
+<li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
+<li><em>timeout</em> - number - How many seconds before giving up</li>
+</ul>
+<p>Returns:</p>
+<ul class="simple">
+<li>An Action dict<ul>
+<li><em>id</em> - int - A unique numeric ID that can be used to identify and reference an action.</li>
+<li><em>status</em> - string - The current status of the action. This can be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>type</em> - string - This is the type of action that the dict represents. For example, this could be &#8220;attach_volume&#8221; to represent the state of a volume attach action.</li>
+<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
+<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
+<li><em>resource_id</em> - nullable int - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>region</em> - dict - The region where the resources acted upon are located.</li>
+<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
+</ul>
+</li>
+</ul>
+<p>Related:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#remove-a-block-storage-volume-from-a-droplet">https://developers.digitalocean.com/documentation/v2/#remove-a-block-storage-volume-from-a-droplet</a></li>
+<li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#remove-a-block-storage-volume-from-a-droplet-by-name">https://developers.digitalocean.com/documentation/v2/#remove-a-block-storage-volume-from-a-droplet-by-name</a></li>
 </ul>
 </div>
 <div class="section" id="resize-a-volume">
@@ -387,7 +461,9 @@
 <li><a class="reference internal" href="#retrieve-an-existing-volume-by-id-or-name-and-region">Retrieve an existing volume by id or name and region</a></li>
 <li><a class="reference internal" href="#delete-a-volume-by-id-or-name-and-region">Delete a volume by id or name and region</a></li>
 <li><a class="reference internal" href="#list-snapshots-for-a-volume">List snapshots for a volume</a></li>
-<li><a class="reference internal" href="#create-a-snpahot-for-a-volume">Create a snpahot for a volume</a></li>
+<li><a class="reference internal" href="#create-a-snapshot-for-a-volume">Create a snapshot for a volume</a></li>
+<li><a class="reference internal" href="#attach-a-volume-by-id-or-name-to-a-droplet">Attach a volume by id or name to a droplet</a></li>
+<li><a class="reference internal" href="#remove-a-volume-by-id-or-name-from-a-droplet">Remove a volume by id or name from a droplet</a></li>
 <li><a class="reference internal" href="#resize-a-volume">Resize a volume</a></li>
 <li><a class="reference internal" href="#list-all-actions-for-a-volume">List all actions for a volume</a></li>
 <li><a class="reference internal" href="#retrieve-an-existing-volume-action">Retrieve an existing volume action</a></li>

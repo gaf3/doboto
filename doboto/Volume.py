@@ -229,7 +229,7 @@ class Volume(Endpoint):
 
     def snapshot_create(self, id, snapshot_name, wait=False, poll=5, timeout=300):
         """
-        description: Create a snpahot for a volume
+        description: Create a snapshot for a volume
 
         in:
             - id - number - The id of the volume

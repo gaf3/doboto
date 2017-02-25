@@ -15,8 +15,6 @@ run_lint:
 
 run_docs:
 	python sphinxter.py
-	cd docs
-	make html
-	cd ..
+	cd docs; make html; cd ..
 
 precommit: run_tests run_lint

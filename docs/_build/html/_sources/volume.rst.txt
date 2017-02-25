@@ -250,7 +250,7 @@ Related:
 
 
 
-Create a snpahot for a volume
+Create a snapshot for a volume
 ----------------------------------------------------------------------------------------------------
 
 .. method:: do.volume.snapshot_create(id, snapshot_name, wait=False, poll=5, timeout=300)
@@ -291,6 +291,110 @@ Returns:
 Related:
 
 * `<https://developers.digitalocean.com/documentation/v2/#create-snapshot-from-a-volume>`_
+
+
+
+Attach a volume by id or name to a droplet
+----------------------------------------------------------------------------------------------------
+
+.. method:: do.volume.attach(id=None, name=None, region=None, droplet_id=None, wait=False, poll=5, timeout=300)
+
+- *id* - number - The id of the volume
+
+- *name* - string - The name of the volume if no id
+
+- *region* - string - The region slug of the volume if no id
+
+- *droplet_id* - number - The id of the droplet
+
+- *wait* - boolean - Whether to wait until the droplet is ready
+
+- *poll* - number - Number of seconds between checks (min 1 sec)
+
+- *timeout* - number - How many seconds before giving up
+
+
+Returns:
+
+- An Action dict
+
+  - *id* - int - A unique numeric ID that can be used to identify and reference an action.
+
+  - *status* - string - The current status of the action. This can be "in-progress", "completed", or "errored".
+
+  - *type* - string - This is the type of action that the dict represents. For example, this could be "attach_volume" to represent the state of a volume attach action.
+
+  - *started_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
+
+  - *completed_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
+
+  - *resource_id* - nullable int - A unique identifier for the resource that the action is associated with.
+
+  - *resource_type* - string - The type of resource that the action is associated with.
+
+  - *region* - dict - The region where the resources acted upon are located.
+
+  - *region_slug* - nullable string - A slug representing the region where the action occurred.
+
+
+
+Related:
+
+* `<https://developers.digitalocean.com/documentation/v2/#attach-a-block-storage-volume-to-a-droplet>`_
+
+* `<https://developers.digitalocean.com/documentation/v2/#attach-a-block-storage-volume-to-a-droplet-by-name>`_
+
+
+
+Remove a volume by id or name from a droplet
+----------------------------------------------------------------------------------------------------
+
+.. method:: do.volume.detach(id=None, name=None, region=None, droplet_id=None, wait=False, poll=5, timeout=300)
+
+- *id* - number - The id of the volume
+
+- *name* - string - The name of the volume if no id
+
+- *region* - string - The region slug of the volume if no id
+
+- *droplet_id* - number - The id of the droplet
+
+- *wait* - boolean - Whether to wait until the droplet is ready
+
+- *poll* - number - Number of seconds between checks (min 1 sec)
+
+- *timeout* - number - How many seconds before giving up
+
+
+Returns:
+
+- An Action dict
+
+  - *id* - int - A unique numeric ID that can be used to identify and reference an action.
+
+  - *status* - string - The current status of the action. This can be "in-progress", "completed", or "errored".
+
+  - *type* - string - This is the type of action that the dict represents. For example, this could be "attach_volume" to represent the state of a volume attach action.
+
+  - *started_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
+
+  - *completed_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
+
+  - *resource_id* - nullable int - A unique identifier for the resource that the action is associated with.
+
+  - *resource_type* - string - The type of resource that the action is associated with.
+
+  - *region* - dict - The region where the resources acted upon are located.
+
+  - *region_slug* - nullable string - A slug representing the region where the action occurred.
+
+
+
+Related:
+
+* `<https://developers.digitalocean.com/documentation/v2/#remove-a-block-storage-volume-from-a-droplet>`_
+
+* `<https://developers.digitalocean.com/documentation/v2/#remove-a-block-storage-volume-from-a-droplet-by-name>`_
 
 
 
