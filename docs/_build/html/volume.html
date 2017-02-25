@@ -100,7 +100,7 @@
 </ul>
 </li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -139,7 +139,7 @@
 </ul>
 </li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -244,8 +244,8 @@
 <li><a class="reference external" href="https://developers.digitalocean.com/documentation/v2/#list-snapshots-for-a-volume">https://developers.digitalocean.com/documentation/v2/#list-snapshots-for-a-volume</a></li>
 </ul>
 </div>
-<div class="section" id="create-a-snpahot-for-a-volume">
-<h2>Create a snpahot for a volume<a class="headerlink" href="#create-a-snpahot-for-a-volume" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="create-a-snapshot-for-a-volume">
+<h2>Create a snapshot for a volume<a class="headerlink" href="#create-a-snapshot-for-a-volume" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="do.volume.snapshot_create">
 <code class="descclassname">do.volume.</code><code class="descname">snapshot_create</code><span class="sig-paren">(</span><em>id</em>, <em>snapshot_name</em>, <em>wait=False</em>, <em>poll=5</em>, <em>timeout=300</em><span class="sig-paren">)</span><a class="headerlink" href="#do.volume.snapshot_create" title="Permalink to this definition">¶</a></dt>
@@ -255,7 +255,7 @@
 <li><em>id</em> - number - The id of the volume</li>
 <li><em>snapshot_name</em> - string - The name of the snapshot</li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -290,7 +290,7 @@
 <li><em>region</em> - string - The region slug of the volume if no id</li>
 <li><em>droplet_id</em> - number - The id of the droplet</li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -327,7 +327,7 @@
 <li><em>region</em> - string - The region slug of the volume if no id</li>
 <li><em>droplet_id</em> - number - The id of the droplet</li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
-<li><em>poll</em> - number - Number of seconds between checks</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
 <li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
@@ -461,7 +461,7 @@
 <li><a class="reference internal" href="#retrieve-an-existing-volume-by-id-or-name-and-region">Retrieve an existing volume by id or name and region</a></li>
 <li><a class="reference internal" href="#delete-a-volume-by-id-or-name-and-region">Delete a volume by id or name and region</a></li>
 <li><a class="reference internal" href="#list-snapshots-for-a-volume">List snapshots for a volume</a></li>
-<li><a class="reference internal" href="#create-a-snpahot-for-a-volume">Create a snpahot for a volume</a></li>
+<li><a class="reference internal" href="#create-a-snapshot-for-a-volume">Create a snapshot for a volume</a></li>
 <li><a class="reference internal" href="#attach-a-volume-by-id-or-name-to-a-droplet">Attach a volume by id or name to a droplet</a></li>
 <li><a class="reference internal" href="#remove-a-volume-by-id-or-name-from-a-droplet">Remove a volume by id or name from a droplet</a></li>
 <li><a class="reference internal" href="#resize-a-volume">Resize a volume</a></li>

@@ -171,7 +171,7 @@ Transfer an Image to another Region
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 
@@ -215,7 +215,7 @@ Convert an Image to a Snapshot
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
-- *poll* - number - Number of seconds between checks
+- *poll* - number - Number of seconds between checks (min 1 sec)
 
 - *timeout* - number - How many seconds before giving up
 

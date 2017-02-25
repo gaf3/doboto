@@ -37,6 +37,6 @@ class Region(Endpoint):
                 - features - list - This attribute is set to a list which contains features available in this region
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-regions
-        """
+        """  # nopep8
 
         return self.pages(self.uri, "regions")

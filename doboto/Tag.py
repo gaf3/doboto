@@ -41,7 +41,7 @@ class Tag(Endpoint):
                     - resource_type - string - The type of the resource
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-tags
-        """
+        """  # nopep8
         return self.pages(self.uri, "tags")
 
     def name_list(self):
@@ -51,7 +51,7 @@ class Tag(Endpoint):
         out: A list of Tag names
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-tags
-        """
+        """  # nopep8
         tags = self.pages(self.uri, "tags")
 
         return [_['name'] for _ in tags]
@@ -74,7 +74,7 @@ class Tag(Endpoint):
                     - resource_type - string - The type of the resource
 
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-tag
-        """
+        """  # nopep8
         attribs = {'name': name}
 
         return self.request(self.uri, "tag", 'POST', attribs)
@@ -97,7 +97,7 @@ class Tag(Endpoint):
                     - resource_type - string - The type of the resource
 
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-tag
-        """
+        """  # nopep8
 
         tags = self.list()
 
@@ -131,7 +131,7 @@ class Tag(Endpoint):
                     - resource_type - string - The type of the resource
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-a-tag
-        """
+        """  # nopep8
         uri = "%s/%s" % (self.uri, name)
         return self.request(uri, "tag")
 
@@ -154,7 +154,7 @@ class Tag(Endpoint):
                     - resource_type - string - The type of the resource
 
         related: https://developers.digitalocean.com/documentation/v2/#update-a-tag
-        """
+        """  # nopep8
         uri = "{}/{}".format(self.uri, name)
         attribs = {'name': new_name}
 
@@ -170,7 +170,7 @@ class Tag(Endpoint):
         out: None. A DOBOTOException is thrown if an issue is encountered.
 
         related: https://developers.digitalocean.com/documentation/v2/#delete-a-tag
-        """
+        """  # nopep8
         uri = "{}/{}".format(self.uri, name)
 
         return self.request(uri, request_method='DELETE')
@@ -191,7 +191,7 @@ class Tag(Endpoint):
         out: None. A DOBOTOException is thrown if an issue is encountered.
 
         related: https://developers.digitalocean.com/documentation/v2/#tag-a-resource
-        """
+        """  # nopep8
         uri = "{}/{}/resources".format(self.uri, name)
         attribs = {'resources': resources}
 
@@ -213,7 +213,7 @@ class Tag(Endpoint):
         out: None. A DOBOTOException is thrown if an issue is encountered.
 
         related: https://developers.digitalocean.com/documentation/v2/#untag-a-resource
-        """
+        """  # nopep8
         uri = "{}/{}/resources".format(self.uri, name)
         attribs = {'resources': resources}
 

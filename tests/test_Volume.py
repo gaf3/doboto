@@ -5,7 +5,7 @@ This module contains tests for the main DO class
 from unittest import TestCase
 from mock import MagicMock, patch, call
 from doboto import Volume
-from doboto.DOBOTOException import DOBOTOException
+from doboto.exception import DOBOTOException, DOBOTONotFoundException, DOBOTOPollingException
 
 
 class TestVolume(TestCase):
@@ -77,30 +77,53 @@ class TestVolume(TestCase):
         """
 
         volume = self.klass(*self.instantiate_args)
-        volume.info = MagicMock(side_effect=[Exception("Not yet"), {"stuff": "things"}])
         mock_request.return_value = {"id": 1, "people": "stuff"}
         datas = {"name": "test.com", "region": "nyc3",
                  "size": "512mb", "image": "ubuntu-14-04-x64"}
-        self.assertEqual(volume.create(datas, wait=True, poll=2), {"stuff": "things"})
 
+        # Standard
+
+        self.assertEqual(volume.create(datas), {"id": 1, "people": "stuff"})
+
+        # Wait
+
+        volume.info = MagicMock(side_effect=[Exception("Not yet"), {"stuff": "things"}])
+        self.assertEqual(volume.create(datas, wait=True, poll=2), {"stuff": "things"})
         mock_request.assert_called_with(
             self.test_uri, "volume", 'POST', attribs=datas
         )
         mock_sleep.assert_has_calls([call(2), call(2)])
         volume.info.assert_has_calls([call(1), call(1)])
 
+        # Wait with bad poll
+
+        volume = self.klass(*self.instantiate_args)
+        volume.info = MagicMock(side_effect=[
+            {"stuff": "things"}
+        ])
+        self.assertEqual(volume.create(datas, wait=True, poll=0), {"stuff": "things"})
+        mock_sleep.assert_has_calls([call(1)])
+
+        # Wait with timeout and error
+
         mock_request.return_value = {"id": 2, "people": "stuff"}
+        volume.info.side_effect = [Exception("Not yet"), {"stuff": "things"}]
 
-        with self.assertRaises(DOBOTOException):
-            volume.create(datas, wait=True, poll=4, timeout=-1)
+        self.assertRaisesRegexp(
+            DOBOTOPollingException,
+            "DO API Timeout: Not yet while polling:.*stuff",
+            volume.create, datas, wait=True, poll=5, timeout=-1
+        )
 
-        mock_request.assert_called_with(self.test_uri, "volume", 'POST', attribs=datas)
-        mock_sleep.assert_has_calls([call(4)])
-        volume.info.assert_has_calls([call(2)])
+        # Wait with timeout
 
-        # Make sure straight works
+        volume.info.side_effect = [DOBOTONotFoundException()]
 
-        self.assertEqual(volume.create(datas), {"id": 2, "people": "stuff"})
+        self.assertRaisesRegexp(
+            DOBOTOPollingException,
+            "DO API Timeout while polling:.*stuff",
+            volume.create, datas, wait=True, poll=4, timeout=-1
+        )
 
     def test_present(self):
         """

@@ -3,8 +3,6 @@
 import time
 import copy
 from .Endpoint import Endpoint
-from .DOBOTOException import DOBOTOException
-
 
 
 class Certificate(Endpoint):
@@ -40,7 +38,7 @@ class Certificate(Endpoint):
                 - created_at - string - A time value given in ISO8601 combined date and time format that represents when the certificate was created.
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-certificates
-        """
+        """  # nopep8
 
         return self.pages(self.uri, "certificates")
 
@@ -63,7 +61,7 @@ class Certificate(Endpoint):
                 - created_at - string - A time value given in ISO8601 combined date and time format that represents when the certificate was created.
 
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-certificates
-        """
+        """  # nopep8
 
         attribs = {
             "name": name,
@@ -91,7 +89,7 @@ class Certificate(Endpoint):
                 - not_after - string - A time value given in ISO8601 combined date and time format that represents the certificate's expiration date.
                 - sha1_fingerprint - string - A unique identifier generated from the SHA-1 fingerprint of the certificate.
                 - created_at - string - A time value given in ISO8601 combined date and time format that represents when the certificate was created.
-        """
+        """  # nopep8
 
         certificates = self.list()
 
@@ -123,7 +121,7 @@ class Certificate(Endpoint):
                 - created_at - string - A time value given in ISO8601 combined date and time format that represents when the certificate was created.
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-certificates
-        """
+        """  # nopep8
 
         return self.request("%s/%s" % (self.uri, id), "certificate")
 
@@ -137,6 +135,6 @@ class Certificate(Endpoint):
         out: None. A DOBOTOException is thrown if an issue is encountered.
 
         related: https://developers.digitalocean.com/documentation/v2/#delete-a-certificates
-        """
+        """  # nopep8
 
         return self.request("%s/%s" % (self.uri, id), request_method='DELETE')

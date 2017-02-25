@@ -13,4 +13,8 @@ run_lint:
 	@echo "Running pylint:"
 	pylint ${PACKAGE}
 
+run_docs:
+	python sphinxter.py
+	cd docs; make html; cd ..
+
 precommit: run_tests run_lint
