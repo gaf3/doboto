@@ -9,7 +9,7 @@ SSL certificates may be uploaded to DigitalOcean where they will be placed in a 
 List all Certificates
 ----------------------------------------------------------------------------------------------------
 
-.. method:: do.certificate.list(tag_name=None)
+.. method:: do.certificate.list()
 
 
 Returns:
@@ -133,7 +133,7 @@ Related:
 Delete a Certificate
 ----------------------------------------------------------------------------------------------------
 
-.. method:: do.certificate.destroy(id=None, tag_name=None)
+.. method:: do.certificate.destroy(id)
 
 - *id* - number - The id of the Certificate to destroy
 

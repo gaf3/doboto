@@ -79,6 +79,7 @@ For more information, see the documentation for each class:
    droplet
    floating_ip
    image
+   load_balancer
    region
    size
    snapshot
