@@ -250,7 +250,7 @@ Related:
 
 
 
-Create a snpahot for a volume
+Create a snapshot for a volume
 ----------------------------------------------------------------------------------------------------
 
 .. method:: do.volume.snapshot_create(id, snapshot_name, wait=False, poll=5, timeout=300)

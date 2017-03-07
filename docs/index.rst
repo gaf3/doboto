@@ -35,6 +35,21 @@ Installation
 
   pip install doboto
 
+Ubuntu
+^^^^^^
+
+**If installation issues, try this before pip install**::
+
+    apt-get install python-dev libffi-dev
+
+Fedora
+^^^^^^
+
+**If installation issues, try this before pip install**::
+
+    dnf install redhat-rpm-config
+    yum install libffi-devel python-devel openssl-devel
+
 Classes
 -----------
 
@@ -58,6 +73,8 @@ For more information, see the documentation for each class:
    do
    account
    action
+   volume
+   certificate
    domain
    droplet
    floating_ip
@@ -67,7 +84,6 @@ For more information, see the documentation for each class:
    snapshot
    ssh_key
    tag
-   volume
 
 Present
 -----------

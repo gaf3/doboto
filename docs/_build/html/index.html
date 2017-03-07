@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>DOBOTO: BOTO like interface for DigitalOcean &#8212; DOBOTO 0.4.0 documentation</title>
+    <title>DOBOTO: BOTO like interface for DigitalOcean &#8212; DOBOTO 0.5.0 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.4.0',
+        VERSION:     '0.5.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="do.html" title="DO (do)"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">DOBOTO 0.4.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">DOBOTO 0.5.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -76,6 +76,21 @@ feature complete and weren&#8217;t being updated as the DigitalOcean API grew.</
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">doboto</span>
 </pre></div>
 </div>
+<div class="section" id="ubuntu">
+<h3>Ubuntu<a class="headerlink" href="#ubuntu" title="Permalink to this headline">¶</a></h3>
+<p><strong>If installation issues, try this before pip install</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">python</span><span class="o">-</span><span class="n">dev</span> <span class="n">libffi</span><span class="o">-</span><span class="n">dev</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="fedora">
+<h3>Fedora<a class="headerlink" href="#fedora" title="Permalink to this headline">¶</a></h3>
+<p><strong>If installation issues, try this before pip install</strong>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dnf</span> <span class="n">install</span> <span class="n">redhat</span><span class="o">-</span><span class="n">rpm</span><span class="o">-</span><span class="n">config</span>
+<span class="n">yum</span> <span class="n">install</span> <span class="n">libffi</span><span class="o">-</span><span class="n">devel</span> <span class="n">python</span><span class="o">-</span><span class="n">devel</span> <span class="n">openssl</span><span class="o">-</span><span class="n">devel</span>
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="classes">
 <h2>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h2>
@@ -96,6 +111,8 @@ sub classes.  The Account example below shows this with do.account.</p>
 <li class="toctree-l1"><a class="reference internal" href="do.html">DO (do)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="account.html">Account (do.account)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="action.html">Action (do.action)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="volume.html">Volume (do.volume)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="certificate.html">Certificate (do.certificate)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="domain.html">Domain (do.domain)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="droplet.html">Droplet (do.droplet)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="floating_ip.html">FloatingIP (do.floating_ip)</a></li>
@@ -105,7 +122,6 @@ sub classes.  The Account example below shows this with do.account.</p>
 <li class="toctree-l1"><a class="reference internal" href="snapshot.html">Snapshot (do.snapshot)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ssh_key.html">SSHKey (do.ssh_key)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tag.html">Tag (do.tag)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="volume.html">Volume (do.volume)</a></li>
 </ul>
 </div>
 </div>
@@ -154,7 +170,7 @@ expectations aren&#8217;t met.</p>
 </div>
 <div class="section" id="dobotonotfoundexception">
 <h3>DOBOTONotFoundException<a class="headerlink" href="#dobotonotfoundexception" title="Permalink to this headline">¶</a></h3>
-<p>DOBOTONotFoundException is raises when a response from the API contains an &#8220;id&#8221; field with a value of &#8220;not_found&#8221;</p>
+<p>DOBOTONotFoundException is raised when a response from the API contains an &#8220;id&#8221; field with a value of &#8220;not_found&#8221;</p>
 <p><strong>Missing droplet</strong>:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">doboto.DO</span> <span class="k">import</span> <span class="n">DO</span>
 
@@ -175,7 +191,7 @@ expectations aren&#8217;t met.</p>
 </div>
 <div class="section" id="dobotopollingexception">
 <h3>DOBOTOPollingException<a class="headerlink" href="#dobotopollingexception" title="Permalink to this headline">¶</a></h3>
-<p>DOBOTOPollingException is raises when the timeout is reached while waiting for a resource to
+<p>DOBOTOPollingException is raised when the timeout is exceeded while waiting for a resource to
 become ready.</p>
 <p><strong>Impatient droplet</strong>:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">doboto.DO</span> <span class="k">import</span> <span class="n">DO</span>
@@ -213,7 +229,11 @@ attribute.</p>
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">DOBOTO: BOTO like interface for DigitalOcean</a><ul>
-<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#installation">Installation</a><ul>
+<li><a class="reference internal" href="#ubuntu">Ubuntu</a></li>
+<li><a class="reference internal" href="#fedora">Fedora</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#classes">Classes</a></li>
 <li><a class="reference internal" href="#present">Present</a></li>
 <li><a class="reference internal" href="#waiting">Waiting</a></li>
@@ -260,7 +280,7 @@ attribute.</p>
         <li class="right" >
           <a href="do.html" title="DO (do)"
              >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">DOBOTO 0.4.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">DOBOTO 0.5.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
