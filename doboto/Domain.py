@@ -12,6 +12,27 @@ class Domain(Endpoint):
         This resource establishes top-level control over each domain. Actions that affect
         individual domain records should be taken on the [Domain Records] resource.
 
+    data:
+        Domain:
+            - name - string - The name of the domain itself. This should follow the standard domain
+              format of domain.TLD. For instance, example.com is a valid domain name.
+            - ttl - number - This value is the time to live for the records on this domain, in
+              seconds. This defines the time frame that clients can cache queried information
+              before a refresh should be requested.
+            - zone_file - string - This attribute contains the complete contents of the zone file
+              for the selected domain. Individual domain record resources should be used to get
+              more granular control over records. However, this attribute can also be used to get
+              information about the SOA record, which is created automatically and is not
+              accessible as an individual record resource.
+        Domain Record:
+            - id - number - A unique identifier for each domain record.
+            - type - string - The type of the DNS record (A, CNAME, TXT, ...).
+            - name - string - The name to use for the DNS record.
+            - data - string - The value to use for the DNS record.
+            - priority - nullable number - The priority for SRV and MX records.
+            - port - nullable number - The port for SRV records.
+            - weight - nullable number - The weight for SRV records.
+
     related: https://developers.digitalocean.com/documentation/v2/#domains
     """
 
@@ -27,11 +48,7 @@ class Domain(Endpoint):
         """
         description: List all Domains
 
-        out:
-            A list of Domain dict's:
-                - name - string - The name of the domain itself. This should follow the standard domain format of domain.TLD. For instance, example.com is a valid domain name.
-                - ttl - number - This value is the time to live for the records on this domain, in seconds. This defines the time frame that clients can cache queried information before a refresh should be requested.
-                - zone_file - string - This attribute contains the complete contents of the zone file for the selected domain. Individual domain record resources should be used to get more granular control over records. However, this attribute can also be used to get information about the SOA record, which is created automatically and is not accessible as an individual record resource.
+        out: A list of Domain data structures
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-domains
         """  # nopep8
@@ -42,14 +59,13 @@ class Domain(Endpoint):
         description: Create a new Domain
 
         in:
-            - name - string - The domain name to add to the DigitalOcean DNS management interface. The name must be unique in DigitalOcean's DNS system. The request will fail if the name has already been taken.
-            - ip_address - string - This attribute contains the IP address you want the domain to point to.
+            - name - string - The domain name to add to the DigitalOcean DNS management interface.
+              The name must be unique in DigitalOcean's DNS system. The request will fail if the
+              name has already been taken.
+            - ip_address - string - This attribute contains the IP address you want the domain to
+              point to.
 
-        out:
-            A Domain dict:
-                - name - string - The name of the domain itself. This should follow the standard domain format of domain.TLD. For instance, example.com is a valid domain name.
-                - ttl - number - This value is the time to live for the records on this domain, in seconds. This defines the time frame that clients can cache queried information before a refresh should be requested.
-                - zone_file - string - This attribute contains the complete contents of the zone file for the selected domain. Individual domain record resources should be used to get more granular control over records. However, this attribute can also be used to get information about the SOA record, which is created automatically and is not accessible as an individual record resource.
+        out: A Domain data structures
 
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-domain
         """  # nopep8
@@ -66,14 +82,12 @@ class Domain(Endpoint):
         description: Create a new Domain if name doesn't already exist
 
         in:
-            - name - string - The domain name to add to the DigitalOcean DNS management interface. The name must be unique in DigitalOcean's DNS system. The request will fail if the name has already been taken.
-            - ip_address - string - This attribute contains the IP address you want the domain to point to.
+            - name - string - The domain name to add to the DigitalOcean DNS management interface.
+              The name must be unique in DigitalOcean's DNS system. The request will fail if the
+              name has already been taken.
+            - ip_address - string - This attribute contains the IP address you want the domain to
 
-        out:
-            A tuple of Domain dict's, the intended, and created (None if already exists):
-                - name - string - The name of the domain itself. This should follow the standard domain format of domain.TLD. For instance, example.com is a valid domain name.
-                - ttl - number - This value is the time to live for the records on this domain, in seconds. This defines the time frame that clients can cache queried information before a refresh should be requested.
-                - zone_file - string - This attribute contains the complete contents of the zone file for the selected domain. Individual domain record resources should be used to get more granular control over records. However, this attribute can also be used to get information about the SOA record, which is created automatically and is not accessible as an individual record resource.
+        out: A tuple of Domain data structures, the intended, and created (None if already exists)
 
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-domain
         """  # nopep8
@@ -99,11 +113,7 @@ class Domain(Endpoint):
         in:
             - name - string - The name of the domain to retrieve
 
-        out:
-            A Domain dict:
-                - name - string - The name of the domain itself. This should follow the standard domain format of domain.TLD. For instance, example.com is a valid domain name.
-                - ttl - number - This value is the time to live for the records on this domain, in seconds. This defines the time frame that clients can cache queried information before a refresh should be requested.
-                - zone_file - string - This attribute contains the complete contents of the zone file for the selected domain. Individual domain record resources should be used to get more granular control over records. However, this attribute can also be used to get information about the SOA record, which is created automatically and is not accessible as an individual record resource.
+        out: A Domain data structure
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-domain
         """  # nopep8
@@ -132,15 +142,7 @@ class Domain(Endpoint):
         in:
             - name - string - The name of the domain, the Domain Records of which to retrieve
 
-        out:
-            A list of Domain Record dict's:
-                - id - number - A unique identifier for each domain record.
-                - type - string - The type of the DNS record (A, CNAME, TXT, ...).
-                - name - string - The name to use for the DNS record.
-                - data - string - The value to use for the DNS record.
-                - priority - nullable number - The priority for SRV and MX records.
-                - port - nullable number - The port for SRV records.
-                - weight - nullable number - The weight for SRV records.
+        out: A list of Domain Record data structures
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-domain-records
         """  # nopep8
@@ -153,23 +155,9 @@ class Domain(Endpoint):
 
         in:
             - name - string - The name of the domain
-            - attribs - dict - The data of the Domain Record in the following format:
-                - type - string - The record type (A, MX, CNAME, etc). - All Records
-                - name - string - The host name, alias, or service being defined by the record. - A, AAAA, CNAME, TXT, SRV
-                - data - string - Variable data depending on record type. See the [Domain Records]() section for more detail on each record type. - A, AAAA, CNAME, MX, TXT, SRV, NS
-                - priority - nullable number - The priority of the host (for SRV and MX records. null otherwise). - MX, SRV
-                - port - nullable number - The port that the service is accessible on (for SRV records only. null otherwise). - SRV
-                - weight - nullable number - The weight of records with the same priority (for SRV records only. null otherwise). - SRV
+            - attribs - dict - Domain Record data structure without an id
 
-        out:
-            A Domain Record dict:
-                - id - number - A unique identifier for each domain record.
-                - type - string - The type of the DNS record (A, CNAME, TXT, ...).
-                - name - string - The name to use for the DNS record.
-                - data - string - The value to use for the DNS record.
-                - priority - nullable number - The priority for SRV and MX records.
-                - port - nullable number - The port for SRV records.
-                - weight - nullable number - The weight for SRV records.
+        out: A Domain Record data structure
 
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-domain-record
         """  # nopep8
@@ -184,15 +172,7 @@ class Domain(Endpoint):
             - name - string - The name of the domain
             - record_id - number - The id of the domain record to retrieve
 
-        out:
-            A Domain Record dict:
-                - id - number - A unique identifier for each domain record.
-                - type - string - The type of the DNS record (A, CNAME, TXT, ...).
-                - name - string - The name to use for the DNS record.
-                - data - string - The value to use for the DNS record.
-                - priority - nullable number - The priority for SRV and MX records.
-                - port - nullable number - The port for SRV records.
-                - weight - nullable number - The weight for SRV records.
+        out: A Domain Record data structure
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-domain-record
         """  # nopep8
@@ -206,23 +186,9 @@ class Domain(Endpoint):
         in:
             - name - string - The name of the domain
             - record_id - number - The id of the domain record to update
-            - attribs - dict - The data of the Domain Record in the following format:
-                - type - string - The record type (A, MX, CNAME, etc). - All Records
-                - name - string - The host name, alias, or service being defined by the record. - A, AAAA, CNAME, TXT, SRV
-                - data - string - Variable data depending on record type. See the [Domain Records]() section for more detail on each record type. - A, AAAA, CNAME, MX, TXT, SRV, NS
-                - priority - nullable number - The priority of the host (for SRV and MX records. null otherwise). - MX, SRV
-                - port - nullable number - The port that the service is accessible on (for SRV records only. null otherwise). - SRV
-                - weight - nullable number - The weight of records with the same priority (for SRV records only. null otherwise). - SRV
+            - attribs - dict - Domain Record data structure without an id
 
-        out:
-            A Domain Record dict:
-                - id - number - A unique identifier for each domain record.
-                - type - string - The type of the DNS record (A, CNAME, TXT, ...).
-                - name - string - The name to use for the DNS record.
-                - data - string - The value to use for the DNS record.
-                - priority - nullable number - The priority for SRV and MX records.
-                - port - nullable number - The port for SRV records.
-                - weight - nullable number - The weight for SRV records.
+        out: A Domain Record data structure
 
         related: https://developers.digitalocean.com/documentation/v2/#update-a-domain-record
         """  # nopep8

@@ -11,6 +11,19 @@ class SSHKey(Endpoint):
         public key into a Droplet at the time of creation. Only the public key is required to take
         advantage of this functionality.
 
+    data:
+        SSH Key:
+            - id - number - This is a unique identification number for the key. This can be used to
+              reference a specific SSH key when you wish to embed a key into a Droplet.
+            - fingerprint - string - This attribute contains the fingerprint value that is
+              generated from the public key. This is a unique identifier that will differentiate it
+              from other keys using a format that SSH recognizes.
+            - public_key - string - This attribute contains the entire public key string that was
+              uploaded. This is what is embedded into the root user's authorized_keys file if you
+              choose to include this SSH key during Droplet creation.
+            - name - string - This is the human-readable display name for the given SSH key. This
+              is used to easily identify the SSH keys when they are displayed.
+
     related: https://developers.digitalocean.com/documentation/v2/#ssh-keys
     """
 
@@ -27,11 +40,7 @@ class SSHKey(Endpoint):
         description: List all Keys
 
         out:
-            A list of SSH Key dict's:
-                - id - number - This is a unique identification number for the key. This can be used to reference a specific SSH key when you wish to embed a key into a Droplet.
-                - fingerprint - string - This attribute contains the fingerprint value that is generated from the public key. This is a unique identifier that will differentiate it from other keys using a format that SSH recognizes.
-                - public_key - string - This attribute contains the entire public key string that was uploaded. This is what is embedded into the root user's authorized_keys file if you choose to include this SSH key during Droplet creation.
-                - name - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.
+            A list of SSH Key data structures
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-keys
         """  # nopep8
@@ -46,12 +55,7 @@ class SSHKey(Endpoint):
             - name - string - The name to give the new SSH key in your account.
             - public_key - string - A string containing the entire public key.
 
-        out:
-            An SSH Key dict:
-                - id - number - This is a unique identification number for the key. This can be used to reference a specific SSH key when you wish to embed a key into a Droplet.
-                - fingerprint - string - This attribute contains the fingerprint value that is generated from the public key. This is a unique identifier that will differentiate it from other keys using a format that SSH recognizes.
-                - public_key - string - This attribute contains the entire public key string that was uploaded. This is what is embedded into the root user's authorized_keys file if you choose to include this SSH key during Droplet creation.
-                - name - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.
+        out: An SSH Key data structure
 
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-key
         """  # nopep8
@@ -68,12 +72,8 @@ class SSHKey(Endpoint):
             - name - string - The name to give the new SSH key in your account.
             - public_key - string - A string containing the entire public key.
 
-        out:
-            A tuple of of SSH Key dict, the intended and created (None if already exists):
-                - id - number - This is a unique identification number for the key. This can be used to reference a specific SSH key when you wish to embed a key into a Droplet.
-                - fingerprint - string - This attribute contains the fingerprint value that is generated from the public key. This is a unique identifier that will differentiate it from other keys using a format that SSH recognizes.
-                - public_key - string - This attribute contains the entire public key string that was uploaded. This is what is embedded into the root user's authorized_keys file if you choose to include this SSH key during Droplet creation.
-                - name - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.
+        out: A tuple of of SSH Key data structures, the intended and created 
+            (None if already exists)
 
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-key
         """  # nopep8
@@ -99,12 +99,7 @@ class SSHKey(Endpoint):
         in:
             - id_fingerprint - number / string - id or fingerprint of the key
 
-        out:
-            An SSH Key dict:
-                - id - number - This is a unique identification number for the key. This can be used to reference a specific SSH key when you wish to embed a key into a Droplet.
-                - fingerprint - string - This attribute contains the fingerprint value that is generated from the public key. This is a unique identifier that will differentiate it from other keys using a format that SSH recognizes.
-                - public_key - string - This attribute contains the entire public key string that was uploaded. This is what is embedded into the root user's authorized_keys file if you choose to include this SSH key during Droplet creation.
-                - name - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.
+        out: An SSH Key data structure
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-key
         """  # nopep8
@@ -120,12 +115,7 @@ class SSHKey(Endpoint):
             - id_fingerprint - number / string - id or fingerprint of the key
             - name - string - The name to give the new SSH key in your account.
 
-        out:
-            An SSH Key dict:
-                - id - number - This is a unique identification number for the key. This can be used to reference a specific SSH key when you wish to embed a key into a Droplet.
-                - fingerprint - string - This attribute contains the fingerprint value that is generated from the public key. This is a unique identifier that will differentiate it from other keys using a format that SSH recognizes.
-                - public_key - string - This attribute contains the entire public key string that was uploaded. This is what is embedded into the root user's authorized_keys file if you choose to include this SSH key during Droplet creation.
-                - name - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.
+        out: An SSH Key data structure
 
         related: https://developers.digitalocean.com/documentation/v2/#update-a-key
         """  # nopep8

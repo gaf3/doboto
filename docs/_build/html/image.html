@@ -55,6 +55,24 @@
 <h1>Image (do.image)<a class="headerlink" href="#image-do-image" title="Permalink to this headline">¶</a></h1>
 <p>Images in DigitalOcean may refer to one of a few different kinds of dict&#8217;s.</p>
 <p>An image may refer to a snapshot that has been taken of a Droplet instance. It may also mean an image representing an automatic backup of a Droplet. The third category that it can represent is a public Linux distribution or application image that is used as a base to create Droplets.</p>
+<div class="section" id="data-structures">
+<h2>Data Structures<a class="headerlink" href="#data-structures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="image">
+<h3>Image<a class="headerlink" href="#image" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>id</em> - number - A unique number that can be used to identify and reference a specific image.</li>
+<li><em>name</em> - string - The display name that has been given to an image. This is what is shown in the control panel and is generally a descriptive title for the image in question.</li>
+<li><em>type</em> - string - The kind of image, describing the duration of how long the image is stored. This is either &#8220;snapshot&#8221; or &#8220;backup&#8221;.</li>
+<li><em>distribution</em> - string - This attribute describes the base distribution used for this image.</li>
+<li><em>slug</em> - nullable string - A uniquely identifying string that is associated with each of the DigitalOcean-provided public images. These can be used to reference a public image as an alternative to the numeric id.</li>
+<li><em>public</em> - boolean - This is a boolean value that indicates whether the image in question is public or not. An image that is public is available to all accounts. A non-public image is only accessible from your account.</li>
+<li><em>regions</em> - list - This attribute is a list of the regions that the image is available in. The regions are represented by their identifying slug values.</li>
+<li><em>min_disk_size</em> - number - The minimum &#8216;disk&#8217; required for a size to use this image.</li>
+<li><em>size_gigabytes</em> - number - The size of the image in gigabytes.</li>
+<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.</li>
+</ul>
+</div>
+</div>
 <div class="section" id="list-all-distribution-application-or-user-images">
 <h2>List all, distribution, application, or user images.<a class="headerlink" href="#list-all-distribution-application-or-user-images" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
@@ -68,19 +86,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A list of Image dict&#8217;s<ul>
-<li><em>id</em> - number - A unique number that can be used to identify and reference a specific image.</li>
-<li><em>name</em> - string - The display name that has been given to an image. This is what is shown in the control panel and is generally a descriptive title for the image in question.</li>
-<li><em>type</em> - string - The kind of image, describing the duration of how long the image is stored. This is either &#8220;snapshot&#8221; or &#8220;backup&#8221;.</li>
-<li><em>distribution</em> - string - This attribute describes the base distribution used for this image.</li>
-<li><em>slug</em> - nullable string - A uniquely identifying string that is associated with each of the DigitalOcean-provided public images. These can be used to reference a public image as an alternative to the numeric id.</li>
-<li><em>public</em> - boolean - This is a boolean value that indicates whether the image in question is public or not. An image that is public is available to all accounts. A non-public image is only accessible from your account.</li>
-<li><em>regions</em> - list - This attribute is a list of the regions that the image is available in. The regions are represented by their identifying slug values.</li>
-<li><em>min_disk_size</em> - number - The minimum &#8216;disk&#8217; required for a size to use this image.</li>
-<li><em>size_gigabytes</em> - number - The size of the image in gigabytes.</li>
-<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.</li>
-</ul>
-</li>
+<li>A list of Image data structures</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -102,19 +108,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>An Image dict<ul>
-<li><em>id</em> - number - A unique number that can be used to identify and reference a specific image.</li>
-<li><em>name</em> - string - The display name that has been given to an image. This is what is shown in the control panel and is generally a descriptive title for the image in question.</li>
-<li><em>type</em> - string - The kind of image, describing the duration of how long the image is stored. This is either &#8220;snapshot&#8221; or &#8220;backup&#8221;.</li>
-<li><em>distribution</em> - string - This attribute describes the base distribution used for this image.</li>
-<li><em>slug</em> - nullable string - A uniquely identifying string that is associated with each of the DigitalOcean-provided public images. These can be used to reference a public image as an alternative to the numeric id.</li>
-<li><em>public</em> - boolean - This is a boolean value that indicates whether the image in question is public or not. An image that is public is available to all accounts. A non-public image is only accessible from your account.</li>
-<li><em>regions</em> - list - This attribute is a list of the regions that the image is available in. The regions are represented by their identifying slug values.</li>
-<li><em>min_disk_size</em> - number - The minimum &#8216;disk&#8217; required for a size to use this image.</li>
-<li><em>size_gigabytes</em> - number - The size of the image in gigabytes.</li>
-<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.</li>
-</ul>
-</li>
+<li>An Image data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -135,19 +129,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>An Image dict<ul>
-<li><em>id</em> - number - A unique number that can be used to identify and reference a specific image.</li>
-<li><em>name</em> - string - The display name that has been given to an image. This is what is shown in the control panel and is generally a descriptive title for the image in question.</li>
-<li><em>type</em> - string - The kind of image, describing the duration of how long the image is stored. This is either &#8220;snapshot&#8221; or &#8220;backup&#8221;.</li>
-<li><em>distribution</em> - string - This attribute describes the base distribution used for this image.</li>
-<li><em>slug</em> - nullable string - A uniquely identifying string that is associated with each of the DigitalOcean-provided public images. These can be used to reference a public image as an alternative to the numeric id.</li>
-<li><em>public</em> - boolean - This is a boolean value that indicates whether the image in question is public or not. An image that is public is available to all accounts. A non-public image is only accessible from your account.</li>
-<li><em>regions</em> - list - This attribute is a list of the regions that the image is available in. The regions are represented by their identifying slug values.</li>
-<li><em>min_disk_size</em> - number - The minimum &#8216;disk&#8217; required for a size to use this image.</li>
-<li><em>size_gigabytes</em> - number - The size of the image in gigabytes.</li>
-<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.</li>
-</ul>
-</li>
+<li>An Image data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -189,18 +171,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>An Action dictt<ul>
-<li><em>id</em> - number - A unique numeric ID that can be used to identify and reference an image action.</li>
-<li><em>status</em> - string - The current status of the image action. This will be either &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
-<li><em>type</em> - string - This is the type of the image action that the JSON dict represents. For example, this could be &#8220;transfer&#8221; to represent the state of an image transfer action.</li>
-<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
-<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
-<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
-<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
-<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
-<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
-</ul>
-</li>
+<li>An Action data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -222,18 +193,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>An Action dict<ul>
-<li><em>id</em> - number - A unique numeric ID that can be used to identify and reference an image action.</li>
-<li><em>status</em> - string - The current status of the image action. This will be either &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
-<li><em>type</em> - string - This is the type of the image action that the JSON dict represents. For example, this could be &#8220;transfer&#8221; to represent the state of an image transfer action.</li>
-<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
-<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
-<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
-<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
-<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
-<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
-</ul>
-</li>
+<li>An Action data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -252,18 +212,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A list of Action dict&#8217;s<ul>
-<li><em>id</em> - number - A unique numeric ID that can be used to identify and reference an image action.</li>
-<li><em>status</em> - string - The current status of the image action. This will be either &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
-<li><em>type</em> - string - This is the type of the image action that the JSON dict represents. For example, this could be &#8220;transfer&#8221; to represent the state of an image transfer action.</li>
-<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
-<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
-<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
-<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
-<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
-<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
-</ul>
-</li>
+<li>A list of Action data structures</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -283,18 +232,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>An Action dict<ul>
-<li><em>id</em> - number - A unique numeric ID that can be used to identify and reference an image action.</li>
-<li><em>status</em> - string - The current status of the image action. This will be either &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
-<li><em>type</em> - string - This is the type of the image action that the JSON dict represents. For example, this could be &#8220;transfer&#8221; to represent the state of an image transfer action.</li>
-<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
-<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
-<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
-<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
-<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
-<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
-</ul>
-</li>
+<li>An Action data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -312,6 +250,10 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Image (do.image)</a><ul>
+<li><a class="reference internal" href="#data-structures">Data Structures</a><ul>
+<li><a class="reference internal" href="#image">Image</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#list-all-distribution-application-or-user-images">List all, distribution, application, or user images.</a></li>
 <li><a class="reference internal" href="#retrieve-an-existing-image-by-id-or-slug">Retrieve an existing image by id or slug</a></li>
 <li><a class="reference internal" href="#update-an-image">Update an Image</a></li>

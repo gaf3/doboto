@@ -51,6 +51,20 @@
 <h1>Tag (do.tag)<a class="headerlink" href="#tag-do-tag" title="Permalink to this headline">¶</a></h1>
 <p>A Tag is a label that can be applied to a resource (currently only Droplets) in order to better organize or facilitate the lookups and actions on it.</p>
 <p>Tags have two attributes, a user defined name attribute and an embedded resources attribute with information about resources that have been taggedself.</p>
+<div class="section" id="data-structures">
+<h2>Data Structures<a class="headerlink" href="#data-structures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="tag">
+<h3>Tag<a class="headerlink" href="#tag" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>name</em> - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.</li>
+<li><em>resources</em> - list - An list of Resource dict&#8217;s<ul>
+<li><em>resource_id</em> - string - The identifier of a resource</li>
+<li><em>resource_type</em> - string - The type of the resource</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
 <div class="section" id="list-all-tags">
 <h2>List all tags<a class="headerlink" href="#list-all-tags" title="Permalink to this headline">¶</a></h2>
 <p>Currently only a resource_type of &#8216;droplet&#8217; is supported.  Thus, resource_id is droplet id.</p>
@@ -61,15 +75,7 @@
 
 <p>Returns:</p>
 <ul class="simple">
-<li>A list of Tag dict&#8217;s<ul>
-<li><em>name</em> - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.</li>
-<li><em>resources</em> - list - An list of Resource dict&#8217;s<ul>
-<li><em>resource_id</em> - string - The identifier of a resource</li>
-<li><em>resource_type</em> - string - The type of the resource</li>
-</ul>
-</li>
-</ul>
-</li>
+<li>A list of Tag data structures</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -105,15 +111,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A Tag dict<ul>
-<li><em>name</em> - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.</li>
-<li><em>resources</em> - list - An list of Resource dict&#8217;s<ul>
-<li><em>resource_id</em> - string - The identifier of a resource</li>
-<li><em>resource_type</em> - string - The type of the resource</li>
-</ul>
-</li>
-</ul>
-</li>
+<li>A Tag data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -133,15 +131,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A tuple of Tag dict&#8217;s, the intended and created (None if already exists)<ul>
-<li><em>name</em> - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.</li>
-<li><em>resources</em> - list - An list of Resource dict&#8217;s<ul>
-<li><em>resource_id</em> - string - The identifier of a resource</li>
-<li><em>resource_type</em> - string - The type of the resource</li>
-</ul>
-</li>
-</ul>
-</li>
+<li>A tuple of Tag data structures, the intended and created (None if already exists)</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -161,15 +151,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A Tag dict<ul>
-<li><em>name</em> - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.</li>
-<li><em>resources</em> - list - An list of Resource dict&#8217;s<ul>
-<li><em>resource_id</em> - string - The identifier of a resource</li>
-<li><em>resource_type</em> - string - The type of the resource</li>
-</ul>
-</li>
-</ul>
-</li>
+<li>A Tag data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -190,15 +172,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A Tag dict<ul>
-<li><em>name</em> - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.</li>
-<li><em>resources</em> - list - An list of Resource dict&#8217;s<ul>
-<li><em>resource_id</em> - string - The identifier of a resource</li>
-<li><em>resource_type</em> - string - The type of the resource</li>
-</ul>
-</li>
-</ul>
-</li>
+<li>A Tag data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -285,6 +259,10 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Tag (do.tag)</a><ul>
+<li><a class="reference internal" href="#data-structures">Data Structures</a><ul>
+<li><a class="reference internal" href="#tag">Tag</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#list-all-tags">List all tags</a></li>
 <li><a class="reference internal" href="#list-all-tag-names">List all tag names</a></li>
 <li><a class="reference internal" href="#create-a-new-tag">Create a new Tag</a></li>

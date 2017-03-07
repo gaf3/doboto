@@ -15,6 +15,14 @@ class Tag(Endpoint):
         Tags have two attributes, a user defined name attribute and an embedded resources attribute
         with information about resources that have been taggedself.
 
+    data:
+        Tag:
+            - name - string - Tags may contain letters, numbers, colons, dashes, and underscores.
+              There is a limit of 255 characters per tag.
+            - resources - list - An list of Resource dict's:
+                - resource_id - string - The identifier of a resource
+                - resource_type - string - The type of the resource
+
     related: https://developers.digitalocean.com/documentation/v2/#tags
     """
 
@@ -33,12 +41,7 @@ class Tag(Endpoint):
             Currently only a resource_type of 'droplet' is supported.  Thus, resource_id is
             droplet id.
 
-        out:
-            A list of Tag dict's:
-                - name - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.
-                - resources - list - An list of Resource dict's:
-                    - resource_id - string - The identifier of a resource
-                    - resource_type - string - The type of the resource
+        out: A list of Tag data structures
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-tags
         """  # nopep8
@@ -66,12 +69,7 @@ class Tag(Endpoint):
         in:
             - name - string - name of the Tag
 
-        out:
-            A Tag dict:
-                - name - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.
-                - resources - list - An list of Resource dict's:
-                    - resource_id - string - The identifier of a resource
-                    - resource_type - string - The type of the resource
+        out: A Tag data structure
 
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-tag
         """  # nopep8
@@ -89,12 +87,7 @@ class Tag(Endpoint):
         in:
             - name - string - name of the Tag
 
-        out:
-            A tuple of Tag dict's, the intended and created (None if already exists):
-                - name - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.
-                - resources - list - An list of Resource dict's:
-                    - resource_id - string - The identifier of a resource
-                    - resource_type - string - The type of the resource
+        out: A tuple of Tag data structures, the intended and created (None if already exists)
 
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-tag
         """  # nopep8
@@ -123,12 +116,7 @@ class Tag(Endpoint):
         in:
             - name - string - name of the Tag
 
-        out:
-            A Tag dict:
-                - name - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.
-                - resources - list - An list of Resource dict's:
-                    - resource_id - string - The identifier of a resource
-                    - resource_type - string - The type of the resource
+        out: A Tag data structure
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-a-tag
         """  # nopep8
@@ -146,12 +134,7 @@ class Tag(Endpoint):
             - name - string - name of the Tag currently
             - new_name - string - desired name of the Tag
 
-        out:
-            A Tag dict:
-                - name - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.
-                - resources - list - An list of Resource dict's:
-                    - resource_id - string - The identifier of a resource
-                    - resource_type - string - The type of the resource
+        out: A Tag data structure
 
         related: https://developers.digitalocean.com/documentation/v2/#update-a-tag
         """  # nopep8

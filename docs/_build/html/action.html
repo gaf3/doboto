@@ -56,16 +56,11 @@
 <p>Actions are records of events that have occurred on the resources in your account. These can be things like rebooting a Droplet, or transferring an image to a new region.</p>
 <p>An action dict is created every time one of these actions is initiated. The action dict contains information about the current status of the action, start and complete timestamps, and the associated resource type and ID.</p>
 <p>Every action that creates an action dict is available through this endpoint. Completed actions are not removed from this list and are always available for querying.</p>
-<div class="section" id="list-all-actions">
-<h2>List all Actions<a class="headerlink" href="#list-all-actions" title="Permalink to this headline">¶</a></h2>
-<dl class="method">
-<dt id="do.action.list">
-<code class="descclassname">do.action.</code><code class="descname">list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#do.action.list" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<p>Returns:</p>
+<div class="section" id="data-structures">
+<h2>Data Structures<a class="headerlink" href="#data-structures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="action">
+<h3>Action<a class="headerlink" href="#action" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>A list of Action dict&#8217;s<ul>
 <li><em>id</em> - number - A unique numeric ID that can be used to identify and reference an action.</li>
 <li><em>status</em> - string - The current status of the action. This can be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
 <li><em>type</em> - string - This is the type of action that the dict represents. For example, this could be &#8220;transfer&#8221; to represent the state of an image transfer action.</li>
@@ -76,7 +71,18 @@
 <li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
 <li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
 </ul>
-</li>
+</div>
+</div>
+<div class="section" id="list-all-actions">
+<h2>List all Actions<a class="headerlink" href="#list-all-actions" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.action.list">
+<code class="descclassname">do.action.</code><code class="descname">list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#do.action.list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Returns:</p>
+<ul class="simple">
+<li>A list of Action data structures</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -95,18 +101,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>An Action dict in the following format<ul>
-<li><em>id</em> - number - A unique numeric ID that can be used to identify and reference an action.</li>
-<li><em>status</em> - string - The current status of the action. This can be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
-<li><em>type</em> - string - This is the type of action that the dict represents. For example, this could be &#8220;transfer&#8221; to represent the state of an image transfer action.</li>
-<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
-<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
-<li><em>resource_id</em> - number - A unique identifier for the resource that the action is associated with.</li>
-<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
-<li><em>region</em> - nullable string - (deprecated) A slug representing the region where the action occurred.</li>
-<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
-</ul>
-</li>
+<li>An Action data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -124,6 +119,10 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Action (do.action)</a><ul>
+<li><a class="reference internal" href="#data-structures">Data Structures</a><ul>
+<li><a class="reference internal" href="#action">Action</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#list-all-actions">List all Actions</a></li>
 <li><a class="reference internal" href="#retrieve-an-existing-action">Retrieve an existing Action</a></li>
 </ul>

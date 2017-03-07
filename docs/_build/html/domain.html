@@ -55,6 +55,29 @@
 <h1>Domain (do.domain)<a class="headerlink" href="#domain-do-domain" title="Permalink to this headline">¶</a></h1>
 <p>Domain resources are domain names that you have purchased from a domain name registrar that you are managing through the DigitalOcean DNS interface.</p>
 <p>This resource establishes top-level control over each domain. Actions that affect individual domain records should be taken on the [Domain Records] resource.</p>
+<div class="section" id="data-structures">
+<h2>Data Structures<a class="headerlink" href="#data-structures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="domain">
+<h3>Domain<a class="headerlink" href="#domain" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>name</em> - string - The name of the domain itself. This should follow the standard domain format of domain.TLD. For instance, example.com is a valid domain name.</li>
+<li><em>ttl</em> - number - This value is the time to live for the records on this domain, in seconds. This defines the time frame that clients can cache queried information before a refresh should be requested.</li>
+<li><em>zone_file</em> - string - This attribute contains the complete contents of the zone file for the selected domain. Individual domain record resources should be used to get more granular control over records. However, this attribute can also be used to get information about the SOA record, which is created automatically and is not accessible as an individual record resource.</li>
+</ul>
+</div>
+<div class="section" id="domain-record">
+<h3>Domain Record<a class="headerlink" href="#domain-record" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>id</em> - number - A unique identifier for each domain record.</li>
+<li><em>type</em> - string - The type of the DNS record (A, CNAME, TXT, ...).</li>
+<li><em>name</em> - string - The name to use for the DNS record.</li>
+<li><em>data</em> - string - The value to use for the DNS record.</li>
+<li><em>priority</em> - nullable number - The priority for SRV and MX records.</li>
+<li><em>port</em> - nullable number - The port for SRV records.</li>
+<li><em>weight</em> - nullable number - The weight for SRV records.</li>
+</ul>
+</div>
+</div>
 <div class="section" id="list-all-domains">
 <h2>List all Domains<a class="headerlink" href="#list-all-domains" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
@@ -64,12 +87,7 @@
 
 <p>Returns:</p>
 <ul class="simple">
-<li>A list of Domain dict&#8217;s<ul>
-<li><em>name</em> - string - The name of the domain itself. This should follow the standard domain format of domain.TLD. For instance, example.com is a valid domain name.</li>
-<li><em>ttl</em> - number - This value is the time to live for the records on this domain, in seconds. This defines the time frame that clients can cache queried information before a refresh should be requested.</li>
-<li><em>zone_file</em> - string - This attribute contains the complete contents of the zone file for the selected domain. Individual domain record resources should be used to get more granular control over records. However, this attribute can also be used to get information about the SOA record, which is created automatically and is not accessible as an individual record resource.</li>
-</ul>
-</li>
+<li>A list of Domain data structures</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -89,12 +107,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A Domain dict<ul>
-<li><em>name</em> - string - The name of the domain itself. This should follow the standard domain format of domain.TLD. For instance, example.com is a valid domain name.</li>
-<li><em>ttl</em> - number - This value is the time to live for the records on this domain, in seconds. This defines the time frame that clients can cache queried information before a refresh should be requested.</li>
-<li><em>zone_file</em> - string - This attribute contains the complete contents of the zone file for the selected domain. Individual domain record resources should be used to get more granular control over records. However, this attribute can also be used to get information about the SOA record, which is created automatically and is not accessible as an individual record resource.</li>
-</ul>
-</li>
+<li>A Domain data structures</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -110,16 +123,11 @@
 
 <ul class="simple">
 <li><em>name</em> - string - The domain name to add to the DigitalOcean DNS management interface. The name must be unique in DigitalOcean&#8217;s DNS system. The request will fail if the name has already been taken.</li>
-<li><em>ip_address</em> - string - This attribute contains the IP address you want the domain to point to.</li>
+<li><em>ip_address</em> - string - This attribute contains the IP address you want the domain to</li>
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A tuple of Domain dict&#8217;s, the intended, and created (None if already exists)<ul>
-<li><em>name</em> - string - The name of the domain itself. This should follow the standard domain format of domain.TLD. For instance, example.com is a valid domain name.</li>
-<li><em>ttl</em> - number - This value is the time to live for the records on this domain, in seconds. This defines the time frame that clients can cache queried information before a refresh should be requested.</li>
-<li><em>zone_file</em> - string - This attribute contains the complete contents of the zone file for the selected domain. Individual domain record resources should be used to get more granular control over records. However, this attribute can also be used to get information about the SOA record, which is created automatically and is not accessible as an individual record resource.</li>
-</ul>
-</li>
+<li>A tuple of Domain data structures, the intended, and created (None if already exists)</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -138,12 +146,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A Domain dict<ul>
-<li><em>name</em> - string - The name of the domain itself. This should follow the standard domain format of domain.TLD. For instance, example.com is a valid domain name.</li>
-<li><em>ttl</em> - number - This value is the time to live for the records on this domain, in seconds. This defines the time frame that clients can cache queried information before a refresh should be requested.</li>
-<li><em>zone_file</em> - string - This attribute contains the complete contents of the zone file for the selected domain. Individual domain record resources should be used to get more granular control over records. However, this attribute can also be used to get information about the SOA record, which is created automatically and is not accessible as an individual record resource.</li>
-</ul>
-</li>
+<li>A Domain data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -181,16 +184,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A list of Domain Record dict&#8217;s<ul>
-<li><em>id</em> - number - A unique identifier for each domain record.</li>
-<li><em>type</em> - string - The type of the DNS record (A, CNAME, TXT, ...).</li>
-<li><em>name</em> - string - The name to use for the DNS record.</li>
-<li><em>data</em> - string - The value to use for the DNS record.</li>
-<li><em>priority</em> - nullable number - The priority for SRV and MX records.</li>
-<li><em>port</em> - nullable number - The port for SRV records.</li>
-<li><em>weight</em> - nullable number - The weight for SRV records.</li>
-</ul>
-</li>
+<li>A list of Domain Record data structures</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -206,28 +200,11 @@
 
 <ul class="simple">
 <li><em>name</em> - string - The name of the domain</li>
-<li><em>attribs</em> - dict - The data of the Domain Record in the following format<ul>
-<li><em>type</em> - string - The record type (A, MX, CNAME, etc). - All Records</li>
-<li><em>name</em> - string - The host name, alias, or service being defined by the record. - A, AAAA, CNAME, TXT, SRV</li>
-<li><em>data</em> - string - Variable data depending on record type. See the [Domain Records]() section for more detail on each record type. - A, AAAA, CNAME, MX, TXT, SRV, NS</li>
-<li><em>priority</em> - nullable number - The priority of the host (for SRV and MX records. null otherwise). - MX, SRV</li>
-<li><em>port</em> - nullable number - The port that the service is accessible on (for SRV records only. null otherwise). - SRV</li>
-<li><em>weight</em> - nullable number - The weight of records with the same priority (for SRV records only. null otherwise). - SRV</li>
-</ul>
-</li>
+<li><em>attribs</em> - dict - Domain Record data structure without an id</li>
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A Domain Record dict<ul>
-<li><em>id</em> - number - A unique identifier for each domain record.</li>
-<li><em>type</em> - string - The type of the DNS record (A, CNAME, TXT, ...).</li>
-<li><em>name</em> - string - The name to use for the DNS record.</li>
-<li><em>data</em> - string - The value to use for the DNS record.</li>
-<li><em>priority</em> - nullable number - The priority for SRV and MX records.</li>
-<li><em>port</em> - nullable number - The port for SRV records.</li>
-<li><em>weight</em> - nullable number - The weight for SRV records.</li>
-</ul>
-</li>
+<li>A Domain Record data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -247,16 +224,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A Domain Record dict<ul>
-<li><em>id</em> - number - A unique identifier for each domain record.</li>
-<li><em>type</em> - string - The type of the DNS record (A, CNAME, TXT, ...).</li>
-<li><em>name</em> - string - The name to use for the DNS record.</li>
-<li><em>data</em> - string - The value to use for the DNS record.</li>
-<li><em>priority</em> - nullable number - The priority for SRV and MX records.</li>
-<li><em>port</em> - nullable number - The port for SRV records.</li>
-<li><em>weight</em> - nullable number - The weight for SRV records.</li>
-</ul>
-</li>
+<li>A Domain Record data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -273,28 +241,11 @@
 <ul class="simple">
 <li><em>name</em> - string - The name of the domain</li>
 <li><em>record_id</em> - number - The id of the domain record to update</li>
-<li><em>attribs</em> - dict - The data of the Domain Record in the following format<ul>
-<li><em>type</em> - string - The record type (A, MX, CNAME, etc). - All Records</li>
-<li><em>name</em> - string - The host name, alias, or service being defined by the record. - A, AAAA, CNAME, TXT, SRV</li>
-<li><em>data</em> - string - Variable data depending on record type. See the [Domain Records]() section for more detail on each record type. - A, AAAA, CNAME, MX, TXT, SRV, NS</li>
-<li><em>priority</em> - nullable number - The priority of the host (for SRV and MX records. null otherwise). - MX, SRV</li>
-<li><em>port</em> - nullable number - The port that the service is accessible on (for SRV records only. null otherwise). - SRV</li>
-<li><em>weight</em> - nullable number - The weight of records with the same priority (for SRV records only. null otherwise). - SRV</li>
-</ul>
-</li>
+<li><em>attribs</em> - dict - Domain Record data structure without an id</li>
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A Domain Record dict<ul>
-<li><em>id</em> - number - A unique identifier for each domain record.</li>
-<li><em>type</em> - string - The type of the DNS record (A, CNAME, TXT, ...).</li>
-<li><em>name</em> - string - The name to use for the DNS record.</li>
-<li><em>data</em> - string - The value to use for the DNS record.</li>
-<li><em>priority</em> - nullable number - The priority for SRV and MX records.</li>
-<li><em>port</em> - nullable number - The port for SRV records.</li>
-<li><em>weight</em> - nullable number - The weight for SRV records.</li>
-</ul>
-</li>
+<li>A Domain Record data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -332,6 +283,11 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Domain (do.domain)</a><ul>
+<li><a class="reference internal" href="#data-structures">Data Structures</a><ul>
+<li><a class="reference internal" href="#domain">Domain</a></li>
+<li><a class="reference internal" href="#domain-record">Domain Record</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#list-all-domains">List all Domains</a></li>
 <li><a class="reference internal" href="#create-a-new-domain">Create a new Domain</a></li>
 <li><a class="reference internal" href="#create-a-new-domain-if-name-doesn-t-already-exist">Create a new Domain if name doesn&#8217;t already exist</a></li>

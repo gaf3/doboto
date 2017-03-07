@@ -54,6 +54,58 @@
   <div class="section" id="loadbalancer-do-load-balancer">
 <h1>LoadBalancer (do.load_balancer)<a class="headerlink" href="#loadbalancer-do-load-balancer" title="Permalink to this headline">¶</a></h1>
 <p>Load Balancers provide a way to distribute traffic across multiple Droplets. You can list, create, or delete Load Balancers as well as add or remove Droplets, forwarding rules, and other configuration details.</p>
+<div class="section" id="data-structures">
+<h2>Data Structures<a class="headerlink" href="#data-structures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="health-check">
+<h3>Health Check<a class="headerlink" href="#health-check" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>protocol</em> - string - The protocol used for health checks sent to the backend Droplets. The possible values are &#8220;http&#8221; or &#8220;tcp&#8221;.</li>
+<li><em>port</em> - int - An integer representing the port on the backend Droplets on which the health check will attempt a connection.</li>
+<li><em>path</em> - string - The path on the backend Droplets to which the Load Balancer instance will send a request.</li>
+<li><em>check_interval_seconds</em> - int - The number of seconds between between two consecutive health checks.</li>
+<li><em>response_timeout_seconds</em> - int - The number of seconds the Load Balancer instance will wait for a response until marking a health check as failed.</li>
+<li><em>unhealthy_threshold</em> - int - The number of times a health check must fail for a backend Droplet to be marked &#8220;unhealthy&#8221; and be removed from the pool.</li>
+<li><em>healthy_threshold</em> - int - The number of times a health check must pass for a backend Droplet to be marked &#8220;healthy&#8221; and be re-added to the pool.</li>
+</ul>
+</div>
+<div class="section" id="load-balancer">
+<h3>Load Balancer<a class="headerlink" href="#load-balancer" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>id</em> - string - A unique ID that can be used to identify and reference a Load Balancer.</li>
+<li><em>name</em> - string - A human-readable name for a Load Balancer instance.</li>
+<li><em>ip</em> - string - An attribute containing the public-facing IP address of the Load Balancer.</li>
+<li><em>algorithm</em> - string - The load balancing algorithm used to determine which backend Droplet will be selected by a client. It must be either &#8220;round_robin&#8221; or &#8220;least_connections&#8221;.</li>
+<li><em>status</em> - string - A status string indicating the current state of the Load Balancer. This can be &#8220;new&#8221;, &#8220;active&#8221;, or &#8220;errored&#8221;.</li>
+<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Load Balancer was created.</li>
+<li><em>forwarding_rules</em> - list - Forwarding Role data structures</li>
+<li><em>health_check</em> - list - Health check data structures</li>
+<li><em>sticky_sessions</em> - list - Sticky Session data structures</li>
+<li><em>region</em> - object - The region where the Load Balancer instance is located. When setting a region, the value should be the slug identifier for the region. When you query a Load Balancer, an entire region object will be returned.</li>
+<li><em>tag</em> - string - The name of a Droplet tag corresponding to Droplets assigned to the Load Balancer.</li>
+<li><em>droplet_ids</em> - array of integers - An array containing the IDs of the Droplets assigned to the Load Balancer.</li>
+<li><em>redirect_http_to_https</em> - bool - A boolean value indicating whether HTTP requests to the Load Balancer on port 80 will be redirected to HTTPS on port 443.</li>
+</ul>
+</div>
+<div class="section" id="forwaring-rule">
+<h3>Forwaring Rule<a class="headerlink" href="#forwaring-rule" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>entry_protocol</em> - string - The protocol used for traffic to the Load Balancer. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
+<li><em>entry_port</em> - int - An integer representing the port on which the Load Balancer instance will listen.</li>
+<li><em>target_protocol</em> - string - The protocol used for traffic from the Load Balancer to the backend Droplets. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
+<li><em>target_port</em> - int - An integer representing the port on the backend Droplets to which the Load Balancer will send traffic.</li>
+<li><em>certificate_id</em> - string - The ID of the TLS certificate used for SSL termination if enabled.</li>
+<li><em>tls_passthrough</em> - bool - A boolean value indicating whether SSL encrypted traffic will be passed through to the backend Droplets.</li>
+</ul>
+</div>
+<div class="section" id="sticky-session">
+<h3>Sticky Session<a class="headerlink" href="#sticky-session" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>type</em> - string - An attribute indicating how and if requests from a client will be persistently served by the same backend Droplet. The possible values are &#8220;cookies&#8221; or &#8220;none&#8221;.</li>
+<li><em>cookie_name</em> - string - The name of the cookie sent to the client. This attribute is only returned when using &#8220;cookies&#8221; for the sticky sessions type.</li>
+<li><em>cookie_ttl_seconds</em> - string - The number of seconds until the cookie set by the Load Balancer expires. This attribute is only returned when using &#8220;cookies&#8221; for the sticky sessions type.</li>
+</ul>
+</div>
+</div>
 <div class="section" id="list-all-load-balancers">
 <h2>List all Load Balancers<a class="headerlink" href="#list-all-load-balancers" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
@@ -63,44 +115,7 @@
 
 <p>Returns:</p>
 <ul class="simple">
-<li>A list of Load Balancer dict&#8217;s<ul>
-<li><em>id</em> - string - A unique ID that can be used to identify and reference a Load Balancer.</li>
-<li><em>name</em> - string - A human-readable name for a Load Balancer instance.</li>
-<li><em>ip</em> - string - An attribute containing the public-facing IP address of the Load Balancer.</li>
-<li><em>algorithm</em> - string - The load balancing algorithm used to determine which backend Droplet will be selected by a client. It must be either &#8220;round_robin&#8221; or &#8220;least_connections&#8221;.</li>
-<li><em>status</em> - string - A status string indicating the current state of the Load Balancer. This can be &#8220;new&#8221;, &#8220;active&#8221;, or &#8220;errored&#8221;.</li>
-<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Load Balancer was created.</li>
-<li><em>forwarding_rules</em> - list - Forwarding Roles dict&#8217;s<ul>
-<li><em>entry_protocol</em> - string - The protocol used for traffic to the Load Balancer. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
-<li><em>entry_port</em> - int - An integer representing the port on which the Load Balancer instance will listen.</li>
-<li><em>target_protocol</em> - string - The protocol used for traffic from the Load Balancer to the backend Droplets. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
-<li><em>target_port</em> - int - An integer representing the port on the backend Droplets to which the Load Balancer will send traffic.</li>
-<li><em>certificate_id</em> - string - The ID of the TLS certificate used for SSL termination if enabled.</li>
-<li><em>tls_passthrough</em> - bool - A boolean value indicating whether SSL encrypted traffic will be passed through to the backend Droplets.</li>
-</ul>
-</li>
-<li><em>health_check</em> - list - Health check dict&#8217;s<ul>
-<li><em>protocol</em> - string - The protocol used for health checks sent to the backend Droplets. The possible values are &#8220;http&#8221; or &#8220;tcp&#8221;.</li>
-<li><em>port</em> - int - An integer representing the port on the backend Droplets on which the health check will attempt a connection.</li>
-<li><em>path</em> - string - The path on the backend Droplets to which the Load Balancer instance will send a request.</li>
-<li><em>check_interval_seconds</em> - int - The number of seconds between between two consecutive health checks.</li>
-<li><em>response_timeout_seconds</em> - int - The number of seconds the Load Balancer instance will wait for a response until marking a health check as failed.</li>
-<li><em>unhealthy_threshold</em> - int - The number of times a health check must fail for a backend Droplet to be marked &#8220;unhealthy&#8221; and be removed from the pool.</li>
-<li><em>healthy_threshold</em> - int - The number of times a health check must pass for a backend Droplet to be marked &#8220;healthy&#8221; and be re-added to the pool.</li>
-</ul>
-</li>
-<li><em>sticky_sessions</em> - list - Sticky Session dict&#8217;s<ul>
-<li><em>type</em> - string - An attribute indicating how and if requests from a client will be persistently served by the same backend Droplet. The possible values are &#8220;cookies&#8221; or &#8220;none&#8221;.</li>
-<li><em>cookie_name</em> - string - The name of the cookie sent to the client. This attribute is only returned when using &#8220;cookies&#8221; for the sticky sessions type.</li>
-<li><em>cookie_ttl_seconds</em> - string - The number of seconds until the cookie set by the Load Balancer expires. This attribute is only returned when using &#8220;cookies&#8221; for the sticky sessions type.</li>
-</ul>
-</li>
-<li><em>region</em> - object - The region where the Load Balancer instance is located. When setting a region, the value should be the slug identifier for the region. When you query a Load Balancer, an entire region object will be returned.</li>
-<li><em>tag</em> - string - The name of a Droplet tag corresponding to Droplets assigned to the Load Balancer.</li>
-<li><em>droplet_ids</em> - array of integers - An array containing the IDs of the Droplets assigned to the Load Balancer.</li>
-<li><em>redirect_http_to_https</em> - bool - A boolean value indicating whether HTTP requests to the Load Balancer on port 80 will be redirected to HTTPS on port 443.</li>
-</ul>
-</li>
+<li>A list of Load Balancer data structures</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -115,78 +130,19 @@
 <dd></dd></dl>
 
 <ul class="simple">
-<li><em>name</em> - string - A human-readable name for a Load Balancer instance. - true</li>
-<li><em>algorithm</em> - string - The load balancing algorithm used to determine which backend Droplet will be selected by a client. It must be either &#8220;round_robin&#8221; or &#8220;least_connections&#8221;. The default value is &#8220;round_robin&#8221;. -</li>
-<li><em>region</em> - string - The region where the Load Balancer instance will be located. When setting a region, the value should be the slug identifier for the region. When you query a Load Balancer, an entire region object will be returned. - true</li>
-<li><em>forwarding_rules</em> - list - Forwarding Roles dict&#8217;s<ul>
-<li><em>entry_protocol</em> - string - The protocol used for traffic to the Load Balancer. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
-<li><em>entry_port</em> - int - An integer representing the port on which the Load Balancer instance will listen.</li>
-<li><em>target_protocol</em> - string - The protocol used for traffic from the Load Balancer to the backend Droplets. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
-<li><em>target_port</em> - int - An integer representing the port on the backend Droplets to which the Load Balancer will send traffic.</li>
-<li><em>certificate_id</em> - string - The ID of the TLS certificate used for SSL termination if enabled.</li>
-<li><em>tls_passthrough</em> - bool - A boolean value indicating whether SSL encrypted traffic will be passed through to the backend Droplets.</li>
-</ul>
-</li>
-<li><em>health_check</em> - list - Health check dict&#8217;s<ul>
-<li><em>protocol</em> - string - The protocol used for health checks sent to the backend Droplets. The possible values are &#8220;http&#8221; or &#8220;tcp&#8221;.</li>
-<li><em>port</em> - int - An integer representing the port on the backend Droplets on which the health check will attempt a connection.</li>
-<li><em>path</em> - string - The path on the backend Droplets to which the Load Balancer instance will send a request.</li>
-<li><em>check_interval_seconds</em> - int - The number of seconds between between two consecutive health checks.</li>
-<li><em>response_timeout_seconds</em> - int - The number of seconds the Load Balancer instance will wait for a response until marking a health check as failed.</li>
-<li><em>unhealthy_threshold</em> - int - The number of times a health check must fail for a backend Droplet to be marked &#8220;unhealthy&#8221; and be removed from the pool.</li>
-<li><em>healthy_threshold</em> - int - The number of times a health check must pass for a backend Droplet to be marked &#8220;healthy&#8221; and be re-added to the pool.</li>
-</ul>
-</li>
-<li><em>sticky_sessions</em> - list - Sticky Session dict&#8217;s<ul>
-<li><em>type</em> - string - An attribute indicating how and if requests from a client will be persistently served by the same backend Droplet. The possible values are &#8220;cookies&#8221; or &#8220;none&#8221;.</li>
-<li><em>cookie_name</em> - string - The name of the cookie sent to the client. This attribute is only returned when using &#8220;cookies&#8221; for the sticky sessions type.</li>
-<li><em>cookie_ttl_seconds</em> - string - The number of seconds until the cookie set by the Load Balancer expires. This attribute is only returned when using &#8220;cookies&#8221; for the sticky sessions type.</li>
-</ul>
-</li>
-<li><em>redirect_http_to_https</em> - bool - A boolean value indicating whether HTTP requests to the Load Balancer on port 80 will be redirected to HTTPS on port 443. Default value is false. -</li>
-<li><em>droplet_ids</em> - array of integers - An array containing the IDs of the Droplets to be assigned to the Load Balancer.</li>
-<li><em>tag</em> - string - The name of a Droplet tag corresponding to Droplets to be assigned to the Load Balancer.</li>
-</ul>
-<p>Returns:</p>
-<ul class="simple">
-<li>A Load Balancer dict<ul>
-<li><em>id</em> - string - A unique ID that can be used to identify and reference a Load Balancer.</li>
 <li><em>name</em> - string - A human-readable name for a Load Balancer instance.</li>
-<li><em>ip</em> - string - An attribute containing the public-facing IP address of the Load Balancer.</li>
 <li><em>algorithm</em> - string - The load balancing algorithm used to determine which backend Droplet will be selected by a client. It must be either &#8220;round_robin&#8221; or &#8220;least_connections&#8221;.</li>
-<li><em>status</em> - string - A status string indicating the current state of the Load Balancer. This can be &#8220;new&#8221;, &#8220;active&#8221;, or &#8220;errored&#8221;.</li>
-<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Load Balancer was created.</li>
-<li><em>forwarding_rules</em> - list - Forwarding Roles dict&#8217;s<ul>
-<li><em>entry_protocol</em> - string - The protocol used for traffic to the Load Balancer. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
-<li><em>entry_port</em> - int - An integer representing the port on which the Load Balancer instance will listen.</li>
-<li><em>target_protocol</em> - string - The protocol used for traffic from the Load Balancer to the backend Droplets. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
-<li><em>target_port</em> - int - An integer representing the port on the backend Droplets to which the Load Balancer will send traffic.</li>
-<li><em>certificate_id</em> - string - The ID of the TLS certificate used for SSL termination if enabled.</li>
-<li><em>tls_passthrough</em> - bool - A boolean value indicating whether SSL encrypted traffic will be passed through to the backend Droplets.</li>
-</ul>
-</li>
-<li><em>health_check</em> - list - Health check dict&#8217;s<ul>
-<li><em>protocol</em> - string - The protocol used for health checks sent to the backend Droplets. The possible values are &#8220;http&#8221; or &#8220;tcp&#8221;.</li>
-<li><em>port</em> - int - An integer representing the port on the backend Droplets on which the health check will attempt a connection.</li>
-<li><em>path</em> - string - The path on the backend Droplets to which the Load Balancer instance will send a request.</li>
-<li><em>check_interval_seconds</em> - int - The number of seconds between between two consecutive health checks.</li>
-<li><em>response_timeout_seconds</em> - int - The number of seconds the Load Balancer instance will wait for a response until marking a health check as failed.</li>
-<li><em>unhealthy_threshold</em> - int - The number of times a health check must fail for a backend Droplet to be marked &#8220;unhealthy&#8221; and be removed from the pool.</li>
-<li><em>healthy_threshold</em> - int - The number of times a health check must pass for a backend Droplet to be marked &#8220;healthy&#8221; and be re-added to the pool.</li>
-</ul>
-</li>
-<li><em>sticky_sessions</em> - list - Sticky Session dict&#8217;s<ul>
-<li><em>type</em> - string - An attribute indicating how and if requests from a client will be persistently served by the same backend Droplet. The possible values are &#8220;cookies&#8221; or &#8220;none&#8221;.</li>
-<li><em>cookie_name</em> - string - The name of the cookie sent to the client. This attribute is only returned when using &#8220;cookies&#8221; for the sticky sessions type.</li>
-<li><em>cookie_ttl_seconds</em> - string - The number of seconds until the cookie set by the Load Balancer expires. This attribute is only returned when using &#8220;cookies&#8221; for the sticky sessions type.</li>
-</ul>
-</li>
+<li><em>forwarding_rules</em> - list - Forwarding Role data structures</li>
+<li><em>health_check</em> - list - Health check data structures</li>
+<li><em>sticky_sessions</em> - list - Sticky Session data structures</li>
 <li><em>region</em> - object - The region where the Load Balancer instance is located. When setting a region, the value should be the slug identifier for the region. When you query a Load Balancer, an entire region object will be returned.</li>
 <li><em>tag</em> - string - The name of a Droplet tag corresponding to Droplets assigned to the Load Balancer.</li>
 <li><em>droplet_ids</em> - array of integers - An array containing the IDs of the Droplets assigned to the Load Balancer.</li>
 <li><em>redirect_http_to_https</em> - bool - A boolean value indicating whether HTTP requests to the Load Balancer on port 80 will be redirected to HTTPS on port 443.</li>
 </ul>
-</li>
+<p>Returns:</p>
+<ul class="simple">
+<li>A Load Balancer data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -202,78 +158,19 @@
 <dd></dd></dl>
 
 <ul class="simple">
-<li><em>name</em> - string - A human-readable name for a Load Balancer instance. - true</li>
-<li><em>algorithm</em> - string - The load balancing algorithm used to determine which backend Droplet will be selected by a client. It must be either &#8220;round_robin&#8221; or &#8220;least_connections&#8221;. The default value is &#8220;round_robin&#8221;. -</li>
-<li><em>region</em> - string - The region where the Load Balancer instance will be located. When setting a region, the value should be the slug identifier for the region. When you query a Load Balancer, an entire region object will be returned. - true</li>
-<li><em>forwarding_rules</em> - list - Forwarding Roles dict&#8217;s<ul>
-<li><em>entry_protocol</em> - string - The protocol used for traffic to the Load Balancer. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
-<li><em>entry_port</em> - int - An integer representing the port on which the Load Balancer instance will listen.</li>
-<li><em>target_protocol</em> - string - The protocol used for traffic from the Load Balancer to the backend Droplets. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
-<li><em>target_port</em> - int - An integer representing the port on the backend Droplets to which the Load Balancer will send traffic.</li>
-<li><em>certificate_id</em> - string - The ID of the TLS certificate used for SSL termination if enabled.</li>
-<li><em>tls_passthrough</em> - bool - A boolean value indicating whether SSL encrypted traffic will be passed through to the backend Droplets.</li>
-</ul>
-</li>
-<li><em>health_check</em> - list - Health check dict&#8217;s<ul>
-<li><em>protocol</em> - string - The protocol used for health checks sent to the backend Droplets. The possible values are &#8220;http&#8221; or &#8220;tcp&#8221;.</li>
-<li><em>port</em> - int - An integer representing the port on the backend Droplets on which the health check will attempt a connection.</li>
-<li><em>path</em> - string - The path on the backend Droplets to which the Load Balancer instance will send a request.</li>
-<li><em>check_interval_seconds</em> - int - The number of seconds between between two consecutive health checks.</li>
-<li><em>response_timeout_seconds</em> - int - The number of seconds the Load Balancer instance will wait for a response until marking a health check as failed.</li>
-<li><em>unhealthy_threshold</em> - int - The number of times a health check must fail for a backend Droplet to be marked &#8220;unhealthy&#8221; and be removed from the pool.</li>
-<li><em>healthy_threshold</em> - int - The number of times a health check must pass for a backend Droplet to be marked &#8220;healthy&#8221; and be re-added to the pool.</li>
-</ul>
-</li>
-<li><em>sticky_sessions</em> - list - Sticky Session dict&#8217;s<ul>
-<li><em>type</em> - string - An attribute indicating how and if requests from a client will be persistently served by the same backend Droplet. The possible values are &#8220;cookies&#8221; or &#8220;none&#8221;.</li>
-<li><em>cookie_name</em> - string - The name of the cookie sent to the client. This attribute is only returned when using &#8220;cookies&#8221; for the sticky sessions type.</li>
-<li><em>cookie_ttl_seconds</em> - string - The number of seconds until the cookie set by the Load Balancer expires. This attribute is only returned when using &#8220;cookies&#8221; for the sticky sessions type.</li>
-</ul>
-</li>
-<li><em>redirect_http_to_https</em> - bool - A boolean value indicating whether HTTP requests to the Load Balancer on port 80 will be redirected to HTTPS on port 443. Default value is false. -</li>
-<li><em>droplet_ids</em> - array of integers - An array containing the IDs of the Droplets to be assigned to the Load Balancer.</li>
-<li><em>tag</em> - string - The name of a Droplet tag corresponding to Droplets to be assigned to the Load Balancer.</li>
-</ul>
-<p>Returns:</p>
-<ul class="simple">
-<li>A tuple of two Load Balancer dict&#8217;s (second is None if already present)<ul>
-<li><em>id</em> - string - A unique ID that can be used to identify and reference a Load Balancer.</li>
 <li><em>name</em> - string - A human-readable name for a Load Balancer instance.</li>
-<li><em>ip</em> - string - An attribute containing the public-facing IP address of the Load Balancer.</li>
 <li><em>algorithm</em> - string - The load balancing algorithm used to determine which backend Droplet will be selected by a client. It must be either &#8220;round_robin&#8221; or &#8220;least_connections&#8221;.</li>
-<li><em>status</em> - string - A status string indicating the current state of the Load Balancer. This can be &#8220;new&#8221;, &#8220;active&#8221;, or &#8220;errored&#8221;.</li>
-<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Load Balancer was created.</li>
-<li><em>forwarding_rules</em> - list - Forwarding Roles dict&#8217;s<ul>
-<li><em>entry_protocol</em> - string - The protocol used for traffic to the Load Balancer. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
-<li><em>entry_port</em> - int - An integer representing the port on which the Load Balancer instance will listen.</li>
-<li><em>target_protocol</em> - string - The protocol used for traffic from the Load Balancer to the backend Droplets. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
-<li><em>target_port</em> - int - An integer representing the port on the backend Droplets to which the Load Balancer will send traffic.</li>
-<li><em>certificate_id</em> - string - The ID of the TLS certificate used for SSL termination if enabled.</li>
-<li><em>tls_passthrough</em> - bool - A boolean value indicating whether SSL encrypted traffic will be passed through to the backend Droplets.</li>
-</ul>
-</li>
-<li><em>health_check</em> - list - Health check dict&#8217;s<ul>
-<li><em>protocol</em> - string - The protocol used for health checks sent to the backend Droplets. The possible values are &#8220;http&#8221; or &#8220;tcp&#8221;.</li>
-<li><em>port</em> - int - An integer representing the port on the backend Droplets on which the health check will attempt a connection.</li>
-<li><em>path</em> - string - The path on the backend Droplets to which the Load Balancer instance will send a request.</li>
-<li><em>check_interval_seconds</em> - int - The number of seconds between between two consecutive health checks.</li>
-<li><em>response_timeout_seconds</em> - int - The number of seconds the Load Balancer instance will wait for a response until marking a health check as failed.</li>
-<li><em>unhealthy_threshold</em> - int - The number of times a health check must fail for a backend Droplet to be marked &#8220;unhealthy&#8221; and be removed from the pool.</li>
-<li><em>healthy_threshold</em> - int - The number of times a health check must pass for a backend Droplet to be marked &#8220;healthy&#8221; and be re-added to the pool.</li>
-</ul>
-</li>
-<li><em>sticky_sessions</em> - list - Sticky Session dict&#8217;s<ul>
-<li><em>type</em> - string - An attribute indicating how and if requests from a client will be persistently served by the same backend Droplet. The possible values are &#8220;cookies&#8221; or &#8220;none&#8221;.</li>
-<li><em>cookie_name</em> - string - The name of the cookie sent to the client. This attribute is only returned when using &#8220;cookies&#8221; for the sticky sessions type.</li>
-<li><em>cookie_ttl_seconds</em> - string - The number of seconds until the cookie set by the Load Balancer expires. This attribute is only returned when using &#8220;cookies&#8221; for the sticky sessions type.</li>
-</ul>
-</li>
+<li><em>forwarding_rules</em> - list - Forwarding Role data structures</li>
+<li><em>health_check</em> - list - Health check data structures</li>
+<li><em>sticky_sessions</em> - list - Sticky Session data structures</li>
 <li><em>region</em> - object - The region where the Load Balancer instance is located. When setting a region, the value should be the slug identifier for the region. When you query a Load Balancer, an entire region object will be returned.</li>
 <li><em>tag</em> - string - The name of a Droplet tag corresponding to Droplets assigned to the Load Balancer.</li>
 <li><em>droplet_ids</em> - array of integers - An array containing the IDs of the Droplets assigned to the Load Balancer.</li>
 <li><em>redirect_http_to_https</em> - bool - A boolean value indicating whether HTTP requests to the Load Balancer on port 80 will be redirected to HTTPS on port 443.</li>
 </ul>
-</li>
+<p>Returns:</p>
+<ul class="simple">
+<li>A tuple of two Load Balancer data structures (second is None if already present)</li>
 </ul>
 </div>
 <div class="section" id="retrieve-an-existing-load-balancer-by-id">
@@ -288,44 +185,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A LoadBalancer dict<ul>
-<li><em>id</em> - string - A unique ID that can be used to identify and reference a Load Balancer.</li>
-<li><em>name</em> - string - A human-readable name for a Load Balancer instance.</li>
-<li><em>ip</em> - string - An attribute containing the public-facing IP address of the Load Balancer.</li>
-<li><em>algorithm</em> - string - The load balancing algorithm used to determine which backend Droplet will be selected by a client. It must be either &#8220;round_robin&#8221; or &#8220;least_connections&#8221;.</li>
-<li><em>status</em> - string - A status string indicating the current state of the Load Balancer. This can be &#8220;new&#8221;, &#8220;active&#8221;, or &#8220;errored&#8221;.</li>
-<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Load Balancer was created.</li>
-<li><em>forwarding_rules</em> - list - Forwarding Roles dict&#8217;s<ul>
-<li><em>entry_protocol</em> - string - The protocol used for traffic to the Load Balancer. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
-<li><em>entry_port</em> - int - An integer representing the port on which the Load Balancer instance will listen.</li>
-<li><em>target_protocol</em> - string - The protocol used for traffic from the Load Balancer to the backend Droplets. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
-<li><em>target_port</em> - int - An integer representing the port on the backend Droplets to which the Load Balancer will send traffic.</li>
-<li><em>certificate_id</em> - string - The ID of the TLS certificate used for SSL termination if enabled.</li>
-<li><em>tls_passthrough</em> - bool - A boolean value indicating whether SSL encrypted traffic will be passed through to the backend Droplets.</li>
-</ul>
-</li>
-<li><em>health_check</em> - list - Health check dict&#8217;s<ul>
-<li><em>protocol</em> - string - The protocol used for health checks sent to the backend Droplets. The possible values are &#8220;http&#8221; or &#8220;tcp&#8221;.</li>
-<li><em>port</em> - int - An integer representing the port on the backend Droplets on which the health check will attempt a connection.</li>
-<li><em>path</em> - string - The path on the backend Droplets to which the Load Balancer instance will send a request.</li>
-<li><em>check_interval_seconds</em> - int - The number of seconds between between two consecutive health checks.</li>
-<li><em>response_timeout_seconds</em> - int - The number of seconds the Load Balancer instance will wait for a response until marking a health check as failed.</li>
-<li><em>unhealthy_threshold</em> - int - The number of times a health check must fail for a backend Droplet to be marked &#8220;unhealthy&#8221; and be removed from the pool.</li>
-<li><em>healthy_threshold</em> - int - The number of times a health check must pass for a backend Droplet to be marked &#8220;healthy&#8221; and be re-added to the pool.</li>
-</ul>
-</li>
-<li><em>sticky_sessions</em> - list - Sticky Session dict&#8217;s<ul>
-<li><em>type</em> - string - An attribute indicating how and if requests from a client will be persistently served by the same backend Droplet. The possible values are &#8220;cookies&#8221; or &#8220;none&#8221;.</li>
-<li><em>cookie_name</em> - string - The name of the cookie sent to the client. This attribute is only returned when using &#8220;cookies&#8221; for the sticky sessions type.</li>
-<li><em>cookie_ttl_seconds</em> - string - The number of seconds until the cookie set by the Load Balancer expires. This attribute is only returned when using &#8220;cookies&#8221; for the sticky sessions type.</li>
-</ul>
-</li>
-<li><em>region</em> - object - The region where the Load Balancer instance is located. When setting a region, the value should be the slug identifier for the region. When you query a Load Balancer, an entire region object will be returned.</li>
-<li><em>tag</em> - string - The name of a Droplet tag corresponding to Droplets assigned to the Load Balancer.</li>
-<li><em>droplet_ids</em> - array of integers - An array containing the IDs of the Droplets assigned to the Load Balancer.</li>
-<li><em>redirect_http_to_https</em> - bool - A boolean value indicating whether HTTP requests to the Load Balancer on port 80 will be redirected to HTTPS on port 443.</li>
-</ul>
-</li>
+<li>A LoadBalancer data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -340,79 +200,19 @@
 <dd></dd></dl>
 
 <ul class="simple">
-<li><em>id</em> - number - The id of the Load Balancer to retrieve</li>
-<li><em>name</em> - string - A human-readable name for a Load Balancer instance. - true</li>
-<li><em>algorithm</em> - string - The load balancing algorithm used to determine which backend Droplet will be selected by a client. It must be either &#8220;round_robin&#8221; or &#8220;least_connections&#8221;. The default value is &#8220;round_robin&#8221;. -</li>
-<li><em>region</em> - string - The region where the Load Balancer instance will be located. When setting a region, the value should be the slug identifier for the region. When you query a Load Balancer, an entire region object will be returned. - true</li>
-<li><em>forwarding_rules</em> - list - Forwarding Roles dict&#8217;s<ul>
-<li><em>entry_protocol</em> - string - The protocol used for traffic to the Load Balancer. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
-<li><em>entry_port</em> - int - An integer representing the port on which the Load Balancer instance will listen.</li>
-<li><em>target_protocol</em> - string - The protocol used for traffic from the Load Balancer to the backend Droplets. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
-<li><em>target_port</em> - int - An integer representing the port on the backend Droplets to which the Load Balancer will send traffic.</li>
-<li><em>certificate_id</em> - string - The ID of the TLS certificate used for SSL termination if enabled.</li>
-<li><em>tls_passthrough</em> - bool - A boolean value indicating whether SSL encrypted traffic will be passed through to the backend Droplets.</li>
-</ul>
-</li>
-<li><em>health_check</em> - list - Health check dict&#8217;s<ul>
-<li><em>protocol</em> - string - The protocol used for health checks sent to the backend Droplets. The possible values are &#8220;http&#8221; or &#8220;tcp&#8221;.</li>
-<li><em>port</em> - int - An integer representing the port on the backend Droplets on which the health check will attempt a connection.</li>
-<li><em>path</em> - string - The path on the backend Droplets to which the Load Balancer instance will send a request.</li>
-<li><em>check_interval_seconds</em> - int - The number of seconds between between two consecutive health checks.</li>
-<li><em>response_timeout_seconds</em> - int - The number of seconds the Load Balancer instance will wait for a response until marking a health check as failed.</li>
-<li><em>unhealthy_threshold</em> - int - The number of times a health check must fail for a backend Droplet to be marked &#8220;unhealthy&#8221; and be removed from the pool.</li>
-<li><em>healthy_threshold</em> - int - The number of times a health check must pass for a backend Droplet to be marked &#8220;healthy&#8221; and be re-added to the pool.</li>
-</ul>
-</li>
-<li><em>sticky_sessions</em> - list - Sticky Session dict&#8217;s<ul>
-<li><em>type</em> - string - An attribute indicating how and if requests from a client will be persistently served by the same backend Droplet. The possible values are &#8220;cookies&#8221; or &#8220;none&#8221;.</li>
-<li><em>cookie_name</em> - string - The name of the cookie sent to the client. This attribute is only returned when using &#8220;cookies&#8221; for the sticky sessions type.</li>
-<li><em>cookie_ttl_seconds</em> - string - The number of seconds until the cookie set by the Load Balancer expires. This attribute is only returned when using &#8220;cookies&#8221; for the sticky sessions type.</li>
-</ul>
-</li>
-<li><em>redirect_http_to_https</em> - bool - A boolean value indicating whether HTTP requests to the Load Balancer on port 80 will be redirected to HTTPS on port 443. Default value is false. -</li>
-<li><em>droplet_ids</em> - array of integers - An array containing the IDs of the Droplets to be assigned to the Load Balancer.</li>
-<li><em>tag</em> - string - The name of a Droplet tag corresponding to Droplets to be assigned to the Load Balancer.</li>
-</ul>
-<p>Returns:</p>
-<ul class="simple">
-<li>A Load Balancer dict<ul>
-<li><em>id</em> - string - A unique ID that can be used to identify and reference a Load Balancer.</li>
 <li><em>name</em> - string - A human-readable name for a Load Balancer instance.</li>
-<li><em>ip</em> - string - An attribute containing the public-facing IP address of the Load Balancer.</li>
 <li><em>algorithm</em> - string - The load balancing algorithm used to determine which backend Droplet will be selected by a client. It must be either &#8220;round_robin&#8221; or &#8220;least_connections&#8221;.</li>
-<li><em>status</em> - string - A status string indicating the current state of the Load Balancer. This can be &#8220;new&#8221;, &#8220;active&#8221;, or &#8220;errored&#8221;.</li>
-<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Load Balancer was created.</li>
-<li><em>forwarding_rules</em> - list - Forwarding Roles dict&#8217;s<ul>
-<li><em>entry_protocol</em> - string - The protocol used for traffic to the Load Balancer. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
-<li><em>entry_port</em> - int - An integer representing the port on which the Load Balancer instance will listen.</li>
-<li><em>target_protocol</em> - string - The protocol used for traffic from the Load Balancer to the backend Droplets. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
-<li><em>target_port</em> - int - An integer representing the port on the backend Droplets to which the Load Balancer will send traffic.</li>
-<li><em>certificate_id</em> - string - The ID of the TLS certificate used for SSL termination if enabled.</li>
-<li><em>tls_passthrough</em> - bool - A boolean value indicating whether SSL encrypted traffic will be passed through to the backend Droplets.</li>
-</ul>
-</li>
-<li><em>health_check</em> - list - Health check dict&#8217;s<ul>
-<li><em>protocol</em> - string - The protocol used for health checks sent to the backend Droplets. The possible values are &#8220;http&#8221; or &#8220;tcp&#8221;.</li>
-<li><em>port</em> - int - An integer representing the port on the backend Droplets on which the health check will attempt a connection.</li>
-<li><em>path</em> - string - The path on the backend Droplets to which the Load Balancer instance will send a request.</li>
-<li><em>check_interval_seconds</em> - int - The number of seconds between between two consecutive health checks.</li>
-<li><em>response_timeout_seconds</em> - int - The number of seconds the Load Balancer instance will wait for a response until marking a health check as failed.</li>
-<li><em>unhealthy_threshold</em> - int - The number of times a health check must fail for a backend Droplet to be marked &#8220;unhealthy&#8221; and be removed from the pool.</li>
-<li><em>healthy_threshold</em> - int - The number of times a health check must pass for a backend Droplet to be marked &#8220;healthy&#8221; and be re-added to the pool.</li>
-</ul>
-</li>
-<li><em>sticky_sessions</em> - list - Sticky Session dict&#8217;s<ul>
-<li><em>type</em> - string - An attribute indicating how and if requests from a client will be persistently served by the same backend Droplet. The possible values are &#8220;cookies&#8221; or &#8220;none&#8221;.</li>
-<li><em>cookie_name</em> - string - The name of the cookie sent to the client. This attribute is only returned when using &#8220;cookies&#8221; for the sticky sessions type.</li>
-<li><em>cookie_ttl_seconds</em> - string - The number of seconds until the cookie set by the Load Balancer expires. This attribute is only returned when using &#8220;cookies&#8221; for the sticky sessions type.</li>
-</ul>
-</li>
+<li><em>forwarding_rules</em> - list - Forwarding Role data structures</li>
+<li><em>health_check</em> - list - Health check data structures</li>
+<li><em>sticky_sessions</em> - list - Sticky Session data structures</li>
 <li><em>region</em> - object - The region where the Load Balancer instance is located. When setting a region, the value should be the slug identifier for the region. When you query a Load Balancer, an entire region object will be returned.</li>
 <li><em>tag</em> - string - The name of a Droplet tag corresponding to Droplets assigned to the Load Balancer.</li>
 <li><em>droplet_ids</em> - array of integers - An array containing the IDs of the Droplets assigned to the Load Balancer.</li>
 <li><em>redirect_http_to_https</em> - bool - A boolean value indicating whether HTTP requests to the Load Balancer on port 80 will be redirected to HTTPS on port 443.</li>
 </ul>
-</li>
+<p>Returns:</p>
+<ul class="simple">
+<li>A Load Balancer data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -489,15 +289,7 @@
 
 <ul class="simple">
 <li><em>id</em> - number - The id of the Load Balancer to change</li>
-<li><em>forwarding_rules</em> - list - Forwarding Roles dict&#8217;s<ul>
-<li><em>entry_protocol</em> - string - The protocol used for traffic to the Load Balancer. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
-<li><em>entry_port</em> - int - An integer representing the port on which the Load Balancer instance will listen.</li>
-<li><em>target_protocol</em> - string - The protocol used for traffic from the Load Balancer to the backend Droplets. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
-<li><em>target_port</em> - int - An integer representing the port on the backend Droplets to which the Load Balancer will send traffic.</li>
-<li><em>certificate_id</em> - string - The ID of the TLS certificate used for SSL termination if enabled.</li>
-<li><em>tls_passthrough</em> - bool - A boolean value indicating whether SSL encrypted traffic will be passed through to the backend Droplets.</li>
-</ul>
-</li>
+<li><em>forwarding_rules</em> - list - Forwarding Roles data structures</li>
 </ul>
 <p>Returns:</p>
 <ul class="simple">
@@ -517,15 +309,7 @@
 
 <ul class="simple">
 <li><em>id</em> - number - The id of the Load Balancer to change</li>
-<li><em>forwarding_rules</em> - list - Forwarding Roles dict&#8217;s<ul>
-<li><em>entry_protocol</em> - string - The protocol used for traffic to the Load Balancer. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
-<li><em>entry_port</em> - int - An integer representing the port on which the Load Balancer instance will listen.</li>
-<li><em>target_protocol</em> - string - The protocol used for traffic from the Load Balancer to the backend Droplets. The possible values are &#8220;http&#8221;, &#8220;https&#8221;, or &#8220;tcp&#8221;.</li>
-<li><em>target_port</em> - int - An integer representing the port on the backend Droplets to which the Load Balancer will send traffic.</li>
-<li><em>certificate_id</em> - string - The ID of the TLS certificate used for SSL termination if enabled.</li>
-<li><em>tls_passthrough</em> - bool - A boolean value indicating whether SSL encrypted traffic will be passed through to the backend Droplets.</li>
-</ul>
-</li>
+<li><em>forwarding_rules</em> - list - Forwarding Roles data structures</li>
 </ul>
 <p>Returns:</p>
 <ul class="simple">
@@ -547,6 +331,13 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">LoadBalancer (do.load_balancer)</a><ul>
+<li><a class="reference internal" href="#data-structures">Data Structures</a><ul>
+<li><a class="reference internal" href="#health-check">Health Check</a></li>
+<li><a class="reference internal" href="#load-balancer">Load Balancer</a></li>
+<li><a class="reference internal" href="#forwaring-rule">Forwaring Rule</a></li>
+<li><a class="reference internal" href="#sticky-session">Sticky Session</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#list-all-load-balancers">List all Load Balancers</a></li>
 <li><a class="reference internal" href="#create-a-new-load-balancer">Create a new Load Balancer</a></li>
 <li><a class="reference internal" href="#create-a-new-load-balancer-if-not-already-existing">Create a new Load Balancer if not already existing</a></li>

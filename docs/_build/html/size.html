@@ -55,16 +55,11 @@
 <h1>Size (do.size)<a class="headerlink" href="#size-do-size" title="Permalink to this headline">¶</a></h1>
 <p>The sizes dict&#8217;s represent different packages of hardware resources that can be used for Droplets. When a Droplet is created, a size must be selected so that the correct resources can be allocated.</p>
 <p>Each size represents a plan that bundles together specific sets of resources. This includes the amount of RAM, the number of virtual CPUs, disk space, and transfer. The size dict also includes the pricing details and the regions that the size is available in.</p>
-<div class="section" id="list-all-sizes">
-<h2>List all Sizes<a class="headerlink" href="#list-all-sizes" title="Permalink to this headline">¶</a></h2>
-<dl class="method">
-<dt id="do.size.list">
-<code class="descclassname">do.size.</code><code class="descname">list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#do.size.list" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<p>Returns:</p>
+<div class="section" id="data-structures">
+<h2>Data Structures<a class="headerlink" href="#data-structures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="size">
+<h3>Size<a class="headerlink" href="#size" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>A list of Size dict&#8217;s<ul>
 <li><em>slug</em> - string - A human-readable string that is used to uniquely identify each size.</li>
 <li><em>available</em> - boolean - This is a boolean value that represents whether new Droplets can be created with this size.</li>
 <li><em>transfer</em> - number - The amount of transfer bandwidth that is available for Droplets created in this size. This only counts traffic on the public interface. The value is given in terabytes.</li>
@@ -75,7 +70,18 @@
 <li><em>disk</em> - number - The amount of disk space set aside for Droplets of this size. The value is represented in gigabytes.</li>
 <li><em>regions</em> - list - A list containing the region slugs where this size is available for Droplet creates.</li>
 </ul>
-</li>
+</div>
+</div>
+<div class="section" id="list-all-sizes">
+<h2>List all Sizes<a class="headerlink" href="#list-all-sizes" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="do.size.list">
+<code class="descclassname">do.size.</code><code class="descname">list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#do.size.list" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>Returns:</p>
+<ul class="simple">
+<li>A list of Size data structures</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -93,6 +99,10 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Size (do.size)</a><ul>
+<li><a class="reference internal" href="#data-structures">Data Structures</a><ul>
+<li><a class="reference internal" href="#size">Size</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#list-all-sizes">List all Sizes</a></li>
 </ul>
 </li>

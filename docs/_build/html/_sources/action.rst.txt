@@ -9,6 +9,31 @@ An action dict is created every time one of these actions is initiated. The acti
 
 Every action that creates an action dict is available through this endpoint. Completed actions are not removed from this list and are always available for querying.
 
+Data Structures
+-----------------------
+
+Action
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- *id* - number - A unique numeric ID that can be used to identify and reference an action.
+
+- *status* - string - The current status of the action. This can be "in-progress", "completed", or "errored".
+
+- *type* - string - This is the type of action that the dict represents. For example, this could be "transfer" to represent the state of an image transfer action.
+
+- *started_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
+
+- *completed_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
+
+- *resource_id* - number - A unique identifier for the resource that the action is associated with.
+
+- *resource_type* - string - The type of resource that the action is associated with.
+
+- *region* - nullable string - (deprecated) A slug representing the region where the action occurred.
+
+- *region_slug* - nullable string - A slug representing the region where the action occurred.
+
+
 
 List all Actions
 ----------------------------------------------------------------------------------------------------
@@ -18,25 +43,7 @@ List all Actions
 
 Returns:
 
-- A list of Action dict's
-
-  - *id* - number - A unique numeric ID that can be used to identify and reference an action.
-
-  - *status* - string - The current status of the action. This can be "in-progress", "completed", or "errored".
-
-  - *type* - string - This is the type of action that the dict represents. For example, this could be "transfer" to represent the state of an image transfer action.
-
-  - *started_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-
-  - *completed_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-
-  - *resource_id* - number - A unique identifier for the resource that the action is associated with.
-
-  - *resource_type* - string - The type of resource that the action is associated with.
-
-  - *region* - nullable string - (deprecated) A slug representing the region where the action occurred.
-
-  - *region_slug* - nullable string - A slug representing the region where the action occurred.
+- A list of Action data structures
 
 
 
@@ -56,25 +63,7 @@ Retrieve an existing Action
 
 Returns:
 
-- An Action dict in the following format
-
-  - *id* - number - A unique numeric ID that can be used to identify and reference an action.
-
-  - *status* - string - The current status of the action. This can be "in-progress", "completed", or "errored".
-
-  - *type* - string - This is the type of action that the dict represents. For example, this could be "transfer" to represent the state of an image transfer action.
-
-  - *started_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-
-  - *completed_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-
-  - *resource_id* - number - A unique identifier for the resource that the action is associated with.
-
-  - *resource_type* - string - The type of resource that the action is associated with.
-
-  - *region* - nullable string - (deprecated) A slug representing the region where the action occurred.
-
-  - *region_slug* - nullable string - A slug representing the region where the action occurred.
+- An Action data structure
 
 
 

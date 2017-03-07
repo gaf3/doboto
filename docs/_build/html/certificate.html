@@ -54,6 +54,19 @@
   <div class="section" id="certificate-do-certificate">
 <h1>Certificate (do.certificate)<a class="headerlink" href="#certificate-do-certificate" title="Permalink to this headline">¶</a></h1>
 <p>SSL certificates may be uploaded to DigitalOcean where they will be placed in a fully encrypted and isolated storage system. They may then be used to perform SSL termination on Load Balancers.</p>
+<div class="section" id="data-structures">
+<h2>Data Structures<a class="headerlink" href="#data-structures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="certificate">
+<h3>Certificate<a class="headerlink" href="#certificate" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>id</em> - string - A unique ID that can be used to identify and reference a certificate.</li>
+<li><em>name</em> - string - A unique human-readable name referring to a certificate.</li>
+<li><em>not_after</em> - string - A time value given in ISO8601 combined date and time format that represents the certificate&#8217;s expiration date.</li>
+<li><em>sha1_fingerprint</em> - string - A unique identifier generated from the SHA-1 fingerprint of the certificate.</li>
+<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the certificate was created.</li>
+</ul>
+</div>
+</div>
 <div class="section" id="list-all-certificates">
 <h2>List all Certificates<a class="headerlink" href="#list-all-certificates" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
@@ -63,14 +76,7 @@
 
 <p>Returns:</p>
 <ul class="simple">
-<li>A list of Certificate dict&#8217;s<ul>
-<li><em>id</em> - string - A unique ID that can be used to identify and reference a certificate.</li>
-<li><em>name</em> - string - A unique human-readable name referring to a certificate.</li>
-<li><em>not_after</em> - string - A time value given in ISO8601 combined date and time format that represents the certificate&#8217;s expiration date.</li>
-<li><em>sha1_fingerprint</em> - string - A unique identifier generated from the SHA-1 fingerprint of the certificate.</li>
-<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the certificate was created.</li>
-</ul>
-</li>
+<li>A list of Certificate data structures</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -85,21 +91,14 @@
 <dd></dd></dl>
 
 <ul class="simple">
-<li><em>name</em> - string - A unique human-readable name referring to a certificate. - true</li>
-<li><em>private_key</em> - string - The contents of a PEM-formatted private-key corresponding to the SSL certificate. - true</li>
-<li><em>leaf_certificate</em> - string - The contents of a PEM-formatted public SSL certificate. - true</li>
-<li><em>certificate_chain</em> - string - The full PEM-formatted trust chain between the certificate authority&#8217;s certificate and your domain&#8217;s SSL certificate. - true</li>
+<li><em>name</em> - string - A unique human-readable name referring to a certificate.</li>
+<li><em>private_key</em> - string - The contents of a PEM-formatted private-key corresponding to the SSL certificate.</li>
+<li><em>leaf_certificate</em> - string - The contents of a PEM-formatted public SSL certificate.</li>
+<li><em>certificate_chain</em> - string - The full PEM-formatted trust chain between the certificate authority&#8217;s certificate and your domain&#8217;s SSL certificate.</li>
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A Certificate dict<ul>
-<li><em>id</em> - string - A unique ID that can be used to identify and reference a certificate.</li>
-<li><em>name</em> - string - A unique human-readable name referring to a certificate.</li>
-<li><em>not_after</em> - string - A time value given in ISO8601 combined date and time format that represents the certificate&#8217;s expiration date.</li>
-<li><em>sha1_fingerprint</em> - string - A unique identifier generated from the SHA-1 fingerprint of the certificate.</li>
-<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the certificate was created.</li>
-</ul>
-</li>
+<li>A Certificate data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -114,21 +113,14 @@
 <dd></dd></dl>
 
 <ul class="simple">
-<li><em>name</em> - string - A unique human-readable name referring to a certificate. - true</li>
-<li><em>private_key</em> - string - The contents of a PEM-formatted private-key corresponding to the SSL certificate. - true</li>
-<li><em>leaf_certificate</em> - string - The contents of a PEM-formatted public SSL certificate. - true</li>
-<li><em>certificate_chain</em> - string - The full PEM-formatted trust chain between the certificate authority&#8217;s certificate and your domain&#8217;s SSL certificate. - true</li>
+<li><em>name</em> - string - A unique human-readable name referring to a certificate.</li>
+<li><em>private_key</em> - string - The contents of a PEM-formatted private-key corresponding to the SSL certificate.</li>
+<li><em>leaf_certificate</em> - string - The contents of a PEM-formatted public SSL certificate.</li>
+<li><em>certificate_chain</em> - string - The full PEM-formatted trust chain between the certificate authority&#8217;s certificate and your domain&#8217;s SSL certificate.</li>
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A tuple of two Certificate dict&#8217;s (second is None if already present)<ul>
-<li><em>id</em> - string - A unique ID that can be used to identify and reference a certificate.</li>
-<li><em>name</em> - string - A unique human-readable name referring to a certificate.</li>
-<li><em>not_after</em> - string - A time value given in ISO8601 combined date and time format that represents the certificate&#8217;s expiration date.</li>
-<li><em>sha1_fingerprint</em> - string - A unique identifier generated from the SHA-1 fingerprint of the certificate.</li>
-<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the certificate was created.</li>
-</ul>
-</li>
+<li>A tuple of two Certificate data structures (second is None if already present)</li>
 </ul>
 </div>
 <div class="section" id="retrieve-an-existing-certificate-by-id">
@@ -143,14 +135,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A Certificate dict<ul>
-<li><em>id</em> - string - A unique ID that can be used to identify and reference a certificate.</li>
-<li><em>name</em> - string - A unique human-readable name referring to a certificate.</li>
-<li><em>not_after</em> - string - A time value given in ISO8601 combined date and time format that represents the certificate&#8217;s expiration date.</li>
-<li><em>sha1_fingerprint</em> - string - A unique identifier generated from the SHA-1 fingerprint of the certificate.</li>
-<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the certificate was created.</li>
-</ul>
-</li>
+<li>A Certificate data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -187,6 +172,10 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Certificate (do.certificate)</a><ul>
+<li><a class="reference internal" href="#data-structures">Data Structures</a><ul>
+<li><a class="reference internal" href="#certificate">Certificate</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#list-all-certificates">List all Certificates</a></li>
 <li><a class="reference internal" href="#create-a-new-certificate-or-multiple-certificates">Create a new Certificate or multiple Certificates</a></li>
 <li><a class="reference internal" href="#create-a-new-certificate-if-not-already-existing">Create a new Certificate if not already existing</a></li>

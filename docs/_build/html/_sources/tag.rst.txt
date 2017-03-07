@@ -7,6 +7,21 @@ A Tag is a label that can be applied to a resource (currently only Droplets) in 
 
 Tags have two attributes, a user defined name attribute and an embedded resources attribute with information about resources that have been taggedself.
 
+Data Structures
+-----------------------
+
+Tag
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- *name* - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.
+
+- *resources* - list - An list of Resource dict's
+
+  - *resource_id* - string - The identifier of a resource
+
+  - *resource_type* - string - The type of the resource
+
+
 
 List all tags
 ----------------------------------------------------------------------------------------------------
@@ -20,15 +35,7 @@ Currently only a resource_type of 'droplet' is supported.  Thus, resource_id is 
 
 Returns:
 
-- A list of Tag dict's
-
-  - *name* - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.
-
-  - *resources* - list - An list of Resource dict's
-
-    - *resource_id* - string - The identifier of a resource
-
-    - *resource_type* - string - The type of the resource
+- A list of Tag data structures
 
 
 
@@ -70,15 +77,7 @@ Currently only a resource_type of 'droplet' is supported.  Thus, resource_id is 
 
 Returns:
 
-- A Tag dict
-
-  - *name* - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.
-
-  - *resources* - list - An list of Resource dict's
-
-    - *resource_id* - string - The identifier of a resource
-
-    - *resource_type* - string - The type of the resource
+- A Tag data structure
 
 
 
@@ -102,15 +101,7 @@ Currently only a resource_type of 'droplet' is supported.  Thus, resource_id is 
 
 Returns:
 
-- A tuple of Tag dict's, the intended and created (None if already exists)
-
-  - *name* - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.
-
-  - *resources* - list - An list of Resource dict's
-
-    - *resource_id* - string - The identifier of a resource
-
-    - *resource_type* - string - The type of the resource
+- A tuple of Tag data structures, the intended and created (None if already exists)
 
 
 
@@ -134,15 +125,7 @@ Currently only a resource_type of 'droplet' is supported.  Thus, resource_id is 
 
 Returns:
 
-- A Tag dict
-
-  - *name* - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.
-
-  - *resources* - list - An list of Resource dict's
-
-    - *resource_id* - string - The identifier of a resource
-
-    - *resource_type* - string - The type of the resource
+- A Tag data structure
 
 
 
@@ -168,15 +151,7 @@ Currently only a resource_type of 'droplet' is supported.  Thus, resource_id is 
 
 Returns:
 
-- A Tag dict
-
-  - *name* - string - Tags may contain letters, numbers, colons, dashes, and underscores. There is a limit of 255 characters per tag.
-
-  - *resources* - list - An list of Resource dict's
-
-    - *resource_id* - string - The identifier of a resource
-
-    - *resource_type* - string - The type of the resource
+- A Tag data structure
 
 
 
