@@ -3,6 +3,7 @@
 import time
 import copy
 from .Endpoint import Endpoint
+from .exception import DOBOTOPollingException
 
 
 class LoadBalancer(Endpoint):
@@ -101,28 +102,31 @@ class LoadBalancer(Endpoint):
 
         return self.pages(self.uri, "load_balancers")
 
-    def create(self, attribs):
+    def create(self, attribs, wait=False, poll=5, timeout=300):
         """
         description: Create a new Load Balancer
 
         in:
-            - name - string - A human-readable name for a Load Balancer instance.
-            - algorithm - string - The load balancing algorithm used to determine which backend
-              Droplet will be selected by a client. It must be either "round_robin" or
-              "least_connections".
-            - forwarding_rules - list - Forwarding Role data structures
-            - health_check - list - Health check data structures
-            - sticky_sessions - list - Sticky Session data structures
-            - region - object - The region where the Load Balancer instance is located. When
-              setting a region, the value should be the slug identifier for the region. When you
-              query a Load Balancer, an entire region object will be returned.
-            - tag - string - The name of a Droplet tag corresponding to Droplets assigned to the
-              Load Balancer.
-            - droplet_ids - array of integers - An array containing the IDs of the Droplets
-              assigned to the Load Balancer.
-            - redirect_http_to_https - bool - A boolean value indicating whether HTTP requests to
-              the Load Balancer on port 80 will be redirected to HTTPS on port 443.
-
+            - attribs:
+                - name - string - A human-readable name for a Load Balancer instance.
+                - algorithm - string - The load balancing algorithm used to determine which backend
+                  Droplet will be selected by a client. It must be either "round_robin" or
+                  "least_connections".
+                - forwarding_rules - list - Forwarding Role data structures
+                - health_check - list - Health check data structures
+                - sticky_sessions - list - Sticky Session data structures
+                - region - object - The region where the Load Balancer instance is located. When
+                  setting a region, the value should be the slug identifier for the region. When
+                  you query a Load Balancer, an entire region object will be returned.
+                - tag - string - The name of a Droplet tag corresponding to Droplets assigned to
+                  the Load Balancer.
+                - droplet_ids - array of integers - An array containing the IDs of the Droplets
+                  assigned to the Load Balancer.
+                - redirect_http_to_https - bool - A boolean value indicating whether HTTP requests
+                  to the Load Balancer on port 80 will be redirected to HTTPS on port 443.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks (min 1 sec)
+            - timeout - number - How many seconds before giving up
         out: A Load Balancer data structure
 
         related:
@@ -130,29 +134,57 @@ class LoadBalancer(Endpoint):
             - https://developers.digitalocean.com/documentation/v2/#create-a-new-load-balancer-with-droplet-tag
         """  # nopep8
 
-        return self.request(self.uri, "load_balancer", 'POST', attribs=attribs)
+        load_balancer = self.request(self.uri, "load_balancer", 'POST', attribs=attribs)
 
-    def present(self, attribs):
+        if not wait:
+            return load_balancer
+
+        if poll < 1:
+            poll = 1
+
+        start_time = time.time()
+
+        while not load_balancer["ip"]:
+
+            time.sleep(poll)
+
+            try:
+                load_balancer = self.info(load_balancer["id"])
+            except Exception as exception:
+                if time.time() - start_time > timeout:
+                    raise DOBOTOPollingException(polling=load_balancer, error=exception)
+
+            if time.time() - start_time > timeout:
+                print "Dude"
+                raise DOBOTOPollingException(polling=load_balancer)
+
+        return load_balancer
+
+    def present(self, attribs, wait=False, poll=5, timeout=300):
         """
         description: Create a new Load Balancer if not already existing
 
         in:
-            - name - string - A human-readable name for a Load Balancer instance.
-            - algorithm - string - The load balancing algorithm used to determine which backend
-              Droplet will be selected by a client. It must be either "round_robin" or
-              "least_connections".
-            - forwarding_rules - list - Forwarding Role data structures
-            - health_check - list - Health check data structures
-            - sticky_sessions - list - Sticky Session data structures
-            - region - object - The region where the Load Balancer instance is located. When
-              setting a region, the value should be the slug identifier for the region. When you
-              query a Load Balancer, an entire region object will be returned.
-            - tag - string - The name of a Droplet tag corresponding to Droplets assigned to the
-              Load Balancer.
-            - droplet_ids - array of integers - An array containing the IDs of the Droplets
-              assigned to the Load Balancer.
-            - redirect_http_to_https - bool - A boolean value indicating whether HTTP requests to
-              the Load Balancer on port 80 will be redirected to HTTPS on port 443.
+            - attribs:
+                - name - string - A human-readable name for a Load Balancer instance.
+                - algorithm - string - The load balancing algorithm used to determine which backend
+                  Droplet will be selected by a client. It must be either "round_robin" or
+                  "least_connections".
+                - forwarding_rules - list - Forwarding Role data structures
+                - health_check - list - Health check data structures
+                - sticky_sessions - list - Sticky Session data structures
+                - region - object - The region where the Load Balancer instance is located. When
+                  setting a region, the value should be the slug identifier for the region. When
+                  you query a Load Balancer, an entire region object will be returned.
+                - tag - string - The name of a Droplet tag corresponding to Droplets assigned to
+                  the Load Balancer.
+                - droplet_ids - array of integers - An array containing the IDs of the Droplets
+                  assigned to the Load Balancer.
+                - redirect_http_to_https - bool - A boolean value indicating whether HTTP requests
+                  to the Load Balancer on port 80 will be redirected to HTTPS on port 443.
+            - wait - boolean - Whether to wait until the droplet is ready
+            - poll - number - Number of seconds between checks (min 1 sec)
+            - timeout - number - How many seconds before giving up
 
         out: A tuple of two Load Balancer data structures (second is None if already present)
         """  # nopep8
@@ -170,7 +202,7 @@ class LoadBalancer(Endpoint):
             if existing is not None:
                 return (existing, None)
 
-            created = self.create(attribs)
+            created = self.create(attribs, wait, poll, timeout)
             return (created, created)
 
         else:

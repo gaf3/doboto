@@ -5,6 +5,7 @@ This module contains tests for the main LoadBalancer class
 from unittest import TestCase
 from mock import MagicMock, patch, call
 from doboto import LoadBalancer
+from doboto.exception import DOBOTOException, DOBOTOPollingException
 
 
 class TestLoadBalancer(TestCase):
@@ -61,8 +62,9 @@ class TestLoadBalancer(TestCase):
 
         mock_pages.assert_called_with(test_uri, "load_balancers")
 
+    @patch('time.sleep')
     @patch('doboto.LoadBalancer.LoadBalancer.request')
-    def test_create(self, mock_request):
+    def test_create(self, mock_request, mock_sleep):
         """
         test create method
         """
@@ -72,6 +74,63 @@ class TestLoadBalancer(TestCase):
         test_uri = "{}".format(self.test_uri)
 
         mock_request.assert_called_with(test_uri, "load_balancer", 'POST', attribs=datas)
+
+        load_balancer = self.klass(*self.instantiate_args)
+
+        # Standard
+
+        mock_request.return_value = {"id": 1, "people": "stuff", "ip": ""}
+
+        datas = {"name": "test.com", "region": "nyc3"}
+        self.assertEqual(load_balancer.create(datas), {"id": 1, "people": "stuff", "ip": ""})
+
+        mock_request.assert_called_with(self.test_uri, "load_balancer", 'POST', attribs=datas)
+
+        # Wait
+
+        load_balancer.info = MagicMock(side_effect=[
+            Exception("Not yet"), {"stuff": "things", "ip": "1"}
+        ])
+
+        self.assertEqual(
+            load_balancer.create(datas, wait=True, poll=2),
+            {"stuff": "things", "ip": "1"}
+        )
+
+        mock_sleep.assert_has_calls([call(2), call(2)])
+        load_balancer.info.assert_has_calls([call(1), call(1)])
+
+        # Wait with bad poll
+
+        load_balancer.info.side_effect = [Exception("Not yet"), {"stuff": "things", "ip": "1"}]
+
+        self.assertEqual(
+            load_balancer.create(datas, wait=True, poll=0),
+            {"stuff": "things", "ip": "1"}
+        )
+
+        mock_sleep.assert_has_calls([call(1), call(1)])
+
+        # Wait with timeout and error
+
+        mock_request.return_value = {"id": 2, "people": "stuff", "ip": ""}
+        load_balancer.info.side_effect = [Exception("Not yet")]
+
+        self.assertRaisesRegexp(
+            DOBOTOPollingException,
+            "DO API Timeout: Not yet while polling:.*stuff",
+            load_balancer.create, datas, wait=True, poll=4, timeout=-1
+        )
+
+        # Wait with timeout
+
+        load_balancer.info.side_effect = [{"stuff": "things", "ip": ""}]
+
+        self.assertRaisesRegexp(
+            DOBOTOPollingException,
+            "DO API Timeout while polling:.*stuff",
+            load_balancer.create, datas, wait=True, poll=4, timeout=-1
+        )
 
     def test_present(self):
         """
@@ -98,7 +157,7 @@ class TestLoadBalancer(TestCase):
             )
         )
         load_balancer.create.assert_has_calls([
-            call({"name": "stuff"}),
+            call({"name": "stuff"}, False, 5, 300),
         ])
 
         self.assertRaisesRegexp(

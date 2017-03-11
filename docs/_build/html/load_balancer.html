@@ -126,10 +126,11 @@
 <h2>Create a new Load Balancer<a class="headerlink" href="#create-a-new-load-balancer" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="do.load_balancer.create">
-<code class="descclassname">do.load_balancer.</code><code class="descname">create</code><span class="sig-paren">(</span><em>attribs</em><span class="sig-paren">)</span><a class="headerlink" href="#do.load_balancer.create" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">do.load_balancer.</code><code class="descname">create</code><span class="sig-paren">(</span><em>attribs</em>, <em>wait=False</em>, <em>poll=5</em>, <em>timeout=300</em><span class="sig-paren">)</span><a class="headerlink" href="#do.load_balancer.create" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <ul class="simple">
+<li>attribs<ul>
 <li><em>name</em> - string - A human-readable name for a Load Balancer instance.</li>
 <li><em>algorithm</em> - string - The load balancing algorithm used to determine which backend Droplet will be selected by a client. It must be either &#8220;round_robin&#8221; or &#8220;least_connections&#8221;.</li>
 <li><em>forwarding_rules</em> - list - Forwarding Role data structures</li>
@@ -139,6 +140,11 @@
 <li><em>tag</em> - string - The name of a Droplet tag corresponding to Droplets assigned to the Load Balancer.</li>
 <li><em>droplet_ids</em> - array of integers - An array containing the IDs of the Droplets assigned to the Load Balancer.</li>
 <li><em>redirect_http_to_https</em> - bool - A boolean value indicating whether HTTP requests to the Load Balancer on port 80 will be redirected to HTTPS on port 443.</li>
+</ul>
+</li>
+<li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
+<li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
 <ul class="simple">
@@ -154,10 +160,11 @@
 <h2>Create a new Load Balancer if not already existing<a class="headerlink" href="#create-a-new-load-balancer-if-not-already-existing" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
 <dt id="do.load_balancer.present">
-<code class="descclassname">do.load_balancer.</code><code class="descname">present</code><span class="sig-paren">(</span><em>attribs</em><span class="sig-paren">)</span><a class="headerlink" href="#do.load_balancer.present" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">do.load_balancer.</code><code class="descname">present</code><span class="sig-paren">(</span><em>attribs</em>, <em>wait=False</em>, <em>poll=5</em>, <em>timeout=300</em><span class="sig-paren">)</span><a class="headerlink" href="#do.load_balancer.present" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <ul class="simple">
+<li>attribs<ul>
 <li><em>name</em> - string - A human-readable name for a Load Balancer instance.</li>
 <li><em>algorithm</em> - string - The load balancing algorithm used to determine which backend Droplet will be selected by a client. It must be either &#8220;round_robin&#8221; or &#8220;least_connections&#8221;.</li>
 <li><em>forwarding_rules</em> - list - Forwarding Role data structures</li>
@@ -167,6 +174,11 @@
 <li><em>tag</em> - string - The name of a Droplet tag corresponding to Droplets assigned to the Load Balancer.</li>
 <li><em>droplet_ids</em> - array of integers - An array containing the IDs of the Droplets assigned to the Load Balancer.</li>
 <li><em>redirect_http_to_https</em> - bool - A boolean value indicating whether HTTP requests to the Load Balancer on port 80 will be redirected to HTTPS on port 443.</li>
+</ul>
+</li>
+<li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
+<li><em>poll</em> - number - Number of seconds between checks (min 1 sec)</li>
+<li><em>timeout</em> - number - How many seconds before giving up</li>
 </ul>
 <p>Returns:</p>
 <ul class="simple">

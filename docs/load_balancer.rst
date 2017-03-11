@@ -101,25 +101,33 @@ Related:
 Create a new Load Balancer
 ----------------------------------------------------------------------------------------------------
 
-.. method:: do.load_balancer.create(attribs)
+.. method:: do.load_balancer.create(attribs, wait=False, poll=5, timeout=300)
 
-- *name* - string - A human-readable name for a Load Balancer instance.
+- attribs
 
-- *algorithm* - string - The load balancing algorithm used to determine which backend Droplet will be selected by a client. It must be either "round_robin" or "least_connections".
+  - *name* - string - A human-readable name for a Load Balancer instance.
 
-- *forwarding_rules* - list - Forwarding Role data structures
+  - *algorithm* - string - The load balancing algorithm used to determine which backend Droplet will be selected by a client. It must be either "round_robin" or "least_connections".
 
-- *health_check* - list - Health check data structures
+  - *forwarding_rules* - list - Forwarding Role data structures
 
-- *sticky_sessions* - list - Sticky Session data structures
+  - *health_check* - list - Health check data structures
 
-- *region* - object - The region where the Load Balancer instance is located. When setting a region, the value should be the slug identifier for the region. When you query a Load Balancer, an entire region object will be returned.
+  - *sticky_sessions* - list - Sticky Session data structures
 
-- *tag* - string - The name of a Droplet tag corresponding to Droplets assigned to the Load Balancer.
+  - *region* - object - The region where the Load Balancer instance is located. When setting a region, the value should be the slug identifier for the region. When you query a Load Balancer, an entire region object will be returned.
 
-- *droplet_ids* - array of integers - An array containing the IDs of the Droplets assigned to the Load Balancer.
+  - *tag* - string - The name of a Droplet tag corresponding to Droplets assigned to the Load Balancer.
 
-- *redirect_http_to_https* - bool - A boolean value indicating whether HTTP requests to the Load Balancer on port 80 will be redirected to HTTPS on port 443.
+  - *droplet_ids* - array of integers - An array containing the IDs of the Droplets assigned to the Load Balancer.
+
+  - *redirect_http_to_https* - bool - A boolean value indicating whether HTTP requests to the Load Balancer on port 80 will be redirected to HTTPS on port 443.
+
+- *wait* - boolean - Whether to wait until the droplet is ready
+
+- *poll* - number - Number of seconds between checks (min 1 sec)
+
+- *timeout* - number - How many seconds before giving up
 
 
 Returns:
@@ -139,25 +147,33 @@ Related:
 Create a new Load Balancer if not already existing
 ----------------------------------------------------------------------------------------------------
 
-.. method:: do.load_balancer.present(attribs)
+.. method:: do.load_balancer.present(attribs, wait=False, poll=5, timeout=300)
 
-- *name* - string - A human-readable name for a Load Balancer instance.
+- attribs
 
-- *algorithm* - string - The load balancing algorithm used to determine which backend Droplet will be selected by a client. It must be either "round_robin" or "least_connections".
+  - *name* - string - A human-readable name for a Load Balancer instance.
 
-- *forwarding_rules* - list - Forwarding Role data structures
+  - *algorithm* - string - The load balancing algorithm used to determine which backend Droplet will be selected by a client. It must be either "round_robin" or "least_connections".
 
-- *health_check* - list - Health check data structures
+  - *forwarding_rules* - list - Forwarding Role data structures
 
-- *sticky_sessions* - list - Sticky Session data structures
+  - *health_check* - list - Health check data structures
 
-- *region* - object - The region where the Load Balancer instance is located. When setting a region, the value should be the slug identifier for the region. When you query a Load Balancer, an entire region object will be returned.
+  - *sticky_sessions* - list - Sticky Session data structures
 
-- *tag* - string - The name of a Droplet tag corresponding to Droplets assigned to the Load Balancer.
+  - *region* - object - The region where the Load Balancer instance is located. When setting a region, the value should be the slug identifier for the region. When you query a Load Balancer, an entire region object will be returned.
 
-- *droplet_ids* - array of integers - An array containing the IDs of the Droplets assigned to the Load Balancer.
+  - *tag* - string - The name of a Droplet tag corresponding to Droplets assigned to the Load Balancer.
 
-- *redirect_http_to_https* - bool - A boolean value indicating whether HTTP requests to the Load Balancer on port 80 will be redirected to HTTPS on port 443.
+  - *droplet_ids* - array of integers - An array containing the IDs of the Droplets assigned to the Load Balancer.
+
+  - *redirect_http_to_https* - bool - A boolean value indicating whether HTTP requests to the Load Balancer on port 80 will be redirected to HTTPS on port 443.
+
+- *wait* - boolean - Whether to wait until the droplet is ready
+
+- *poll* - number - Number of seconds between checks (min 1 sec)
+
+- *timeout* - number - How many seconds before giving up
 
 
 Returns:
