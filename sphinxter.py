@@ -52,6 +52,15 @@ for sub_name in dir(do):
 %s
 """ % (sub.__class__.__name__, sub_name, sub_doc["description"].replace("\n", "\n\n")))
 
+    if "data" in sub_doc:
+
+        doc_file.write("\nData Structures\n-----------------------\n\n")
+
+        for structure in sub_doc['data']:
+            doc_file.write("%s\n^^^^^^^^^^^^^^^^^^^^^^^^^\n\n" % structure)
+
+            write_data(doc_file, sub_doc['data'][structure])
+
     method_order = []
     method_args = {}
     for definition in DEFINITIONS.findall(sub_text):

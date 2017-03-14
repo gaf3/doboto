@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Region (do.region) &#8212; DOBOTO 0.5.0 documentation</title>
+    <title>Region (do.region) &#8212; DOBOTO 0.6.0 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.5.0',
+        VERSION:     '0.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -27,7 +27,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Size (do.size)" href="size.html" />
-    <link rel="prev" title="Image (do.image)" href="image.html" /> 
+    <link rel="prev" title="LoadBalancer (do.load_balancer)" href="load_balancer.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -40,9 +40,9 @@
           <a href="size.html" title="Size (do.size)"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="image.html" title="Image (do.image)"
+          <a href="load_balancer.html" title="LoadBalancer (do.load_balancer)"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.5.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.6.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -55,6 +55,19 @@
 <h1>Region (do.region)<a class="headerlink" href="#region-do-region" title="Permalink to this headline">¶</a></h1>
 <p>A region in DigitalOcean represents a datacenter where Droplets can be deployed and images can be transferred.</p>
 <p>Each region represents a specific datacenter in a geographic location. Some geographical locations may have multiple &#8220;regions&#8221; available. This means that there are multiple datacenters available within that area.</p>
+<div class="section" id="data-structures">
+<h2>Data Structures<a class="headerlink" href="#data-structures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="region">
+<h3>Region<a class="headerlink" href="#region" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>slug</em> - string - A human-readable string that is used as a unique identifier for each region.</li>
+<li><em>name</em> - string - The display name of the region. This will be a full name that is used in the control panel and other interfaces.</li>
+<li><em>sizes</em> - list - This attribute is set to a list which contains the identifying slugs for the sizes available in this region.</li>
+<li><em>available</em> - boolean - This is a boolean value that represents whether new Droplets can be created in this region.</li>
+<li><em>features</em> - list - This attribute is set to a list which contains features available in this region</li>
+</ul>
+</div>
+</div>
 <div class="section" id="list-all-regions">
 <h2>List all Regions<a class="headerlink" href="#list-all-regions" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
@@ -64,14 +77,7 @@
 
 <p>Returns:</p>
 <ul class="simple">
-<li>A list of Region dict&#8217;s<ul>
-<li><em>slug</em> - string - A human-readable string that is used as a unique identifier for each region.</li>
-<li><em>name</em> - string - The display name of the region. This will be a full name that is used in the control panel and other interfaces.</li>
-<li><em>sizes</em> - list - This attribute is set to a list which contains the identifying slugs for the sizes available in this region.</li>
-<li><em>available</em> - boolean - This is a boolean value that represents whether new Droplets can be created in this region.</li>
-<li><em>features</em> - list - This attribute is set to a list which contains features available in this region</li>
-</ul>
-</li>
+<li>A list of Region data structures</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -89,14 +95,18 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Region (do.region)</a><ul>
+<li><a class="reference internal" href="#data-structures">Data Structures</a><ul>
+<li><a class="reference internal" href="#region">Region</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#list-all-regions">List all Regions</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="image.html"
-                        title="previous chapter">Image (do.image)</a></p>
+  <p class="topless"><a href="load_balancer.html"
+                        title="previous chapter">LoadBalancer (do.load_balancer)</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="size.html"
                         title="next chapter">Size (do.size)</a></p>
@@ -131,9 +141,9 @@
           <a href="size.html" title="Size (do.size)"
              >next</a> |</li>
         <li class="right" >
-          <a href="image.html" title="Image (do.image)"
+          <a href="load_balancer.html" title="LoadBalancer (do.load_balancer)"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.5.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.6.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

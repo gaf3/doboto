@@ -7,6 +7,33 @@ Images in DigitalOcean may refer to one of a few different kinds of dict's.
 
 An image may refer to a snapshot that has been taken of a Droplet instance. It may also mean an image representing an automatic backup of a Droplet. The third category that it can represent is a public Linux distribution or application image that is used as a base to create Droplets.
 
+Data Structures
+-----------------------
+
+Image
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- *id* - number - A unique number that can be used to identify and reference a specific image.
+
+- *name* - string - The display name that has been given to an image. This is what is shown in the control panel and is generally a descriptive title for the image in question.
+
+- *type* - string - The kind of image, describing the duration of how long the image is stored. This is either "snapshot" or "backup".
+
+- *distribution* - string - This attribute describes the base distribution used for this image.
+
+- *slug* - nullable string - A uniquely identifying string that is associated with each of the DigitalOcean-provided public images. These can be used to reference a public image as an alternative to the numeric id.
+
+- *public* - boolean - This is a boolean value that indicates whether the image in question is public or not. An image that is public is available to all accounts. A non-public image is only accessible from your account.
+
+- *regions* - list - This attribute is a list of the regions that the image is available in. The regions are represented by their identifying slug values.
+
+- *min_disk_size* - number - The minimum 'disk' required for a size to use this image.
+
+- *size_gigabytes* - number - The size of the image in gigabytes.
+
+- *created_at* - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.
+
+
 
 List all, distribution, application, or user images.
 ----------------------------------------------------------------------------------------------------
@@ -20,27 +47,7 @@ List all, distribution, application, or user images.
 
 Returns:
 
-- A list of Image dict's
-
-  - *id* - number - A unique number that can be used to identify and reference a specific image.
-
-  - *name* - string - The display name that has been given to an image. This is what is shown in the control panel and is generally a descriptive title for the image in question.
-
-  - *type* - string - The kind of image, describing the duration of how long the image is stored. This is either "snapshot" or "backup".
-
-  - *distribution* - string - This attribute describes the base distribution used for this image.
-
-  - *slug* - nullable string - A uniquely identifying string that is associated with each of the DigitalOcean-provided public images. These can be used to reference a public image as an alternative to the numeric id.
-
-  - *public* - boolean - This is a boolean value that indicates whether the image in question is public or not. An image that is public is available to all accounts. A non-public image is only accessible from your account.
-
-  - *regions* - list - This attribute is a list of the regions that the image is available in. The regions are represented by their identifying slug values.
-
-  - *min_disk_size* - number - The minimum 'disk' required for a size to use this image.
-
-  - *size_gigabytes* - number - The size of the image in gigabytes.
-
-  - *created_at* - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.
+- A list of Image data structures
 
 
 
@@ -66,27 +73,7 @@ Retrieve an existing image by id or slug
 
 Returns:
 
-- An Image dict
-
-  - *id* - number - A unique number that can be used to identify and reference a specific image.
-
-  - *name* - string - The display name that has been given to an image. This is what is shown in the control panel and is generally a descriptive title for the image in question.
-
-  - *type* - string - The kind of image, describing the duration of how long the image is stored. This is either "snapshot" or "backup".
-
-  - *distribution* - string - This attribute describes the base distribution used for this image.
-
-  - *slug* - nullable string - A uniquely identifying string that is associated with each of the DigitalOcean-provided public images. These can be used to reference a public image as an alternative to the numeric id.
-
-  - *public* - boolean - This is a boolean value that indicates whether the image in question is public or not. An image that is public is available to all accounts. A non-public image is only accessible from your account.
-
-  - *regions* - list - This attribute is a list of the regions that the image is available in. The regions are represented by their identifying slug values.
-
-  - *min_disk_size* - number - The minimum 'disk' required for a size to use this image.
-
-  - *size_gigabytes* - number - The size of the image in gigabytes.
-
-  - *created_at* - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.
+- An Image data structure
 
 
 
@@ -110,27 +97,7 @@ Update an Image
 
 Returns:
 
-- An Image dict
-
-  - *id* - number - A unique number that can be used to identify and reference a specific image.
-
-  - *name* - string - The display name that has been given to an image. This is what is shown in the control panel and is generally a descriptive title for the image in question.
-
-  - *type* - string - The kind of image, describing the duration of how long the image is stored. This is either "snapshot" or "backup".
-
-  - *distribution* - string - This attribute describes the base distribution used for this image.
-
-  - *slug* - nullable string - A uniquely identifying string that is associated with each of the DigitalOcean-provided public images. These can be used to reference a public image as an alternative to the numeric id.
-
-  - *public* - boolean - This is a boolean value that indicates whether the image in question is public or not. An image that is public is available to all accounts. A non-public image is only accessible from your account.
-
-  - *regions* - list - This attribute is a list of the regions that the image is available in. The regions are represented by their identifying slug values.
-
-  - *min_disk_size* - number - The minimum 'disk' required for a size to use this image.
-
-  - *size_gigabytes* - number - The size of the image in gigabytes.
-
-  - *created_at* - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.
+- An Image data structure
 
 
 
@@ -178,25 +145,7 @@ Transfer an Image to another Region
 
 Returns:
 
-- An Action dictt
-
-  - *id* - number - A unique numeric ID that can be used to identify and reference an image action.
-
-  - *status* - string - The current status of the image action. This will be either "in-progress", "completed", or "errored".
-
-  - *type* - string - This is the type of the image action that the JSON dict represents. For example, this could be "transfer" to represent the state of an image transfer action.
-
-  - *started_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-
-  - *completed_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-
-  - *resource_id* - number - A unique identifier for the resource that the action is associated with.
-
-  - *resource_type* - string - The type of resource that the action is associated with.
-
-  - *region* - nullable string - (deprecated) A slug representing the region where the action occurred.
-
-  - *region_slug* - nullable string - A slug representing the region where the action occurred.
+- An Action data structure
 
 
 
@@ -222,25 +171,7 @@ Convert an Image to a Snapshot
 
 Returns:
 
-- An Action dict
-
-  - *id* - number - A unique numeric ID that can be used to identify and reference an image action.
-
-  - *status* - string - The current status of the image action. This will be either "in-progress", "completed", or "errored".
-
-  - *type* - string - This is the type of the image action that the JSON dict represents. For example, this could be "transfer" to represent the state of an image transfer action.
-
-  - *started_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-
-  - *completed_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-
-  - *resource_id* - number - A unique identifier for the resource that the action is associated with.
-
-  - *resource_type* - string - The type of resource that the action is associated with.
-
-  - *region* - nullable string - (deprecated) A slug representing the region where the action occurred.
-
-  - *region_slug* - nullable string - A slug representing the region where the action occurred.
+- An Action data structure
 
 
 
@@ -260,25 +191,7 @@ List all actions for an Image
 
 Returns:
 
-- A list of Action dict's
-
-  - *id* - number - A unique numeric ID that can be used to identify and reference an image action.
-
-  - *status* - string - The current status of the image action. This will be either "in-progress", "completed", or "errored".
-
-  - *type* - string - This is the type of the image action that the JSON dict represents. For example, this could be "transfer" to represent the state of an image transfer action.
-
-  - *started_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-
-  - *completed_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-
-  - *resource_id* - number - A unique identifier for the resource that the action is associated with.
-
-  - *resource_type* - string - The type of resource that the action is associated with.
-
-  - *region* - nullable string - (deprecated) A slug representing the region where the action occurred.
-
-  - *region_slug* - nullable string - A slug representing the region where the action occurred.
+- A list of Action data structures
 
 
 
@@ -300,25 +213,7 @@ Retrieve an existing Image Action
 
 Returns:
 
-- An Action dict
-
-  - *id* - number - A unique numeric ID that can be used to identify and reference an image action.
-
-  - *status* - string - The current status of the image action. This will be either "in-progress", "completed", or "errored".
-
-  - *type* - string - This is the type of the image action that the JSON dict represents. For example, this could be "transfer" to represent the state of an image transfer action.
-
-  - *started_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-
-  - *completed_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-
-  - *resource_id* - number - A unique identifier for the resource that the action is associated with.
-
-  - *resource_type* - string - The type of resource that the action is associated with.
-
-  - *region* - nullable string - (deprecated) A slug representing the region where the action occurred.
-
-  - *region_slug* - nullable string - A slug representing the region where the action occurred.
+- An Action data structure
 
 
 

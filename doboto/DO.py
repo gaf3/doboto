@@ -7,6 +7,7 @@ from .Certificate import Certificate
 from .Domain import Domain
 from .Droplet import Droplet
 from .Image import Image
+from .LoadBalancer import LoadBalancer
 from .Snapshot import Snapshot
 from .Region import Region
 from .Size import Size
@@ -37,6 +38,7 @@ class DO(object):
         self.domain = Domain(self, token, url, agent)
         self.droplet = Droplet(self, token, url, agent)
         self.image = Image(self, token, url, agent)
+        self.load_balancer = LoadBalancer(self, token, url, agent)
         self.snapshot = Snapshot(self, token, url, agent)
         self.region = Region(self, token, url, agent)
         self.size = Size(self, token, url, agent)

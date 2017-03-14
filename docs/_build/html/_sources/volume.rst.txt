@@ -5,6 +5,29 @@ Volume (do.volume)
 
 Block Storage volumes provide expanded storage capacity for your Droplets and can be moved between Droplets within a specific region. Volumes function as raw block devices, meaning they appear to the operating system as locally attached storage which can be formatted using any file system supported by the OS. They may be created in sizes from 1GiB to 16TiB.
 
+Data Structures
+-----------------------
+
+Volume
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- *id* - string - The unique identifier for the Block Storage volume.
+
+- *region* - dict - The region that the Block Storage volume is located in. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned.
+
+- *droplet_ids* - list - A list containing the IDs of the Droplets the volume is attached to. Note that at this time, a volume can only be attached to a single Droplet.
+
+- *name* - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and "-", up to a limit of 64 characters.
+
+- *description* - string - An optional free-form text field to describe a Block Storage volume.
+
+- *size_gigabytes* - number - The size of the Block Storage volume in GiB (1024^3).
+
+- *created_at* - string - A time value given in ISO8601 combined date and time format that represents when the Block Storage volume was created.
+
+- *droplet_ids* - list - This attribute is a list of the Droplets that the volume is attached to.
+
+
 
 List all volumes
 ----------------------------------------------------------------------------------------------------
@@ -16,23 +39,7 @@ List all volumes
 
 Returns:
 
-- A list of Volume dict's
-
-  - *id* - string - The unique identifier for the Block Storage volume.
-
-  - *region* - dict - The region that the Block Storage volume is located in. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned.
-
-  - *droplet_ids* - list - A list containing the IDs of the Droplets the volume is attached to. Note that at this time, a volume can only be attached to a single Droplet.
-
-  - *name* - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and "-", up to a limit of 64 characters.
-
-  - *description* - string - An optional free-form text field to describe a Block Storage volume.
-
-  - *size_gigabytes* - number - The size of the Block Storage volume in GiB (1024^3).
-
-  - *created_at* - string - A time value given in ISO8601 combined date and time format that represents when the Block Storage volume was created.
-
-  - *droplet_ids* - list - This attribute is a list of the Droplets that the volume is attached to.
+- A list of Volume data structures
 
 
 
@@ -53,11 +60,11 @@ Create a new volume
 
   - *name* - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and "-", up to a limit of 64 characters. - required
 
-  - *description* - string - An optional free-form text field to describe a Block Storage volume. -
+  - *description* - string - An optional free-form text field to describe a Block Storage volume.
 
-  - *region* - string - The region where the Block Storage volume will be created. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned. Should not be specified with a snapshot_id. -
+  - *region* - string - The region where the Block Storage volume will be created. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned. Should not be specified with a snapshot_id.
 
-  - *snapshot_id* - string - The unique identifier for the volume snapshot from which to create the volume. Should not be specified with a region_id. -
+  - *snapshot_id* - string - The unique identifier for the volume snapshot from which to create the volume. Should not be specified with a region_id.
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
@@ -68,23 +75,7 @@ Create a new volume
 
 Returns:
 
-- A Volume dict
-
-  - *id* - string - The unique identifier for the Block Storage volume.
-
-  - *region* - dict - The region that the Block Storage volume is located in. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned.
-
-  - *droplet_ids* - list - A list containing the IDs of the Droplets the volume is attached to. Note that at this time, a volume can only be attached to a single Droplet.
-
-  - *name* - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and "-", up to a limit of 64 characters.
-
-  - *description* - string - An optional free-form text field to describe a Block Storage volume.
-
-  - *size_gigabytes* - number - The size of the Block Storage volume in GiB (1024^3).
-
-  - *created_at* - string - A time value given in ISO8601 combined date and time format that represents when the Block Storage volume was created.
-
-  - *droplet_ids* - list - This attribute is a list of the Droplets that the volume is attached to.
+- A Volume data structure
 
 
 
@@ -105,11 +96,11 @@ Create a new volume if name not already present
 
   - *name* - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and "-", up to a limit of 64 characters. - required
 
-  - *description* - string - An optional free-form text field to describe a Block Storage volume. -
+  - *description* - string - An optional free-form text field to describe a Block Storage volume.
 
-  - *region* - string - The region where the Block Storage volume will be created. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned. Should not be specified with a snapshot_id. -
+  - *region* - string - The region where the Block Storage volume will be created. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned. Should not be specified with a snapshot_id.
 
-  - *snapshot_id* - string - The unique identifier for the volume snapshot from which to create the volume. Should not be specified with a region_id. -
+  - *snapshot_id* - string - The unique identifier for the volume snapshot from which to create the volume. Should not be specified with a region_id.
 
 - *wait* - boolean - Whether to wait until the droplet is ready
 
@@ -120,23 +111,7 @@ Create a new volume if name not already present
 
 Returns:
 
-- A tuple of Volume dict's, the intended and created (None if already exists)
-
-  - *id* - string - The unique identifier for the Block Storage volume.
-
-  - *region* - dict - The region that the Block Storage volume is located in. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned.
-
-  - *droplet_ids* - list - A list containing the IDs of the Droplets the volume is attached to. Note that at this time, a volume can only be attached to a single Droplet.
-
-  - *name* - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and "-", up to a limit of 64 characters.
-
-  - *description* - string - An optional free-form text field to describe a Block Storage volume.
-
-  - *size_gigabytes* - number - The size of the Block Storage volume in GiB (1024^3).
-
-  - *created_at* - string - A time value given in ISO8601 combined date and time format that represents when the Block Storage volume was created.
-
-  - *droplet_ids* - list - This attribute is a list of the Droplets that the volume is attached to.
+- A tuple of Volume data structures, the intended and created (None if already exists)
 
 
 
@@ -160,23 +135,7 @@ Retrieve an existing volume by id or name and region
 
 Returns:
 
-- A Volume dict
-
-  - *id* - string - The unique identifier for the Block Storage volume.
-
-  - *region* - dict - The region that the Block Storage volume is located in. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned.
-
-  - *droplet_ids* - list - A list containing the IDs of the Droplets the volume is attached to. Note that at this time, a volume can only be attached to a single Droplet.
-
-  - *name* - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and "-", up to a limit of 64 characters.
-
-  - *description* - string - An optional free-form text field to describe a Block Storage volume.
-
-  - *size_gigabytes* - number - The size of the Block Storage volume in GiB (1024^3).
-
-  - *created_at* - string - A time value given in ISO8601 combined date and time format that represents when the Block Storage volume was created.
-
-  - *droplet_ids* - list - This attribute is a list of the Droplets that the volume is attached to.
+- A Volume data structure
 
 
 
@@ -224,23 +183,7 @@ List snapshots for a volume
 
 Returns:
 
-- A list of Image dict's
-
-  - *id* - string - The unique identifier for the snapshot.
-
-  - *name* - string - A human-readable name for the snapshot.
-
-  - *created_at* - string - A time value given in ISO8601 combined date and time format that represents when the snapshot was created.
-
-  - *regions* - list - A list of the regions that the image is available in. The regions are represented by their identifying slug values.
-
-  - *resource_id* - string - A unique identifier for the resource that the action is associated with.
-
-  - *resource_type* - string - The type of resource that the action is associated with.
-
-  - *min_disk_size* - number - The minimum size in GB required for a volume or Droplet to use this snapshot.
-
-  - *size_gigabytes* - number - The billable size of the snapshot in gigabytes.
+- A list of Image data structures
 
 
 
@@ -268,23 +211,7 @@ Create a snapshot for a volume
 
 Returns:
 
-- An Image dict
-
-  - *id* - string - The unique identifier for the snapshot.
-
-  - *name* - string - A human-readable name for the snapshot.
-
-  - *created_at* - string - A time value given in ISO8601 combined date and time format that represents when the snapshot was created.
-
-  - *regions* - list - A list of the regions that the image is available in. The regions are represented by their identifying slug values.
-
-  - *resource_id* - string - A unique identifier for the resource that the action is associated with.
-
-  - *resource_type* - string - The type of resource that the action is associated with.
-
-  - *min_disk_size* - number - The minimum size in GB required for a volume or Droplet to use this snapshot.
-
-  - *size_gigabytes* - number - The billable size of the snapshot in gigabytes.
+- An Image data structure
 
 
 
@@ -316,25 +243,7 @@ Attach a volume by id or name to a droplet
 
 Returns:
 
-- An Action dict
-
-  - *id* - int - A unique numeric ID that can be used to identify and reference an action.
-
-  - *status* - string - The current status of the action. This can be "in-progress", "completed", or "errored".
-
-  - *type* - string - This is the type of action that the dict represents. For example, this could be "attach_volume" to represent the state of a volume attach action.
-
-  - *started_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-
-  - *completed_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-
-  - *resource_id* - nullable int - A unique identifier for the resource that the action is associated with.
-
-  - *resource_type* - string - The type of resource that the action is associated with.
-
-  - *region* - dict - The region where the resources acted upon are located.
-
-  - *region_slug* - nullable string - A slug representing the region where the action occurred.
+- An Action data structure
 
 
 
@@ -368,25 +277,7 @@ Remove a volume by id or name from a droplet
 
 Returns:
 
-- An Action dict
-
-  - *id* - int - A unique numeric ID that can be used to identify and reference an action.
-
-  - *status* - string - The current status of the action. This can be "in-progress", "completed", or "errored".
-
-  - *type* - string - This is the type of action that the dict represents. For example, this could be "attach_volume" to represent the state of a volume attach action.
-
-  - *started_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-
-  - *completed_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-
-  - *resource_id* - nullable int - A unique identifier for the resource that the action is associated with.
-
-  - *resource_type* - string - The type of resource that the action is associated with.
-
-  - *region* - dict - The region where the resources acted upon are located.
-
-  - *region_slug* - nullable string - A slug representing the region where the action occurred.
+- An Action data structure
 
 
 
@@ -412,25 +303,7 @@ Resize a volume
 
 Returns:
 
-- An Action dict
-
-  - *id* - int - A unique numeric ID that can be used to identify and reference an action.
-
-  - *status* - string - The current status of the action. This can be "in-progress", "completed", or "errored".
-
-  - *type* - string - This is the type of action that the dict represents. For example, this could be "attach_volume" to represent the state of a volume attach action.
-
-  - *started_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-
-  - *completed_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-
-  - *resource_id* - nullable int - A unique identifier for the resource that the action is associated with.
-
-  - *resource_type* - string - The type of resource that the action is associated with.
-
-  - *region* - dict - The region where the resources acted upon are located.
-
-  - *region_slug* - nullable string - A slug representing the region where the action occurred.
+- An Action data structure
 
 
 
@@ -450,25 +323,7 @@ List all actions for a volume
 
 Returns:
 
-- A list of Action dict's
-
-  - *id* - int - A unique numeric ID that can be used to identify and reference an action.
-
-  - *status* - string - The current status of the action. This can be "in-progress", "completed", or "errored".
-
-  - *type* - string - This is the type of action that the dict represents. For example, this could be "attach_volume" to represent the state of a volume attach action.
-
-  - *started_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-
-  - *completed_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-
-  - *resource_id* - nullable int - A unique identifier for the resource that the action is associated with.
-
-  - *resource_type* - string - The type of resource that the action is associated with.
-
-  - *region* - dict - The region where the resources acted upon are located.
-
-  - *region_slug* - nullable string - A slug representing the region where the action occurred.
+- A list of Action data structures
 
 
 
@@ -490,25 +345,7 @@ Retrieve an existing volume action
 
 Returns:
 
-- An Action dict
-
-  - *id* - int - A unique numeric ID that can be used to identify and reference an action.
-
-  - *status* - string - The current status of the action. This can be "in-progress", "completed", or "errored".
-
-  - *type* - string - This is the type of action that the dict represents. For example, this could be "attach_volume" to represent the state of a volume attach action.
-
-  - *started_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-
-  - *completed_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-
-  - *resource_id* - nullable int - A unique identifier for the resource that the action is associated with.
-
-  - *resource_type* - string - The type of resource that the action is associated with.
-
-  - *region* - dict - The region where the resources acted upon are located.
-
-  - *region_slug* - nullable string - A slug representing the region where the action occurred.
+- An Action data structure
 
 
 

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Volume (do.volume) &#8212; DOBOTO 0.5.0 documentation</title>
+    <title>Volume (do.volume) &#8212; DOBOTO 0.6.0 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.5.0',
+        VERSION:     '0.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="action.html" title="Action (do.action)"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.5.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.6.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -54,6 +54,22 @@
   <div class="section" id="volume-do-volume">
 <h1>Volume (do.volume)<a class="headerlink" href="#volume-do-volume" title="Permalink to this headline">¶</a></h1>
 <p>Block Storage volumes provide expanded storage capacity for your Droplets and can be moved between Droplets within a specific region. Volumes function as raw block devices, meaning they appear to the operating system as locally attached storage which can be formatted using any file system supported by the OS. They may be created in sizes from 1GiB to 16TiB.</p>
+<div class="section" id="data-structures">
+<h2>Data Structures<a class="headerlink" href="#data-structures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="volume">
+<h3>Volume<a class="headerlink" href="#volume" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>id</em> - string - The unique identifier for the Block Storage volume.</li>
+<li><em>region</em> - dict - The region that the Block Storage volume is located in. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned.</li>
+<li><em>droplet_ids</em> - list - A list containing the IDs of the Droplets the volume is attached to. Note that at this time, a volume can only be attached to a single Droplet.</li>
+<li><em>name</em> - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and &#8220;-&#8221;, up to a limit of 64 characters.</li>
+<li><em>description</em> - string - An optional free-form text field to describe a Block Storage volume.</li>
+<li><em>size_gigabytes</em> - number - The size of the Block Storage volume in GiB (1024^3).</li>
+<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Block Storage volume was created.</li>
+<li><em>droplet_ids</em> - list - This attribute is a list of the Droplets that the volume is attached to.</li>
+</ul>
+</div>
+</div>
 <div class="section" id="list-all-volumes">
 <h2>List all volumes<a class="headerlink" href="#list-all-volumes" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
@@ -66,17 +82,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A list of Volume dict&#8217;s<ul>
-<li><em>id</em> - string - The unique identifier for the Block Storage volume.</li>
-<li><em>region</em> - dict - The region that the Block Storage volume is located in. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned.</li>
-<li><em>droplet_ids</em> - list - A list containing the IDs of the Droplets the volume is attached to. Note that at this time, a volume can only be attached to a single Droplet.</li>
-<li><em>name</em> - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and &#8220;-&#8221;, up to a limit of 64 characters.</li>
-<li><em>description</em> - string - An optional free-form text field to describe a Block Storage volume.</li>
-<li><em>size_gigabytes</em> - number - The size of the Block Storage volume in GiB (1024^3).</li>
-<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Block Storage volume was created.</li>
-<li><em>droplet_ids</em> - list - This attribute is a list of the Droplets that the volume is attached to.</li>
-</ul>
-</li>
+<li>A list of Volume data structures</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -94,9 +100,9 @@
 <li><em>attribs</em> - dict - Volume information to create by<ul>
 <li><em>size_gigabytes</em> - number - The size of the Block Storage volume in GiB (1024^3). - required</li>
 <li><em>name</em> - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and &#8220;-&#8221;, up to a limit of 64 characters. - required</li>
-<li><em>description</em> - string - An optional free-form text field to describe a Block Storage volume. -</li>
-<li><em>region</em> - string - The region where the Block Storage volume will be created. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned. Should not be specified with a snapshot_id. -</li>
-<li><em>snapshot_id</em> - string - The unique identifier for the volume snapshot from which to create the volume. Should not be specified with a region_id. -</li>
+<li><em>description</em> - string - An optional free-form text field to describe a Block Storage volume.</li>
+<li><em>region</em> - string - The region where the Block Storage volume will be created. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned. Should not be specified with a snapshot_id.</li>
+<li><em>snapshot_id</em> - string - The unique identifier for the volume snapshot from which to create the volume. Should not be specified with a region_id.</li>
 </ul>
 </li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
@@ -105,17 +111,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A Volume dict<ul>
-<li><em>id</em> - string - The unique identifier for the Block Storage volume.</li>
-<li><em>region</em> - dict - The region that the Block Storage volume is located in. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned.</li>
-<li><em>droplet_ids</em> - list - A list containing the IDs of the Droplets the volume is attached to. Note that at this time, a volume can only be attached to a single Droplet.</li>
-<li><em>name</em> - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and &#8220;-&#8221;, up to a limit of 64 characters.</li>
-<li><em>description</em> - string - An optional free-form text field to describe a Block Storage volume.</li>
-<li><em>size_gigabytes</em> - number - The size of the Block Storage volume in GiB (1024^3).</li>
-<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Block Storage volume was created.</li>
-<li><em>droplet_ids</em> - list - This attribute is a list of the Droplets that the volume is attached to.</li>
-</ul>
-</li>
+<li>A Volume data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -133,9 +129,9 @@
 <li><em>attribs</em> - dict - Volume information to create by<ul>
 <li><em>size_gigabytes</em> - number - The size of the Block Storage volume in GiB (1024^3). - required</li>
 <li><em>name</em> - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and &#8220;-&#8221;, up to a limit of 64 characters. - required</li>
-<li><em>description</em> - string - An optional free-form text field to describe a Block Storage volume. -</li>
-<li><em>region</em> - string - The region where the Block Storage volume will be created. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned. Should not be specified with a snapshot_id. -</li>
-<li><em>snapshot_id</em> - string - The unique identifier for the volume snapshot from which to create the volume. Should not be specified with a region_id. -</li>
+<li><em>description</em> - string - An optional free-form text field to describe a Block Storage volume.</li>
+<li><em>region</em> - string - The region where the Block Storage volume will be created. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned. Should not be specified with a snapshot_id.</li>
+<li><em>snapshot_id</em> - string - The unique identifier for the volume snapshot from which to create the volume. Should not be specified with a region_id.</li>
 </ul>
 </li>
 <li><em>wait</em> - boolean - Whether to wait until the droplet is ready</li>
@@ -144,17 +140,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A tuple of Volume dict&#8217;s, the intended and created (None if already exists)<ul>
-<li><em>id</em> - string - The unique identifier for the Block Storage volume.</li>
-<li><em>region</em> - dict - The region that the Block Storage volume is located in. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned.</li>
-<li><em>droplet_ids</em> - list - A list containing the IDs of the Droplets the volume is attached to. Note that at this time, a volume can only be attached to a single Droplet.</li>
-<li><em>name</em> - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and &#8220;-&#8221;, up to a limit of 64 characters.</li>
-<li><em>description</em> - string - An optional free-form text field to describe a Block Storage volume.</li>
-<li><em>size_gigabytes</em> - number - The size of the Block Storage volume in GiB (1024^3).</li>
-<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Block Storage volume was created.</li>
-<li><em>droplet_ids</em> - list - This attribute is a list of the Droplets that the volume is attached to.</li>
-</ul>
-</li>
+<li>A tuple of Volume data structures, the intended and created (None if already exists)</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -175,17 +161,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A Volume dict<ul>
-<li><em>id</em> - string - The unique identifier for the Block Storage volume.</li>
-<li><em>region</em> - dict - The region that the Block Storage volume is located in. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned.</li>
-<li><em>droplet_ids</em> - list - A list containing the IDs of the Droplets the volume is attached to. Note that at this time, a volume can only be attached to a single Droplet.</li>
-<li><em>name</em> - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and &#8220;-&#8221;, up to a limit of 64 characters.</li>
-<li><em>description</em> - string - An optional free-form text field to describe a Block Storage volume.</li>
-<li><em>size_gigabytes</em> - number - The size of the Block Storage volume in GiB (1024^3).</li>
-<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the Block Storage volume was created.</li>
-<li><em>droplet_ids</em> - list - This attribute is a list of the Droplets that the volume is attached to.</li>
-</ul>
-</li>
+<li>A Volume data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -227,17 +203,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A list of Image dict&#8217;s<ul>
-<li><em>id</em> - string - The unique identifier for the snapshot.</li>
-<li><em>name</em> - string - A human-readable name for the snapshot.</li>
-<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the snapshot was created.</li>
-<li><em>regions</em> - list - A list of the regions that the image is available in. The regions are represented by their identifying slug values.</li>
-<li><em>resource_id</em> - string - A unique identifier for the resource that the action is associated with.</li>
-<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
-<li><em>min_disk_size</em> - number - The minimum size in GB required for a volume or Droplet to use this snapshot.</li>
-<li><em>size_gigabytes</em> - number - The billable size of the snapshot in gigabytes.</li>
-</ul>
-</li>
+<li>A list of Image data structures</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -260,17 +226,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>An Image dict<ul>
-<li><em>id</em> - string - The unique identifier for the snapshot.</li>
-<li><em>name</em> - string - A human-readable name for the snapshot.</li>
-<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the snapshot was created.</li>
-<li><em>regions</em> - list - A list of the regions that the image is available in. The regions are represented by their identifying slug values.</li>
-<li><em>resource_id</em> - string - A unique identifier for the resource that the action is associated with.</li>
-<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
-<li><em>min_disk_size</em> - number - The minimum size in GB required for a volume or Droplet to use this snapshot.</li>
-<li><em>size_gigabytes</em> - number - The billable size of the snapshot in gigabytes.</li>
-</ul>
-</li>
+<li>An Image data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -295,18 +251,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>An Action dict<ul>
-<li><em>id</em> - int - A unique numeric ID that can be used to identify and reference an action.</li>
-<li><em>status</em> - string - The current status of the action. This can be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
-<li><em>type</em> - string - This is the type of action that the dict represents. For example, this could be &#8220;attach_volume&#8221; to represent the state of a volume attach action.</li>
-<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
-<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
-<li><em>resource_id</em> - nullable int - A unique identifier for the resource that the action is associated with.</li>
-<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
-<li><em>region</em> - dict - The region where the resources acted upon are located.</li>
-<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
-</ul>
-</li>
+<li>An Action data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -332,18 +277,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>An Action dict<ul>
-<li><em>id</em> - int - A unique numeric ID that can be used to identify and reference an action.</li>
-<li><em>status</em> - string - The current status of the action. This can be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
-<li><em>type</em> - string - This is the type of action that the dict represents. For example, this could be &#8220;attach_volume&#8221; to represent the state of a volume attach action.</li>
-<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
-<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
-<li><em>resource_id</em> - nullable int - A unique identifier for the resource that the action is associated with.</li>
-<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
-<li><em>region</em> - dict - The region where the resources acted upon are located.</li>
-<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
-</ul>
-</li>
+<li>An Action data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -365,18 +299,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>An Action dict<ul>
-<li><em>id</em> - int - A unique numeric ID that can be used to identify and reference an action.</li>
-<li><em>status</em> - string - The current status of the action. This can be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
-<li><em>type</em> - string - This is the type of action that the dict represents. For example, this could be &#8220;attach_volume&#8221; to represent the state of a volume attach action.</li>
-<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
-<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
-<li><em>resource_id</em> - nullable int - A unique identifier for the resource that the action is associated with.</li>
-<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
-<li><em>region</em> - dict - The region where the resources acted upon are located.</li>
-<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
-</ul>
-</li>
+<li>An Action data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -395,18 +318,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A list of Action dict&#8217;s<ul>
-<li><em>id</em> - int - A unique numeric ID that can be used to identify and reference an action.</li>
-<li><em>status</em> - string - The current status of the action. This can be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
-<li><em>type</em> - string - This is the type of action that the dict represents. For example, this could be &#8220;attach_volume&#8221; to represent the state of a volume attach action.</li>
-<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
-<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
-<li><em>resource_id</em> - nullable int - A unique identifier for the resource that the action is associated with.</li>
-<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
-<li><em>region</em> - dict - The region where the resources acted upon are located.</li>
-<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
-</ul>
-</li>
+<li>A list of Action data structures</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -426,18 +338,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>An Action dict<ul>
-<li><em>id</em> - int - A unique numeric ID that can be used to identify and reference an action.</li>
-<li><em>status</em> - string - The current status of the action. This can be &#8220;in-progress&#8221;, &#8220;completed&#8221;, or &#8220;errored&#8221;.</li>
-<li><em>type</em> - string - This is the type of action that the dict represents. For example, this could be &#8220;attach_volume&#8221; to represent the state of a volume attach action.</li>
-<li><em>started_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.</li>
-<li><em>completed_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.</li>
-<li><em>resource_id</em> - nullable int - A unique identifier for the resource that the action is associated with.</li>
-<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
-<li><em>region</em> - dict - The region where the resources acted upon are located.</li>
-<li><em>region_slug</em> - nullable string - A slug representing the region where the action occurred.</li>
-</ul>
-</li>
+<li>An Action data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -455,6 +356,10 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Volume (do.volume)</a><ul>
+<li><a class="reference internal" href="#data-structures">Data Structures</a><ul>
+<li><a class="reference internal" href="#volume">Volume</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#list-all-volumes">List all volumes</a></li>
 <li><a class="reference internal" href="#create-a-new-volume">Create a new volume</a></li>
 <li><a class="reference internal" href="#create-a-new-volume-if-name-not-already-present">Create a new volume if name not already present</a></li>
@@ -510,7 +415,7 @@
         <li class="right" >
           <a href="action.html" title="Action (do.action)"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.5.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.6.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

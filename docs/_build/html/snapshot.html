@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Snapshot (do.snapshot) &#8212; DOBOTO 0.5.0 documentation</title>
+    <title>Snapshot (do.snapshot) &#8212; DOBOTO 0.6.0 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.5.0',
+        VERSION:     '0.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="size.html" title="Size (do.size)"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.5.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.6.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -54,6 +54,22 @@
   <div class="section" id="snapshot-do-snapshot">
 <h1>Snapshot (do.snapshot)<a class="headerlink" href="#snapshot-do-snapshot" title="Permalink to this headline">¶</a></h1>
 <p>Snapshots are saved instances of a Droplet or a volume, which is reflected in the resource_type attribute. In order to avoid problems with compressing filesystems, each defines a min_disk_size attribute which is the minimum size of the Droplet or volume disk when creating a new resource from the saved snapshot.</p>
+<div class="section" id="data-structures">
+<h2>Data Structures<a class="headerlink" href="#data-structures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="snapshot">
+<h3>Snapshot<a class="headerlink" href="#snapshot" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>id</em> - string - The unique identifier for the snapshot.</li>
+<li><em>name</em> - string - A human-readable name for the snapshot.</li>
+<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the snapshot was created.</li>
+<li><em>regions</em> - list - A list of the regions that the image is available in. The regions are represented by their identifying slug values.</li>
+<li><em>resource_id</em> - string - A unique identifier for the resource that the action is associated with.</li>
+<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
+<li><em>min_disk_size</em> - number - The minimum size in GB required for a volume or Droplet to use this snapshot.</li>
+<li><em>size_gigabytes</em> - number - The billable size of the snapshot in gigabytes.</li>
+</ul>
+</div>
+</div>
 <div class="section" id="list-all-droplet-or-volume-snapshots">
 <h2>List all, droplet, or volume snapshots<a class="headerlink" href="#list-all-droplet-or-volume-snapshots" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
@@ -66,17 +82,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A list of Snapshot dict&#8217;s<ul>
-<li><em>id</em> - string - The unique identifier for the snapshot.</li>
-<li><em>name</em> - string - A human-readable name for the snapshot.</li>
-<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the snapshot was created.</li>
-<li><em>regions</em> - list - A list of the regions that the image is available in. The regions are represented by their identifying slug values.</li>
-<li><em>resource_id</em> - string - A unique identifier for the resource that the action is associated with.</li>
-<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
-<li><em>min_disk_size</em> - number - The minimum size in GB required for a volume or Droplet to use this snapshot.</li>
-<li><em>size_gigabytes</em> - number - The billable size of the snapshot in gigabytes.</li>
-</ul>
-</li>
+<li>A list of Snapshot data structures</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -97,17 +103,7 @@
 </ul>
 <p>Returns:</p>
 <ul class="simple">
-<li>A Snapshot dict<ul>
-<li><em>id</em> - string - The unique identifier for the snapshot.</li>
-<li><em>name</em> - string - A human-readable name for the snapshot.</li>
-<li><em>created_at</em> - string - A time value given in ISO8601 combined date and time format that represents when the snapshot was created.</li>
-<li><em>regions</em> - list - A list of the regions that the image is available in. The regions are represented by their identifying slug values.</li>
-<li><em>resource_id</em> - string - A unique identifier for the resource that the action is associated with.</li>
-<li><em>resource_type</em> - string - The type of resource that the action is associated with.</li>
-<li><em>min_disk_size</em> - number - The minimum size in GB required for a volume or Droplet to use this snapshot.</li>
-<li><em>size_gigabytes</em> - number - The billable size of the snapshot in gigabytes.</li>
-</ul>
-</li>
+<li>A Snapshot data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -144,6 +140,10 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Snapshot (do.snapshot)</a><ul>
+<li><a class="reference internal" href="#data-structures">Data Structures</a><ul>
+<li><a class="reference internal" href="#snapshot">Snapshot</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#list-all-droplet-or-volume-snapshots">List all, droplet, or volume snapshots</a></li>
 <li><a class="reference internal" href="#retrieve-an-existing-snapshot-by-id">Retrieve an existing snapshot by id</a></li>
 <li><a class="reference internal" href="#delete-a-snapshot">Delete a snapshot</a></li>
@@ -190,7 +190,7 @@
         <li class="right" >
           <a href="size.html" title="Size (do.size)"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.5.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.6.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

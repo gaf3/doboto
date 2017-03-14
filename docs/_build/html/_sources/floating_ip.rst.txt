@@ -7,6 +7,19 @@ Floating IP dict's represent a publicly-accessible static IP addresses that can 
 
 Floating IPs are bound to a specific region.
 
+Data Structures
+-----------------------
+
+Floating IP
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- *ip* - string - The public IP address of the Floating IP. It also serves as its identifier.
+
+- *region* - dict - The region that the Floating IP is reserved to. When you query a Floating IP, the entire region dict will be returned.
+
+- *droplet* - dict - The Droplet that the Floating IP has been assigned to. When you query a Floating IP, if it is assigned to a Droplet, the entire Droplet dict will be returned. If it is not assigned, the value will be null.
+
+
 
 List all Floating IPs
 ----------------------------------------------------------------------------------------------------
@@ -17,12 +30,6 @@ List all Floating IPs
 Returns:
 
 - A list of Floating IP dict's
-
-  - *ip* - string - The public IP address of the Floating IP. It also serves as its identifier.
-
-  - *region* - dict - The region that the Floating IP is reserved to. When you query a Floating IP, the entire region dict will be returned.
-
-  - *droplet* - dict - The Droplet that the Floating IP has been assigned to. When you query a Floating IP, if it is assigned to a Droplet, the entire Droplet dict will be returned. If it is not assigned, the value will be null.
 
 
 
@@ -44,13 +51,7 @@ Create a new Floating IP assigned to a Droplet or Region
 
 Returns:
 
-- A Floating IP dict
-
-  - *ip* - string - The public IP address of the Floating IP. It also serves as its identifier.
-
-  - *region* - dict - The region that the Floating IP is reserved to. When you query a Floating IP, the entire region dict will be returned.
-
-  - *droplet* - dict - The Droplet that the Floating IP has been assigned to. When you query a Floating IP, if it is assigned to a Droplet, the entire Droplet dict will be returned. If it is not assigned, the value will be null.
+- A Floating IP data structure
 
 
 
@@ -72,13 +73,7 @@ Retrieve an existing Floating IP
 
 Returns:
 
-- A Floating IP dict
-
-  - *ip* - string - The public IP address of the Floating IP. It also serves as its identifier.
-
-  - *region* - dict - The region that the Floating IP is reserved to. When you query a Floating IP, the entire region dict will be returned.
-
-  - *droplet* - dict - The Droplet that the Floating IP has been assigned to. When you query a Floating IP, if it is assigned to a Droplet, the entire Droplet dict will be returned. If it is not assigned, the value will be null.
+- A Floating IP data structure
 
 
 
@@ -126,25 +121,7 @@ Assign a Floating IP to a Droplet
 
 Returns:
 
-- An Action dict
-
-  - *id* - number - A unique numeric ID that can be used to identify and reference an action.
-
-  - *status* - string - The current status of the action. This can be "in-progress", "completed", or "errored".
-
-  - *type* - string - This is the type of action that the dict represents. For example, this could be "assign_ip" to represent the state of a Floating IP assign action.
-
-  - *started_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-
-  - *completed_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-
-  - *resource_id* - number - A unique identifier for the resource that the action is associated with.
-
-  - *resource_type* - string - The type of resource that the action is associated with.
-
-  - *region* - nullable string - (deprecated) A slug representing the region where the action occurred.
-
-  - *region_slug* - nullable string - A slug representing the region where the action occurred.
+- An Action data structure
 
 
 
@@ -170,25 +147,7 @@ Unassign a Floating IP
 
 Returns:
 
-- An Action dict
-
-  - *id* - number - A unique numeric ID that can be used to identify and reference an action.
-
-  - *status* - string - The current status of the action. This can be "in-progress", "completed", or "errored".
-
-  - *type* - string - This is the type of action that the dict represents. For example, this could be "assign_ip" to represent the state of a Floating IP assign action.
-
-  - *started_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-
-  - *completed_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-
-  - *resource_id* - number - A unique identifier for the resource that the action is associated with.
-
-  - *resource_type* - string - The type of resource that the action is associated with.
-
-  - *region* - nullable string - (deprecated) A slug representing the region where the action occurred.
-
-  - *region_slug* - nullable string - A slug representing the region where the action occurred.
+- An Action data structure
 
 
 
@@ -214,25 +173,7 @@ List all actions for a Floating IP
 
 Returns:
 
-- A list of Action dict's
-
-  - *id* - number - A unique numeric ID that can be used to identify and reference an action.
-
-  - *status* - string - The current status of the action. This can be "in-progress", "completed", or "errored".
-
-  - *type* - string - This is the type of action that the dict represents. For example, this could be "assign_ip" to represent the state of a Floating IP assign action.
-
-  - *started_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-
-  - *completed_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-
-  - *resource_id* - number - A unique identifier for the resource that the action is associated with.
-
-  - *resource_type* - string - The type of resource that the action is associated with.
-
-  - *region* - nullable string - (deprecated) A slug representing the region where the action occurred.
-
-  - *region_slug* - nullable string - A slug representing the region where the action occurred.
+- A list of Action data structures
 
 
 
@@ -254,25 +195,7 @@ Retrieve an existing Floating IP Action
 
 Returns:
 
-- An Action dict
-
-  - *id* - number - A unique numeric ID that can be used to identify and reference an action.
-
-  - *status* - string - The current status of the action. This can be "in-progress", "completed", or "errored".
-
-  - *type* - string - This is the type of action that the dict represents. For example, this could be "assign_ip" to represent the state of a Floating IP assign action.
-
-  - *started_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-
-  - *completed_at* - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-
-  - *resource_id* - number - A unique identifier for the resource that the action is associated with.
-
-  - *resource_type* - string - The type of resource that the action is associated with.
-
-  - *region* - nullable string - (deprecated) A slug representing the region where the action occurred.
-
-  - *region_slug* - nullable string - A slug representing the region where the action occurred.
+- An Action data structure
 
 
 

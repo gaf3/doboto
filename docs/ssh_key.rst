@@ -5,6 +5,21 @@ SSHKey (do.ssh_key)
 
 DigitalOcean allows you to add SSH public keys to the interface so that you can embed your public key into a Droplet at the time of creation. Only the public key is required to take advantage of this functionality.
 
+Data Structures
+-----------------------
+
+SSH Key
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+- *id* - number - This is a unique identification number for the key. This can be used to reference a specific SSH key when you wish to embed a key into a Droplet.
+
+- *fingerprint* - string - This attribute contains the fingerprint value that is generated from the public key. This is a unique identifier that will differentiate it from other keys using a format that SSH recognizes.
+
+- *public_key* - string - This attribute contains the entire public key string that was uploaded. This is what is embedded into the root user's authorized_keys file if you choose to include this SSH key during Droplet creation.
+
+- *name* - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.
+
+
 
 List all Keys
 ----------------------------------------------------------------------------------------------------
@@ -14,15 +29,7 @@ List all Keys
 
 Returns:
 
-- A list of SSH Key dict's
-
-  - *id* - number - This is a unique identification number for the key. This can be used to reference a specific SSH key when you wish to embed a key into a Droplet.
-
-  - *fingerprint* - string - This attribute contains the fingerprint value that is generated from the public key. This is a unique identifier that will differentiate it from other keys using a format that SSH recognizes.
-
-  - *public_key* - string - This attribute contains the entire public key string that was uploaded. This is what is embedded into the root user's authorized_keys file if you choose to include this SSH key during Droplet creation.
-
-  - *name* - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.
+- A list of SSH Key data structures
 
 
 
@@ -44,15 +51,7 @@ Create a new Key
 
 Returns:
 
-- An SSH Key dict
-
-  - *id* - number - This is a unique identification number for the key. This can be used to reference a specific SSH key when you wish to embed a key into a Droplet.
-
-  - *fingerprint* - string - This attribute contains the fingerprint value that is generated from the public key. This is a unique identifier that will differentiate it from other keys using a format that SSH recognizes.
-
-  - *public_key* - string - This attribute contains the entire public key string that was uploaded. This is what is embedded into the root user's authorized_keys file if you choose to include this SSH key during Droplet creation.
-
-  - *name* - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.
+- An SSH Key data structure
 
 
 
@@ -74,15 +73,7 @@ Create a new Key if name not already present
 
 Returns:
 
-- A tuple of of SSH Key dict, the intended and created (None if already exists)
-
-  - *id* - number - This is a unique identification number for the key. This can be used to reference a specific SSH key when you wish to embed a key into a Droplet.
-
-  - *fingerprint* - string - This attribute contains the fingerprint value that is generated from the public key. This is a unique identifier that will differentiate it from other keys using a format that SSH recognizes.
-
-  - *public_key* - string - This attribute contains the entire public key string that was uploaded. This is what is embedded into the root user's authorized_keys file if you choose to include this SSH key during Droplet creation.
-
-  - *name* - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.
+- A tuple of of SSH Key data structures, the intended and created (None if already exists)
 
 
 
@@ -102,15 +93,7 @@ Retrieve an existing Key
 
 Returns:
 
-- An SSH Key dict
-
-  - *id* - number - This is a unique identification number for the key. This can be used to reference a specific SSH key when you wish to embed a key into a Droplet.
-
-  - *fingerprint* - string - This attribute contains the fingerprint value that is generated from the public key. This is a unique identifier that will differentiate it from other keys using a format that SSH recognizes.
-
-  - *public_key* - string - This attribute contains the entire public key string that was uploaded. This is what is embedded into the root user's authorized_keys file if you choose to include this SSH key during Droplet creation.
-
-  - *name* - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.
+- An SSH Key data structure
 
 
 
@@ -132,15 +115,7 @@ Update a Key
 
 Returns:
 
-- An SSH Key dict
-
-  - *id* - number - This is a unique identification number for the key. This can be used to reference a specific SSH key when you wish to embed a key into a Droplet.
-
-  - *fingerprint* - string - This attribute contains the fingerprint value that is generated from the public key. This is a unique identifier that will differentiate it from other keys using a format that SSH recognizes.
-
-  - *public_key* - string - This attribute contains the entire public key string that was uploaded. This is what is embedded into the root user's authorized_keys file if you choose to include this SSH key during Droplet creation.
-
-  - *name* - string - This is the human-readable display name for the given SSH key. This is used to easily identify the SSH keys when they are displayed.
+- An SSH Key data structure
 
 
 

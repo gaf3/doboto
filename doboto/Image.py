@@ -14,6 +14,30 @@ class Image(Endpoint):
         represent is a public Linux distribution or application image that is used as a base to
         create Droplets.
 
+    data:
+        Image:
+            - id - number - A unique number that can be used to identify and reference a specific
+              image.
+            - name - string - The display name that has been given to an image. This is what is
+              shown in the control panel and is generally a descriptive title for the image in
+              question.
+            - type - string - The kind of image, describing the duration of how long the image is
+              stored. This is either "snapshot" or "backup".
+            - distribution - string - This attribute describes the base distribution used for this
+              image.
+            - slug - nullable string - A uniquely identifying string that is associated with each
+              of the DigitalOcean-provided public images. These can be used to reference a public
+              image as an alternative to the numeric id.
+            - public - boolean - This is a boolean value that indicates whether the image in
+              question is public or not. An image that is public is available to all accounts. A
+              non-public image is only accessible from your account.
+            - regions - list - This attribute is a list of the regions that the image is available
+              in. The regions are represented by their identifying slug values.
+            - min_disk_size - number - The minimum 'disk' required for a size to use this image.
+            - size_gigabytes - number - The size of the image in gigabytes.
+            - created_at - string - A time value given in ISO8601 combined date and time format
+              that represents when the Image was created.
+
     related: https://developers.digitalocean.com/documentation/v2/#images
     """
 
@@ -33,18 +57,7 @@ class Image(Endpoint):
             - type - string - Can be "distribution" or "application" for images thereof.
             - private - boolean - Set to True for user images
 
-        out:
-            A list of Image dict's:
-                - id - number - A unique number that can be used to identify and reference a specific image.
-                - name - string - The display name that has been given to an image. This is what is shown in the control panel and is generally a descriptive title for the image in question.
-                - type - string - The kind of image, describing the duration of how long the image is stored. This is either "snapshot" or "backup".
-                - distribution - string - This attribute describes the base distribution used for this image.
-                - slug - nullable string - A uniquely identifying string that is associated with each of the DigitalOcean-provided public images. These can be used to reference a public image as an alternative to the numeric id.
-                - public - boolean - This is a boolean value that indicates whether the image in question is public or not. An image that is public is available to all accounts. A non-public image is only accessible from your account.
-                - regions - list - This attribute is a list of the regions that the image is available in. The regions are represented by their identifying slug values.
-                - min_disk_size - number - The minimum 'disk' required for a size to use this image.
-                - size_gigabytes - number - The size of the image in gigabytes.
-                - created_at - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.
+        out: A list of Image data structures
 
         related:
             - https://developers.digitalocean.com/documentation/v2/#list-all-images
@@ -70,18 +83,7 @@ class Image(Endpoint):
         in:
             - id_slug - number / string - id or slug of the Image
 
-        out:
-            An Image dict:
-                - id - number - A unique number that can be used to identify and reference a specific image.
-                - name - string - The display name that has been given to an image. This is what is shown in the control panel and is generally a descriptive title for the image in question.
-                - type - string - The kind of image, describing the duration of how long the image is stored. This is either "snapshot" or "backup".
-                - distribution - string - This attribute describes the base distribution used for this image.
-                - slug - nullable string - A uniquely identifying string that is associated with each of the DigitalOcean-provided public images. These can be used to reference a public image as an alternative to the numeric id.
-                - public - boolean - This is a boolean value that indicates whether the image in question is public or not. An image that is public is available to all accounts. A non-public image is only accessible from your account.
-                - regions - list - This attribute is a list of the regions that the image is available in. The regions are represented by their identifying slug values.
-                - min_disk_size - number - The minimum 'disk' required for a size to use this image.
-                - size_gigabytes - number - The size of the image in gigabytes.
-                - created_at - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.
+        out: An Image data structure
 
         related:
             - https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-image-by-id
@@ -99,18 +101,7 @@ class Image(Endpoint):
             - id - number - id of the Image
             - name - string - The new name that you would like to use for the image.
 
-        out:
-            An Image dict:
-                - id - number - A unique number that can be used to identify and reference a specific image.
-                - name - string - The display name that has been given to an image. This is what is shown in the control panel and is generally a descriptive title for the image in question.
-                - type - string - The kind of image, describing the duration of how long the image is stored. This is either "snapshot" or "backup".
-                - distribution - string - This attribute describes the base distribution used for this image.
-                - slug - nullable string - A uniquely identifying string that is associated with each of the DigitalOcean-provided public images. These can be used to reference a public image as an alternative to the numeric id.
-                - public - boolean - This is a boolean value that indicates whether the image in question is public or not. An image that is public is available to all accounts. A non-public image is only accessible from your account.
-                - regions - list - This attribute is a list of the regions that the image is available in. The regions are represented by their identifying slug values.
-                - min_disk_size - number - The minimum 'disk' required for a size to use this image.
-                - size_gigabytes - number - The size of the image in gigabytes.
-                - created_at - string - A time value given in ISO8601 combined date and time format that represents when the Image was created.
+        out: An Image data structure
 
         related: https://developers.digitalocean.com/documentation/v2/#update-an-image
         """  # nopep8
@@ -144,17 +135,7 @@ class Image(Endpoint):
             - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
-        out:
-            An Action dictt:
-                - id - number - A unique numeric ID that can be used to identify and reference an image action.
-                - status - string - The current status of the image action. This will be either "in-progress", "completed", or "errored".
-                - type - string - This is the type of the image action that the JSON dict represents. For example, this could be "transfer" to represent the state of an image transfer action.
-                - started_at - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-                - completed_at - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-                - resource_id - number - A unique identifier for the resource that the action is associated with.
-                - resource_type - string - The type of resource that the action is associated with.
-                - region - nullable string - (deprecated) A slug representing the region where the action occurred.
-                - region_slug - nullable string - A slug representing the region where the action occurred.
+        out: An Action data structure
 
         related: https://developers.digitalocean.com/documentation/v2/#transfer-an-image
         """  # nopep8
@@ -176,17 +157,7 @@ class Image(Endpoint):
             - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
-        out:
-            An Action dict:
-                - id - number - A unique numeric ID that can be used to identify and reference an image action.
-                - status - string - The current status of the image action. This will be either "in-progress", "completed", or "errored".
-                - type - string - This is the type of the image action that the JSON dict represents. For example, this could be "transfer" to represent the state of an image transfer action.
-                - started_at - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-                - completed_at - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-                - resource_id - number - A unique identifier for the resource that the action is associated with.
-                - resource_type - string - The type of resource that the action is associated with.
-                - region - nullable string - (deprecated) A slug representing the region where the action occurred.
-                - region_slug - nullable string - A slug representing the region where the action occurred.
+        out: An Action data structure
 
         related: https://developers.digitalocean.com/documentation/v2/#convert-an-image-to-a-snapshot
         """  # nopep8
@@ -204,17 +175,7 @@ class Image(Endpoint):
         in:
             - id - number - id of the Image
 
-        out:
-            A list of Action dict's:
-                - id - number - A unique numeric ID that can be used to identify and reference an image action.
-                - status - string - The current status of the image action. This will be either "in-progress", "completed", or "errored".
-                - type - string - This is the type of the image action that the JSON dict represents. For example, this could be "transfer" to represent the state of an image transfer action.
-                - started_at - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-                - completed_at - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-                - resource_id - number - A unique identifier for the resource that the action is associated with.
-                - resource_type - string - The type of resource that the action is associated with.
-                - region - nullable string - (deprecated) A slug representing the region where the action occurred.
-                - region_slug - nullable string - A slug representing the region where the action occurred.
+        out: A list of Action data structures
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-actions-for-an-image
         """  # nopep8
@@ -230,17 +191,7 @@ class Image(Endpoint):
             - id - number - id of the Image
             - action_id - number - id of the Action
 
-        out:
-            An Action dict:
-                - id - number - A unique numeric ID that can be used to identify and reference an image action.
-                - status - string - The current status of the image action. This will be either "in-progress", "completed", or "errored".
-                - type - string - This is the type of the image action that the JSON dict represents. For example, this could be "transfer" to represent the state of an image transfer action.
-                - started_at - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-                - completed_at - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-                - resource_id - number - A unique identifier for the resource that the action is associated with.
-                - resource_type - string - The type of resource that the action is associated with.
-                - region - nullable string - (deprecated) A slug representing the region where the action occurred.
-                - region_slug - nullable string - A slug representing the region where the action occurred.
+        out: An Action data structure
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-image-action
         """  # nopep8

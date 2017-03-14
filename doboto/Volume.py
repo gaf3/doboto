@@ -14,6 +14,24 @@ class Volume(Endpoint):
         they appear to the operating system as locally attached storage which can be formatted
         using any file system supported by the OS. They may be created in sizes from 1GiB to 16TiB.
 
+    data:
+        Volume:
+            - id - string - The unique identifier for the Block Storage volume.
+            - region - dict - The region that the Block Storage volume is located in. When setting
+              a region, the value should be the slug identifier for the region. When you query a
+              Block Storage volume, the entire region dict will be returned.
+            - droplet_ids - list - A list containing the IDs of the Droplets the volume is attached
+              to. Note that at this time, a volume can only be attached to a single Droplet.
+            - name - string - A human-readable name for the Block Storage volume. Must be lowercase
+              and be composed only of numbers, letters and "-", up to a limit of 64 characters.
+            - description - string - An optional free-form text field to describe a Block Storage
+              volume.
+            - size_gigabytes - number - The size of the Block Storage volume in GiB (1024^3).
+            - created_at - string - A time value given in ISO8601 combined date and time format
+              that represents when the Block Storage volume was created.
+            - droplet_ids - list - This attribute is a list of the Droplets that the volume is
+              attached to.
+
     related: https://developers.digitalocean.com/documentation/v2/#block-storage
     """
 
@@ -32,16 +50,7 @@ class Volume(Endpoint):
         in:
             - region - string - Region slug for listing on snapshots from that region - optional
 
-        out:
-            A list of Volume dict's:
-                - id - string - The unique identifier for the Block Storage volume.
-                - region - dict - The region that the Block Storage volume is located in. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned.
-                - droplet_ids - list - A list containing the IDs of the Droplets the volume is attached to. Note that at this time, a volume can only be attached to a single Droplet.
-                - name - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and "-", up to a limit of 64 characters.
-                - description - string - An optional free-form text field to describe a Block Storage volume.
-                - size_gigabytes - number - The size of the Block Storage volume in GiB (1024^3).
-                - created_at - string - A time value given in ISO8601 combined date and time format that represents when the Block Storage volume was created.
-                - droplet_ids - list - This attribute is a list of the Droplets that the volume is attached to.
+        out: A list of Volume data structures
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-block-storage-volumes
         """  # nopep8
@@ -56,25 +65,24 @@ class Volume(Endpoint):
 
         in:
             - attribs - dict - Volume information to create by:
-                - size_gigabytes - number - The size of the Block Storage volume in GiB (1024^3). - required
-                - name - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and "-", up to a limit of 64 characters. - required
-                - description - string - An optional free-form text field to describe a Block Storage volume. -
-                - region - string - The region where the Block Storage volume will be created. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned. Should not be specified with a snapshot_id. -
-                - snapshot_id - string - The unique identifier for the volume snapshot from which to create the volume. Should not be specified with a region_id. -
+                - size_gigabytes - number - The size of the Block Storage volume in GiB (1024^3). -
+                  required
+                - name - string - A human-readable name for the Block Storage volume. Must be
+                  lowercase and be composed only of numbers, letters and "-", up to a limit of 64
+                  characters. - required
+                - description - string - An optional free-form text field to describe a Block
+                  Storage volume.
+                - region - string - The region where the Block Storage volume will be created. When
+                  setting a region, the value should be the slug identifier for the region. When
+                  you query a Block Storage volume, the entire region dict will be returned. Should
+                  not be specified with a snapshot_id.
+                - snapshot_id - string - The unique identifier for the volume snapshot from which
+                  to create the volume. Should not be specified with a region_id.
             - wait - boolean - Whether to wait until the droplet is ready
             - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
-        out:
-            A Volume dict:
-                - id - string - The unique identifier for the Block Storage volume.
-                - region - dict - The region that the Block Storage volume is located in. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned.
-                - droplet_ids - list - A list containing the IDs of the Droplets the volume is attached to. Note that at this time, a volume can only be attached to a single Droplet.
-                - name - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and "-", up to a limit of 64 characters.
-                - description - string - An optional free-form text field to describe a Block Storage volume.
-                - size_gigabytes - number - The size of the Block Storage volume in GiB (1024^3).
-                - created_at - string - A time value given in ISO8601 combined date and time format that represents when the Block Storage volume was created.
-                - droplet_ids - list - This attribute is a list of the Droplets that the volume is attached to.
+        out:  A Volume data structure
 
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-block-storage-volume
         """  # nopep8
@@ -113,25 +121,24 @@ class Volume(Endpoint):
 
         in:
             - attribs - dict - Volume information to create by:
-                - size_gigabytes - number - The size of the Block Storage volume in GiB (1024^3). - required
-                - name - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and "-", up to a limit of 64 characters. - required
-                - description - string - An optional free-form text field to describe a Block Storage volume. -
-                - region - string - The region where the Block Storage volume will be created. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned. Should not be specified with a snapshot_id. -
-                - snapshot_id - string - The unique identifier for the volume snapshot from which to create the volume. Should not be specified with a region_id. -
+                - size_gigabytes - number - The size of the Block Storage volume in GiB (1024^3). -
+                  required
+                - name - string - A human-readable name for the Block Storage volume. Must be
+                  lowercase and be composed only of numbers, letters and "-", up to a limit of 64
+                  characters. - required
+                - description - string - An optional free-form text field to describe a Block
+                  Storage volume.
+                - region - string - The region where the Block Storage volume will be created. When
+                  setting a region, the value should be the slug identifier for the region. When
+                  you query a Block Storage volume, the entire region dict will be returned. Should
+                  not be specified with a snapshot_id.
+                - snapshot_id - string - The unique identifier for the volume snapshot from which
+                  to create the volume. Should not be specified with a region_id.
             - wait - boolean - Whether to wait until the droplet is ready
             - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
-        out:
-            A tuple of Volume dict's, the intended and created (None if already exists):
-                - id - string - The unique identifier for the Block Storage volume.
-                - region - dict - The region that the Block Storage volume is located in. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned.
-                - droplet_ids - list - A list containing the IDs of the Droplets the volume is attached to. Note that at this time, a volume can only be attached to a single Droplet.
-                - name - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and "-", up to a limit of 64 characters.
-                - description - string - An optional free-form text field to describe a Block Storage volume.
-                - size_gigabytes - number - The size of the Block Storage volume in GiB (1024^3).
-                - created_at - string - A time value given in ISO8601 combined date and time format that represents when the Block Storage volume was created.
-                - droplet_ids - list - This attribute is a list of the Droplets that the volume is attached to.
+        out: A tuple of Volume data structures, the intended and created (None if already exists)
 
         related: https://developers.digitalocean.com/documentation/v2/#create-a-new-block-storage-volume
         """  # nopep8
@@ -158,16 +165,7 @@ class Volume(Endpoint):
             - name - string - The name of the volume if no id
             - region - string - The region slug of the volume if no id
 
-        out:
-            A Volume dict:
-                - id - string - The unique identifier for the Block Storage volume.
-                - region - dict - The region that the Block Storage volume is located in. When setting a region, the value should be the slug identifier for the region. When you query a Block Storage volume, the entire region dict will be returned.
-                - droplet_ids - list - A list containing the IDs of the Droplets the volume is attached to. Note that at this time, a volume can only be attached to a single Droplet.
-                - name - string - A human-readable name for the Block Storage volume. Must be lowercase and be composed only of numbers, letters and "-", up to a limit of 64 characters.
-                - description - string - An optional free-form text field to describe a Block Storage volume.
-                - size_gigabytes - number - The size of the Block Storage volume in GiB (1024^3).
-                - created_at - string - A time value given in ISO8601 combined date and time format that represents when the Block Storage volume was created.
-                - droplet_ids - list - This attribute is a list of the Droplets that the volume is attached to.
+        out: A Volume data structure
 
         related:
             - https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-block-storage-volume
@@ -211,16 +209,7 @@ class Volume(Endpoint):
         in:
             - id - number - The id of the volume
 
-        out:
-            A list of Image dict's:
-                - id - string - The unique identifier for the snapshot.
-                - name - string - A human-readable name for the snapshot.
-                - created_at - string - A time value given in ISO8601 combined date and time format that represents when the snapshot was created.
-                - regions - list - A list of the regions that the image is available in. The regions are represented by their identifying slug values.
-                - resource_id - string - A unique identifier for the resource that the action is associated with.
-                - resource_type - string - The type of resource that the action is associated with.
-                - min_disk_size - number - The minimum size in GB required for a volume or Droplet to use this snapshot.
-                - size_gigabytes - number - The billable size of the snapshot in gigabytes.
+        out: A list of Image data structures
 
         related: https://developers.digitalocean.com/documentation/v2/#list-snapshots-for-a-volume
         """  # nopep8
@@ -238,16 +227,7 @@ class Volume(Endpoint):
             - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
-        out:
-            An Image dict:
-                - id - string - The unique identifier for the snapshot.
-                - name - string - A human-readable name for the snapshot.
-                - created_at - string - A time value given in ISO8601 combined date and time format that represents when the snapshot was created.
-                - regions - list - A list of the regions that the image is available in. The regions are represented by their identifying slug values.
-                - resource_id - string - A unique identifier for the resource that the action is associated with.
-                - resource_type - string - The type of resource that the action is associated with.
-                - min_disk_size - number - The minimum size in GB required for a volume or Droplet to use this snapshot.
-                - size_gigabytes - number - The billable size of the snapshot in gigabytes.
+        out: An Image data structure
 
         related: https://developers.digitalocean.com/documentation/v2/#create-snapshot-from-a-volume
         """  # nopep8
@@ -272,17 +252,7 @@ class Volume(Endpoint):
             - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
-        out:
-            An Action dict:
-                - id - int - A unique numeric ID that can be used to identify and reference an action.
-                - status - string - The current status of the action. This can be "in-progress", "completed", or "errored".
-                - type - string - This is the type of action that the dict represents. For example, this could be "attach_volume" to represent the state of a volume attach action.
-                - started_at - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-                - completed_at - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-                - resource_id - nullable int - A unique identifier for the resource that the action is associated with.
-                - resource_type - string - The type of resource that the action is associated with.
-                - region - dict - The region where the resources acted upon are located.
-                - region_slug - nullable string - A slug representing the region where the action occurred.
+        out: An Action data structure
 
         related:
             - https://developers.digitalocean.com/documentation/v2/#attach-a-block-storage-volume-to-a-droplet
@@ -330,17 +300,7 @@ class Volume(Endpoint):
             - poll - number - Number of seconds between checks (min 1 sec)
             - timeout - number - How many seconds before giving up
 
-        out:
-            An Action dict:
-                - id - int - A unique numeric ID that can be used to identify and reference an action.
-                - status - string - The current status of the action. This can be "in-progress", "completed", or "errored".
-                - type - string - This is the type of action that the dict represents. For example, this could be "attach_volume" to represent the state of a volume attach action.
-                - started_at - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-                - completed_at - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-                - resource_id - nullable int - A unique identifier for the resource that the action is associated with.
-                - resource_type - string - The type of resource that the action is associated with.
-                - region - dict - The region where the resources acted upon are located.
-                - region_slug - nullable string - A slug representing the region where the action occurred.
+        out: An Action data structure
 
         related:
             - https://developers.digitalocean.com/documentation/v2/#remove-a-block-storage-volume-from-a-droplet
@@ -382,17 +342,7 @@ class Volume(Endpoint):
             - size_gigabytes - int - The new size of the Block Storage volume in GiB (1024^3). - true
             - region - string - The slug identifier for the region the volume is located in. -
 
-        out:
-            An Action dict:
-                - id - int - A unique numeric ID that can be used to identify and reference an action.
-                - status - string - The current status of the action. This can be "in-progress", "completed", or "errored".
-                - type - string - This is the type of action that the dict represents. For example, this could be "attach_volume" to represent the state of a volume attach action.
-                - started_at - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-                - completed_at - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-                - resource_id - nullable int - A unique identifier for the resource that the action is associated with.
-                - resource_type - string - The type of resource that the action is associated with.
-                - region - dict - The region where the resources acted upon are located.
-                - region_slug - nullable string - A slug representing the region where the action occurred.
+        out: An Action data structure
 
         related: https://developers.digitalocean.com/documentation/v2/#resize-a-volume
         """  # nopep8
@@ -417,17 +367,7 @@ class Volume(Endpoint):
         in:
             - id - number - The id of the volume
 
-        out:
-            A list of Action dict's:
-                - id - int - A unique numeric ID that can be used to identify and reference an action.
-                - status - string - The current status of the action. This can be "in-progress", "completed", or "errored".
-                - type - string - This is the type of action that the dict represents. For example, this could be "attach_volume" to represent the state of a volume attach action.
-                - started_at - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-                - completed_at - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-                - resource_id - nullable int - A unique identifier for the resource that the action is associated with.
-                - resource_type - string - The type of resource that the action is associated with.
-                - region - dict - The region where the resources acted upon are located.
-                - region_slug - nullable string - A slug representing the region where the action occurred.
+        out: A list of Action data structures
 
         related: https://developers.digitalocean.com/documentation/v2/#list-all-actions-for-a-volume
         """  # nopep8
@@ -442,17 +382,7 @@ class Volume(Endpoint):
             - id - number - The id of the volume
             - action_id - number - The id of the action
 
-        out:
-            An Action dict:
-                - id - int - A unique numeric ID that can be used to identify and reference an action.
-                - status - string - The current status of the action. This can be "in-progress", "completed", or "errored".
-                - type - string - This is the type of action that the dict represents. For example, this could be "attach_volume" to represent the state of a volume attach action.
-                - started_at - string - A time value given in ISO8601 combined date and time format that represents when the action was initiated.
-                - completed_at - string - A time value given in ISO8601 combined date and time format that represents when the action was completed.
-                - resource_id - nullable int - A unique identifier for the resource that the action is associated with.
-                - resource_type - string - The type of resource that the action is associated with.
-                - region - dict - The region where the resources acted upon are located.
-                - region_slug - nullable string - A slug representing the region where the action occurred.
+        out: An Action data structure
 
         related: https://developers.digitalocean.com/documentation/v2/#retrieve-an-existing-volume-action
         """  # nopep8

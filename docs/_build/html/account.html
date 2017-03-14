@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Account (do.account) &#8212; DOBOTO 0.5.0 documentation</title>
+    <title>Account (do.account) &#8212; DOBOTO 0.6.0 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.5.0',
+        VERSION:     '0.6.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="do.html" title="DO (do)"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.5.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.6.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -54,6 +54,21 @@
   <div class="section" id="account-do-account">
 <h1>Account (do.account)<a class="headerlink" href="#account-do-account" title="Permalink to this headline">¶</a></h1>
 <p>Class for obtaining account information</p>
+<div class="section" id="data-structures">
+<h2>Data Structures<a class="headerlink" href="#data-structures" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="account">
+<h3>Account<a class="headerlink" href="#account" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><em>droplet_limit</em> - number - The total number of droplets the user may have</li>
+<li><em>floating_ip_limit</em> - number - The total number of floating IPs the user may have</li>
+<li><em>email</em> - string - The email the user has registered for Digital Ocean with</li>
+<li><em>uuid</em> - string (alphanumeric) - The universal identifier for this user</li>
+<li><em>email_verified</em> - boolean - If true, the user has verified their account via email. False otherwise.</li>
+<li><em>status</em> - string - This value is one of &#8220;active&#8221;, &#8220;warning&#8221; or &#8220;locked&#8221;.</li>
+<li><em>status_message</em> - string - A human-readable message giving more details about the status of the account.</li>
+</ul>
+</div>
+</div>
 <div class="section" id="get-user-information">
 <h2>Get User Information<a class="headerlink" href="#get-user-information" title="Permalink to this headline">¶</a></h2>
 <dl class="method">
@@ -63,16 +78,7 @@
 
 <p>Returns:</p>
 <ul class="simple">
-<li>An Account dict<ul>
-<li><em>droplet_limit</em> - number - The total number of droplets the user may have</li>
-<li><em>floating_ip_limit</em> - number - The total number of floating IPs the user may have</li>
-<li><em>email</em> - string - The email the user has registered for Digital Ocean with</li>
-<li><em>uuid</em> - string (alphanumeric) - The universal identifier for this user</li>
-<li><em>email_verified</em> - boolean - If true, the user has verified their account via email. False otherwise.</li>
-<li><em>status</em> - string - This value is one of &#8220;active&#8221;, &#8220;warning&#8221; or &#8220;locked&#8221;.</li>
-<li><em>status_message</em> - string - A human-readable message giving more details about the status of the account.</li>
-</ul>
-</li>
+<li>An Account data structure</li>
 </ul>
 <p>Related:</p>
 <ul class="simple">
@@ -90,6 +96,10 @@
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Account (do.account)</a><ul>
+<li><a class="reference internal" href="#data-structures">Data Structures</a><ul>
+<li><a class="reference internal" href="#account">Account</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#get-user-information">Get User Information</a></li>
 </ul>
 </li>
@@ -134,7 +144,7 @@
         <li class="right" >
           <a href="do.html" title="DO (do)"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.5.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">DOBOTO 0.6.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
