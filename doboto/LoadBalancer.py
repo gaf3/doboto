@@ -155,7 +155,6 @@ class LoadBalancer(Endpoint):
                     raise DOBOTOPollingException(polling=load_balancer, error=exception)
 
             if time.time() - start_time > timeout:
-                print "Dude"
                 raise DOBOTOPollingException(polling=load_balancer)
 
         return load_balancer
