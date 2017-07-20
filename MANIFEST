@@ -2,13 +2,14 @@
 setup.py
 doboto/Account.py
 doboto/Action.py
+doboto/Certificate.py
 doboto/DO.py
-doboto/DOBOTOException.py
 doboto/Domain.py
 doboto/Droplet.py
 doboto/Endpoint.py
 doboto/FloatingIP.py
 doboto/Image.py
+doboto/LoadBalancer.py
 doboto/Region.py
 doboto/SSHKey.py
 doboto/Size.py
@@ -16,3 +17,4 @@ doboto/Snapshot.py
 doboto/Tag.py
 doboto/Volume.py
 doboto/__init__.py
+doboto/exception.py

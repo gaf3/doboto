@@ -5,7 +5,7 @@ import os
 
 setup(
     name='doboto',
-    version="0.6.0",
+    version="0.6.1",
     description="BOTO-like library for interacting with the Digital Ocean API",
     packages=['doboto'],
     long_description="BOTO-like library for interacting with the Digital Ocean API",
